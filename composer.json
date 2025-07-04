@@ -31,6 +31,17 @@
         "symfony/validator": "7.3.*",
         "symfony/yaml": "7.3.*"
     },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-mockery": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-symfony": "^2.0",
+        "phpunit/phpunit": "^12.2",
+        "symfony/browser-kit": "7.3.*",
+        "symfony/css-selector": "7.3.*",
+        "symfony/maker-bundle": "^1.63"
+    },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
@@ -80,8 +91,5 @@
             "allow-contrib": false,
             "require": "7.3.*"
         }
-    },
-    "require-dev": {
-        "symfony/maker-bundle": "^1.63"
     }
 }
