@@ -1,10 +1,17 @@
 PHP := php
 SYMFONY := symfony
 CONSOLE := $(PHP) bin/console
+COMPOSER := composer
 
 ## ----------------------------------
 ## App
 ## ----------------------------------
+.PHONY: install
+install: vendor/autoload.php ## Install dependencies
+	$(COMPOSER) install
+	$(CONSOLE) lexik:jwt:generate-keypair
+	$(CONSOLE) doctrine:database:create --if-not-exists
+
 .PHONY: serve
 serve: vendor/autoload.php ## Run Development Server
 	$(SYMFONY) serve
