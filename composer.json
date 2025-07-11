@@ -37,6 +37,7 @@
         "symfonycasts/verify-email-bundle": "^1.17"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.1",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-doctrine": "^2.0",
         "phpstan/phpstan-mockery": "^2.0",
