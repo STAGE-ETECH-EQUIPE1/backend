@@ -8,9 +8,10 @@ COMPOSER := composer
 ## ----------------------------------
 .PHONY: install
 install: vendor/autoload.php ## Install dependencies
-	$(COMPOSER) install
-	$(CONSOLE) lexik:jwt:generate-keypair
+	$(COMPOSER) install --no-interaction
+	$(CONSOLE) lexik:jwt:generate-keypair --no-interaction
 	$(CONSOLE) doctrine:database:create --if-not-exists
+	$(CONSOLE) doctrine:fixtures:load --no-interaction
 
 .PHONY: serve
 serve: vendor/autoload.php ## Run Development Server
@@ -31,6 +32,10 @@ migration: vendor/autoload.php ## Make migration
 .PHONY: migrate
 migrate: vendor/autoload.php ## Migrate migration to database
 	$(CONSOLE) doctrine:migrations:migrate
+
+.PHONY: fixtures
+fixtures: vendor/autoload.php ## Load fixtures
+	$(CONSOLE) doctrine:fixtures:load --no-interaction
 
 ##
 ## ----------------------------------
