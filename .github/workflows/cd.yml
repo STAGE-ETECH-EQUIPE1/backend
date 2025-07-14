@@ -1,0 +1,22 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - preprod
+      - prod
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render deploy hook
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "preprod" ]]; then
+            curl -X POST "${{ secrets.RENDER_HOOK_URL_PREPROD }}"
+          elif [[ "${GITHUB_REF##*/}" == "prod" ]]; then
+            curl -X POST "${{ secrets.RENDER_HOOK_URL_PROD }}"
+          else
+            echo "Not a deployable branch. Skipping deployment."
+          fi
