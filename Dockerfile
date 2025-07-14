@@ -1,7 +1,7 @@
 # Image PHP avec extensions pour Symfony
 FROM php:8.3-cli
 
-# Installation des dépendances système
+# Installation des dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -18,36 +18,36 @@ RUN apt-get update && apt-get install -y \
 # Installation de Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Configuration Composer
+# Variables Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_NO_INTERACTION=1
 
 # Répertoire de travail
 WORKDIR /app
 
-# Copie des fichiers de dépendances
+# Copier uniquement les fichiers nécessaires à composer install
 COPY composer.json composer.lock ./
 
-# Installation des dépendances sans scripts
+# Installer les dépendances PHP sans exécuter de script
 RUN composer install --prefer-dist --no-scripts --no-interaction --optimize-autoloader
 
+# Créer un fichier .env vide pour éviter l'erreur
 RUN touch .env
 
-# Copie du code source
+# Copier le reste du code source
 COPY . .
 
-# Génération de l'autoloader optimisé
+# Re-générer l’autoloader optimisé
 RUN composer dump-autoload --optimize
 
-# Configuration des permissions
-RUN mkdir -p var/cache var/log \
-    && chmod -R 777 var
+# Préparer les répertoires nécessaires
+RUN mkdir -p var/cache var/log && chmod -R 777 var
 
-# Nettoyage du cache Symfony
+# Nettoyer le cache Symfony sans échouer si bin/console échoue
 RUN php bin/console cache:clear --env=prod --no-debug || true
 
-# Exposition du port
+# Exposer le port par défaut
 EXPOSE 8000
 
-# Commande de démarrage
+# Lancer le serveur PHP intégré
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
