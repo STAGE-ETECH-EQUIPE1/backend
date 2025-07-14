@@ -1,11 +1,8 @@
-# ----------------------------
-# Étape 1 : Image PHP officielle + extensions Symfony
-# ----------------------------
+# Image PHP avec extensions pour Symfony
 FROM php:8.3-cli
 
-# Mise à jour et installation des dépendances système
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y \
+# Installation des dépendances système
+RUN apt-get update && apt-get install -y \
     git \
     unzip \
     zip \
@@ -14,39 +11,41 @@ RUN apt-get update && apt-get upgrade -y && \
     libpq-dev \
     libzip-dev \
     curl \
-    && docker-php-ext-install intl mbstring pdo pdo_pgsql zip opcache
+    && docker-php-ext-install intl mbstring pdo pdo_pgsql zip opcache \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Installation de Composer depuis l'image officielle
+# Installation de Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Définir le dossier de travail
+# Configuration Composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_NO_INTERACTION=1
+
+# Répertoire de travail
 WORKDIR /app
 
-# Variables d'environnement pour Composer (évite les warnings)
-ENV COMPOSER_ALLOW_SUPERUSER=1 \
-    APP_ENV=prod \
-    APP_DEBUG=0
+# Copie des fichiers de dépendances
+COPY composer.json composer.lock ./
 
-# Copier uniquement les fichiers nécessaires pour installer les dépendances
-COPY composer.json composer.lock symfony.lock ./
+# Installation des dépendances sans scripts
+RUN composer install --prefer-dist --no-scripts --no-interaction --optimize-autoloader
 
-# Installation des dépendances PHP (avec scripts activés)
-RUN composer install --prefer-dist --no-interaction --optimize-autoloader
-
-# Copier le reste du code source
+# Copie du code source
 COPY . .
 
-# Donner les bonnes permissions
-RUN mkdir -p var/cache var/log && chmod -R 777 var
+# Génération de l'autoloader optimisé
+RUN composer dump-autoload --optimize
 
-# Vérification des requirements Symfony (optionnel)
-RUN php bin/console about
+# Configuration des permissions
+RUN mkdir -p var/cache var/log \
+    && chmod -R 777 var
 
-# Pré-chauffage du cache pour l'environnement de production
-RUN php bin/console cache:warmup --env=prod
+# Nettoyage du cache Symfony
+RUN php bin/console cache:clear --env=prod --no-debug || true
 
-# Exposer le port (utilisé avec php -S)
+# Exposition du port
 EXPOSE 8000
 
-# Commande de démarrage (serveur PHP intégré pointant vers /public)
+# Commande de démarrage
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
