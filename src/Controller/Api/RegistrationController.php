@@ -5,11 +5,11 @@ namespace App\Controller\Api;
 use App\DTO\Request\RegisterDTO;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -26,7 +26,7 @@ class RegistrationController extends AbstractController
         ValidatorInterface $validator,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $em,
-        JWTTokenManagerInterface $jwtManager
+        JWTTokenManagerInterface $jwtManager,
     ): JsonResponse {
         $errors = $validator->validate($registerDto);
         if (count($errors) > 0) {
@@ -34,6 +34,7 @@ class RegistrationController extends AbstractController
             foreach ($errors as $error) {
                 $errorMessages[$error->getPropertyPath()] = $error->getMessage();
             }
+
             return new JsonResponse(['errors' => $errorMessages], 400);
         }
 
@@ -68,8 +69,8 @@ class RegistrationController extends AbstractController
             'user' => [
                 'email' => $user->getEmail(),
                 'username' => $user->getUsername(),
-                'lastName' => $user->getFullName()
-            ]
+                'lastName' => $user->getFullName(),
+            ],
         ], 201);
     }
 }
