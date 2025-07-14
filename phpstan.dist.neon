@@ -1,15 +1,16 @@
 includes:
+  - vendor/phpstan/phpstan-phpunit/extension.neon
   - vendor/phpstan/phpstan-mockery/extension.neon
   - vendor/phpstan/phpstan-symfony/extension.neon
+  - vendor/phpstan/phpstan-symfony/rules.neon
   - vendor/phpstan/phpstan-doctrine/extension.neon
 
 parameters:
-    level: 6
+    level: 8
+    paths:
+        - src/
     excludePaths:
         - migrations/*
-    paths:
-        - bin/
-        - config/
-        - public/
-        - src/
-        - tests/
+    doctrine:
+        objectManagerLoader: tests/object-manager.php
+    ignoreErrors:
