@@ -31,6 +31,8 @@ COPY composer.json composer.lock ./
 # Installation des dépendances sans scripts
 RUN composer install --prefer-dist --no-scripts --no-interaction --optimize-autoloader
 
+RUN touch .env
+
 # Copie du code source
 COPY . .
 
