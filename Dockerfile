@@ -1,11 +1,10 @@
 # Étape 1 : image PHP avec extensions utiles pour Symfony
 FROM php:8.3-cli
 
-
 # Always update package lists and upgrade to latest security patches
 RUN apt-get update && apt-get upgrade -y
 
-# Installer les dépendances système (ex : git, unzip, zip, etc.)
+# Installer les dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -17,23 +16,26 @@ RUN apt-get update && apt-get install -y \
     curl \
     && docker-php-ext-install intl mbstring pdo pdo_pgsql zip opcache
 
-# Installer Composer
+# Installer Composer (version 2)
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Créer un répertoire pour l'application Symfony
+# Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers de l'application
-COPY . .
+# Copier uniquement les fichiers nécessaires pour installer les dépendances (pour profiter du cache Docker)
+COPY composer.json composer.lock ./
 
-# Installer les dépendances PHP (avec --no-dev en prod si besoin)
+# Installer les dépendances PHP sans les scripts (tu peux activer scripts si tu veux)
 RUN composer install --prefer-dist --no-scripts --no-interaction --optimize-autoloader
 
-# Donner les permissions nécessaires
+# Copier tout le reste de l'application (code source, config, etc.)
+COPY . .
+
+# Donner les permissions nécessaires (cache, logs)
 RUN mkdir -p var/cache var/log && chmod -R 777 var
 
-# Port d’écoute si tu exposes un serveur interne (ex : Symfony server ou php -S)
+# Exposer le port 8000 pour le serveur interne
 EXPOSE 8000
 
-# Lancer le serveur Symfony ou PHP
+# Lancer le serveur PHP intégré pointant vers le dossier public
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
