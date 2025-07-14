@@ -1,12 +1,9 @@
 <?php
 
-// src/Controller/Api/UserRegistrationController.php
-
 namespace App\Controller\Api;
 
-use App\DataTransformer\UserRegistrationDataTransformer;
 use App\DTO\Request\UserRegistrationDTO;
-use App\Entity\User;
+use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,17 +13,15 @@ class UserRegistrationController extends AbstractController
 {
     public function __invoke(
         UserRegistrationDTO $userRegistrationDto,
-        UserRegistrationDataTransformer $transformer,
+        UserServiceInterface $userService,
         EntityManagerInterface $entityManager,
     ): JsonResponse {
-        $user = new User();
-        $transformer->transform($userRegistrationDto, $user);
-
+        $user = $userService->convertUserRegistrationDtoToUser($userRegistrationDto);
         // $entityManager->persist($user);
         // $entityManager->flush();
         return $this->json([
             'message' => 'User registered successfully',
-            'email' => $user->getEmail(),
+            'user' => $userService->convertToDto($user),
         ], Response::HTTP_CREATED);
     }
 }
