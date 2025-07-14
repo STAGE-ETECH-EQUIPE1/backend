@@ -23,26 +23,23 @@ WORKDIR /app
 # Autoriser Composer à s'exécuter en tant que super-utilisateur
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# 1. Copier uniquement les fichiers Composer
-COPY composer.json composer.lock ./
+# Copier uniquement les fichiers nécessaires pour l'installation
+COPY composer.json composer.lock symfony.lock ./
 
-# 2. Installer les dépendances SANS exécuter les scripts
+# Installer les dépendances sans scripts
 RUN composer install --prefer-dist --no-scripts --no-interaction --optimize-autoloader
 
-# 3. Copier le reste de l'application
+# Copier le reste de l'application
 COPY . .
 
-# 4. Installer les binaires Symfony manuellement
-RUN ./vendor/bin/symfony_requirements
+# Exécuter les scripts Composer avec le chemin complet
+RUN ./vendor/bin/symfony-cmd check:requirements
 
-# 5. Exécuter les scripts Composer manuellement
-RUN ./vendor/bin/simple-phpunit install && composer run-script post-install-cmd
-
-# Configuration des permissions
+# Configurer les permissions
 RUN mkdir -p var/cache var/log \
     && chmod -R 777 var
 
-# Pré-chauffage du cache
+# Pré-chauffer le cache
 RUN php bin/console cache:warmup --env=prod
 
 # Exposition du port
