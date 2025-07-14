@@ -20,19 +20,24 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Répertoire de travail
 WORKDIR /app
 
-# Copie des fichiers Composer pour optimiser le cache Docker
+# 1. Copier uniquement les fichiers Composer
 COPY composer.json composer.lock ./
 
-# Installation des dépendances AVEC exécution des scripts
-RUN composer install --prefer-dist --no-interaction --optimize-autoloader
+# 2. Installer les dépendances SANS exécuter les scripts
+RUN composer install --prefer-dist --no-scripts --no-interaction --optimize-autoloader
 
-# Copie du reste de l'application
+# 3. Copier le reste de l'application
 COPY . .
 
-# Configuration des permissions et génération du cache
+# 4. Exécuter les scripts manuellement
+RUN composer run-script post-install-cmd
+
+# Configuration des permissions
 RUN mkdir -p var/cache var/log \
-    && chmod -R 777 var \
-    && php bin/console cache:warmup --env=prod
+    && chmod -R 777 var
+
+# Pré-chauffage du cache (optionnel)
+# RUN php bin/console cache:warmup --env=prod
 
 # Exposition du port
 EXPOSE 8000
