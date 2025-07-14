@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\DTO\Output\JWTUser;
 use App\DTO\Request\UserRegistrationDTO;
 use App\DTO\UserDTO;
 use App\Entity\User;
@@ -40,5 +41,14 @@ final class UserService implements UserServiceInterface
             ->setFullName((string) $user->getFullName())
             ->setPhone((string) $user->getPhone())
             ->setCreatedAt($user->getCreatedAt() ?? new \DateTimeImmutable());
+    }
+
+    public function convertToJwtUser(User $user): JWTUser
+    {
+        return new JWTUser(
+            $user->getUsername() ?? '',
+            $user->getEmail(),
+            $user->getRoles()
+        );
     }
 }
