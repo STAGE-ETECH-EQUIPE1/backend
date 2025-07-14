@@ -20,6 +20,7 @@ class UserRegistrationController extends AbstractController
 
         $entityManager->persist($user);
         $entityManager->flush();
+
         return $this->json([
             'message' => 'User registered successfully',
             'user' => $userService->convertToDto($user),
