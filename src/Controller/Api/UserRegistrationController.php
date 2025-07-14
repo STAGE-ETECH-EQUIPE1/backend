@@ -18,8 +18,9 @@ class UserRegistrationController extends AbstractController
     ): JsonResponse {
         $user = $userService->convertUserRegistrationDtoToUser($userRegistrationDto);
 
-        // $entityManager->persist($user);
-        // $entityManager->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
         return $this->json([
             'message' => 'User registered successfully',
             'user' => $userService->convertToDto($user),
