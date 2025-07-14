@@ -25,8 +25,6 @@ ENV COMPOSER_NO_INTERACTION=1
 # Répertoire de travail
 WORKDIR /app
 
-COPY .env .env
-
 # Copie des fichiers de dépendances
 COPY composer.json composer.lock ./
 
