@@ -19,7 +19,7 @@ final class UserDTO
     private bool $isVerified;
 
     /**
-     * Get the value of id
+     * Get the value of id.
      */
     public function getId(): int
     {
@@ -27,9 +27,9 @@ final class UserDTO
     }
 
     /**
-     * Set the value of id
-     * @param int $id
-     * @return  self
+     * Set the value of id.
+     *
+     * @return self
      */
     public function setId(int $id): static
     {
@@ -39,7 +39,7 @@ final class UserDTO
     }
 
     /**
-     * Get the value of email
+     * Get the value of email.
      */
     public function getEmail(): string
     {
@@ -47,9 +47,9 @@ final class UserDTO
     }
 
     /**
-     * Set the value of email
-     * @param string $email
-     * @return  self
+     * Set the value of email.
+     *
+     * @return self
      */
     public function setEmail(string $email): static
     {
@@ -59,7 +59,7 @@ final class UserDTO
     }
 
     /**
-     * Get the value of username
+     * Get the value of username.
      */
     public function getUsername(): string
     {
@@ -67,9 +67,9 @@ final class UserDTO
     }
 
     /**
-     * Set the value of username
+     * Set the value of username.
      *
-     * @return  self
+     * @return self
      */
     public function setUsername(string $username): static
     {
@@ -79,17 +79,17 @@ final class UserDTO
     }
 
     /**
-     * Get the value of phone
+     * Get the value of phone.
      */
-    public function getPhone(): string|null
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
     /**
-     * Set the value of phone
-     * @param string $phone
-     * @return  self
+     * Set the value of phone.
+     *
+     * @return self
      */
     public function setPhone(string $phone): static
     {
@@ -99,17 +99,17 @@ final class UserDTO
     }
 
     /**
-     * Get the value of fullName
+     * Get the value of fullName.
      */
-    public function getFullName(): string|null
+    public function getFullName(): ?string
     {
         return $this->fullName;
     }
 
     /**
-     * Set the value of fullName
-     * @param string $fullName
-     * @return  self
+     * Set the value of fullName.
+     *
+     * @return self
      */
     public function setFullName(string $fullName): static
     {
@@ -119,7 +119,7 @@ final class UserDTO
     }
 
     /**
-     * Get the value of createdAt
+     * Get the value of createdAt.
      */
     public function getCreatedAt(): \DateTimeImmutable
     {
@@ -127,9 +127,9 @@ final class UserDTO
     }
 
     /**
-     * Set the value of createdAt
-     * @param \DateTimeImmutable $createdAt
-     * @return  self
+     * Set the value of createdAt.
+     *
+     * @return self
      */
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
@@ -139,7 +139,7 @@ final class UserDTO
     }
 
     /**
-     * Get the value of isVerified
+     * Get the value of isVerified.
      */
     public function getIsVerified(): bool
     {
@@ -147,9 +147,9 @@ final class UserDTO
     }
 
     /**
-     * Set the value of isVerified
-     * @param bool $isVerified
-     * @return  self
+     * Set the value of isVerified.
+     *
+     * @return self
      */
     public function setIsVerified(bool $isVerified): static
     {

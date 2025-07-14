@@ -11,7 +11,8 @@ final class UserService implements UserServiceInterface
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
-    ) {}
+    ) {
+    }
 
     public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User
     {
@@ -26,6 +27,7 @@ final class UserService implements UserServiceInterface
                 $user,
                 $userDto->password
             ));
+
         return $user;
     }
 
