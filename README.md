@@ -13,7 +13,8 @@ OU
 ```bash
 composer install
 php bin/console lexik:jwt:generate-keypair # Générer une clé pour le token jwt
-pho bin/console doctrine:database:create --if-not-exists
+php bin/console doctrine:database:create --if-not-exists
+php doctrine:fixtures:load --no-interaction
 ```
 
 2. Pour lancer le serveur de développement
