@@ -1,5 +1,6 @@
 # Étape 1 : image PHP avec extensions utiles pour Symfony
-FROM php:8.3-cli-slim
+FROM php:8.3-cli
+
 
 # Always update package lists and upgrade to latest security patches
 RUN apt-get update && apt-get upgrade -y
