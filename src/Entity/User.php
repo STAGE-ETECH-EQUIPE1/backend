@@ -70,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -81,6 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         assert(!empty($this->email));
+
         return $this->email;
     }
 
@@ -92,6 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
+
         return array_unique($roles);
     }
 
@@ -101,6 +104,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
         return $this;
     }
 
@@ -115,13 +119,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
         return $this;
     }
 
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;    
+        // $this->plainPassword = null;
     }
 
     public function getUsername(): ?string
@@ -132,6 +137,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(?string $username): static
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -143,6 +149,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFullName(?string $fullName): static
     {
         $this->fullName = $fullName;
+
         return $this;
     }
 
@@ -154,6 +161,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
+
         return $this;
     }
 
@@ -165,6 +173,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -176,6 +185,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
         return $this;
     }
 }

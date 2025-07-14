@@ -11,12 +11,13 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AppFixtures extends Fixture
 {
     public function __construct(
-        private readonly UserPasswordHasherInterface $passwordHasher
-    ) {}
+        private readonly UserPasswordHasherInterface $passwordHasher,
+    ) {
+    }
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create("fr_FR");
+        $faker = Factory::create('fr_FR');
 
         $user = new User();
         $user->setEmail('user@domain.com')

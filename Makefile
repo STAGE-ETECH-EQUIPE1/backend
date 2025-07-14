@@ -44,6 +44,7 @@ fixtures: vendor/autoload.php ## Load fixtures
 .PHONY: lint
 lint: vendor/autoload.php ## Analyze code
 	$(PHP) ./vendor/bin/phpstan analyze
+	$(PHP) ./vendor/bin/php-cs-fixer fix src
 
 .PHONY: clear
 clear: ## Clear cache
