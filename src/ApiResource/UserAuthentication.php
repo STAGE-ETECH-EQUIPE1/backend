@@ -3,8 +3,8 @@
 namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use App\Controller\Api\CurrentUserController;
 use App\Controller\Api\UserRegistrationController;
 use App\DTO\Request\UserRegistrationDTO;
