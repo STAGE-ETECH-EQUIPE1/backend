@@ -4,6 +4,7 @@ namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use App\Controller\Api\CurrentUserController;
 use App\Controller\Api\UserRegistrationController;
 use App\DTO\Request\UserRegistrationDTO;
@@ -17,7 +18,7 @@ use App\DTO\Request\UserRegistrationDTO;
             name: 'register',
             description: 'Register a new user'
         ),
-        new Post(
+        new Get(
             uriTemplate: '/me',
             controller: CurrentUserController::class,
             input: false,
