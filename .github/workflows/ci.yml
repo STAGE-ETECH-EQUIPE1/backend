@@ -36,8 +36,8 @@ jobs:
                   mkdir -p var
                   touch var/test.db
 
-            - name: Run Doctrine migrations
-              run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
+            - name: Run Doctrine migrations (test)
+              run: php bin/console doctrine:migrations:migrate --env=test --no-interaction --no-debug
 
             - name: Run PHPUnit
-              run: vendor/bin/phpunit --testdox
+              run: vendor/bin/phpunit --testdox --no-coverage --no-debug
