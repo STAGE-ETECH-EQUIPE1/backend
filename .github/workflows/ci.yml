@@ -13,7 +13,8 @@ jobs:
 
         env:
             APP_ENV: test
-            DATABASE_URL: sqlite:///${{ github.workspace }}/var/test.db
+            DATABASE_URL: sqlite:///%GITHUB_WORKSPACE%/var/test.db
+            JWT_PASSPHRASE: testpass
 
         steps:
             - name: Checkout repository
@@ -29,12 +30,19 @@ jobs:
             - name: Install dependencies
               run: composer install --no-interaction --prefer-dist --no-progress
 
-            - name: Prepare SQLite test DB (clean reset)
+            - name: Generate JWT keys for tests
+              run: |
+                  mkdir -p config/jwt
+                  openssl genrsa -out config/jwt/private.pem -aes256 -passout pass:testpass 4096
+                  openssl rsa -pubout -in config/jwt/private.pem -passin pass:testpass -out config/jwt/public.pem
+
+            - name: Create SQLite test DB
               run: |
                   rm -f var/test.db
                   mkdir -p var
+                  touch var/test.db
 
-            - name: Create Schema (recommended for test CI)
+            - name: Create schema
               run: php bin/console doctrine:schema:create --env=test --no-interaction --no-debug
 
             - name: Validate DB schema
