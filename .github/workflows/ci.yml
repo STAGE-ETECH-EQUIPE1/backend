@@ -25,11 +25,13 @@ jobs:
             - name: Install dependencies
               run: composer install --no-interaction --prefer-dist --no-progress
 
+            # ✅ Créer dossier et fichier SQLite test
             - name: Create SQLite test DB
               run: |
                   mkdir -p var
                   touch var/test.db
 
+            # ✅ Injecter la variable dans l’environnement GitHub
             - name: Set DATABASE_URL for test
               run: echo "DATABASE_URL=sqlite:///%CD%/var/test.db" >> $GITHUB_ENV
 
