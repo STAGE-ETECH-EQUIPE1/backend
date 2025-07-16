@@ -14,3 +14,11 @@ api_controllers:
 
 api_login_check:
     path: /api/login
+
+connect_google_start:
+    path: /connect/google
+    controller: App\Controller\SecurityController::connectGoogle
+
+connect_google_check:
+    path: /connect/google/check
+
