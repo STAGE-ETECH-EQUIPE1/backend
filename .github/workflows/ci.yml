@@ -11,6 +11,10 @@ jobs:
     quality-check:
         runs-on: ubuntu-latest
 
+        env:
+            APP_ENV: test
+            DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
+
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -19,7 +23,7 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: "8.3"
-                  extensions: mbstring, intl, pdo, pdo_pgsql, pgsql, opcache, sqlite3, pdo_sqlite
+                  extensions: mbstring, intl, pdo, pdo_pgsql, pgsql, sqlite3, pdo_sqlite
                   coverage: none
 
             - name: Install dependencies
@@ -36,8 +40,11 @@ jobs:
                   mkdir -p var
                   touch var/test.db
 
-            - name: Run Doctrine migrations (test)
+            - name: Run Doctrine migrations
               run: php bin/console doctrine:migrations:migrate --env=test --no-interaction --no-debug
+
+            - name: Validate DB schema
+              run: php bin/console doctrine:schema:validate --env=test --no-debug
 
             - name: Run PHPUnit
               run: vendor/bin/phpunit --testdox --no-coverage
