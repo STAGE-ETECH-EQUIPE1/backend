@@ -11,10 +11,6 @@ jobs:
     quality-check:
         runs-on: ubuntu-latest
 
-        env:
-            APP_ENV: test
-            DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
-
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
