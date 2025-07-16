@@ -32,9 +32,6 @@ jobs:
             - name: Run PHP CS Fixer
               run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
-            - name: Run PHPStan
-              run: vendor/bin/phpstan analyse --memory-limit=512M
-
             - name: Create SQLite test DB
               run: |
                   mkdir -p var
@@ -45,6 +42,9 @@ jobs:
 
             - name: Validate DB schema
               run: php bin/console doctrine:schema:validate --env=test --no-interaction --no-debug
+
+            - name: Run PHPStan
+              run: vendor/bin/phpstan analyse --memory-limit=512M
 
             - name: Run PHPUnit
               run: vendor/bin/phpunit --testdox --no-coverage
