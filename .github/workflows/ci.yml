@@ -11,10 +11,6 @@ jobs:
     quality-check:
         runs-on: ubuntu-latest
 
-        env:
-            APP_ENV: test
-            DATABASE_URL: "sqlite:///$(pwd)/var/test.db"
-
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -29,8 +25,8 @@ jobs:
             - name: Install dependencies
               run: composer install --no-interaction --prefer-dist --no-progress
 
-            - name: Run PHP CS Fixer
-              run: vendor/bin/php-cs-fixer fix --dry-run --diff
+            - name: Set DATABASE_URL as absolute path
+              run: echo "DATABASE_URL=sqlite://$(pwd)/var/test.db" >> $GITHUB_ENV
 
             - name: Create SQLite test DB
               run: |
@@ -42,6 +38,9 @@ jobs:
 
             - name: Validate DB schema
               run: php bin/console doctrine:schema:validate --env=test --no-interaction --no-debug
+
+            - name: Run PHP CS Fixer
+              run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
             - name: Run PHPStan
               run: vendor/bin/phpstan analyse --memory-limit=512M
