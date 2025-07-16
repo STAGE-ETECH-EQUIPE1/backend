@@ -11,6 +11,10 @@ jobs:
     quality-check:
         runs-on: ubuntu-latest
 
+        env:
+            APP_ENV: test
+            DATABASE_URL: sqlite:///${{ github.workspace }}/var/test.db
+
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -25,16 +29,13 @@ jobs:
             - name: Install dependencies
               run: composer install --no-interaction --prefer-dist --no-progress
 
-            - name: Create SQLite test DB
+            - name: Prepare SQLite test DB (clean reset)
               run: |
+                  rm -f var/test.db
                   mkdir -p var
-                  touch var/test.db
 
-            - name: Set DATABASE_URL for test
-              run: echo "DATABASE_URL=sqlite:///${{ github.workspace }}/var/test.db" >> $GITHUB_ENV
-
-            - name: Run Doctrine migrations
-              run: php bin/console doctrine:migrations:migrate --env=test --no-interaction --no-debug
+            - name: Create Schema (recommended for test CI)
+              run: php bin/console doctrine:schema:create --env=test --no-interaction --no-debug
 
             - name: Validate DB schema
               run: php bin/console doctrine:schema:validate --env=test --no-interaction --no-debug
@@ -42,8 +43,8 @@ jobs:
             - name: Run PHP CS Fixer
               run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
-            - name: Run PHPStan (non-bloquant)
-              run: vendor/bin/phpstan analyse --memory-limit=512M || true
+            - name: Run PHPStan
+              run: vendor/bin/phpstan analyse --memory-limit=512M
 
             - name: Run PHPUnit
-              run: vendor/bin/phpunit --testdox --no-coverage
+              run: vendor/bin/phpunit --testdox
