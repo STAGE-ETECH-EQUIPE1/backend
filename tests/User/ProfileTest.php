@@ -9,7 +9,7 @@ class ProfileTest extends WebTestCase
     public function testProfile(): void
     {
         $client = static::createClient();
-        $email = 'user' .uniqid() . '@gmail.com';
+        $email = 'user'.uniqid().'@gmail.com';
         $client->request('POST', '/api/register', [], [], [
             'CONTENT_TYPE' => 'application/ld+json',
             'HTTP_ACCEPT' => 'application/ld+json',
@@ -25,7 +25,7 @@ class ProfileTest extends WebTestCase
         $this->assertJson($client->getResponse()->getContent());
 
         $client->request('POST', '/api/login', [], [], [
-            'CONTENT_TYPE' => 'application/ld+json'
+            'CONTENT_TYPE' => 'application/ld+json',
         ], json_encode([
             'email' => $email,
             'password' => 'Password1234',

@@ -9,7 +9,7 @@ class RegisterTest extends WebTestCase
     public function testRegister(): void
     {
         $client = static::createClient();
-        $email = 'user' .uniqid() . '@gmail.com';
+        $email = 'user'.uniqid().'@gmail.com';
         $client->request('POST', '/api/register', [], [], [
             'CONTENT_TYPE' => 'application/ld+json',
             'HPTTP_ACCEPT' => 'application/ld+json',
