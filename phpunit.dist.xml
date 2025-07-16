@@ -11,6 +11,14 @@
          cacheDirectory=".phpunit.cache"
 >
     <php>
+        <env name="APP_ENV" value="test"/>
+        <env name="KERNEL_CLASS" value="App\Kernel"/>
+        <env name="DATABASE_URL" value="sqlite:///%kernel.project_dir%/var/test.db"/>
+        <env name="APP_SECRET" value="$ecretf0rt3st"/>
+        <env name="JWT_SECRET_KEY" value="%kernel.project_dir%/config/jwt/private.pem"/>
+        <env name="JWT_PUBLIC_KEY" value="%kernel.project_dir%/config/jwt/public.pem"/>
+        <env name="JWT_PASSPHRASE" value="9fb64d578cd0013992ba74cfeee212148e70d7a5354d06a7de79853da372ad4e"/>
+        <env name="CORS_ALLOW_ORIGIN" value="*"/>
         <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />

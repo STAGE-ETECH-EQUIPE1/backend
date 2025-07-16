@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CurrentUserController extends AbstractController
 {
@@ -17,6 +18,7 @@ class CurrentUserController extends AbstractController
     ) {
     }
 
+    #[Route('/api/me', name: 'current_user', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
         $user = $this->security->getUser();
