@@ -2,6 +2,7 @@ controllers:
     resource:
         path: ../src/Controller/
         namespace: App\Controller
+    exclude: ../src/Controller/Api/
     type: attribute
 
 api_controllers:
@@ -21,4 +22,3 @@ connect_google_start:
 
 connect_google_check:
     path: /connect/google/check
-
