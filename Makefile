@@ -37,6 +37,11 @@ migrate: vendor/autoload.php ## Migrate migration to database
 fixtures: vendor/autoload.php ## Load fixtures
 	$(CONSOLE) doctrine:fixtures:load --no-interaction
 
+.PHONY: database-test
+database-test: ## Create test database if not exist
+	$(CONSOLE) doctrine:database:create --if-not-exists --env=test
+	$(CONSOLE) doctrine:schema:update --env=test --force
+
 ##
 ## ----------------------------------
 ## Others
