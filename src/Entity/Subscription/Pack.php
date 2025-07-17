@@ -2,7 +2,7 @@
 
 namespace App\Entity\Subscription;
 
-use App\Repository\PackRepository;
+use App\Repository\Subscription\PackRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 

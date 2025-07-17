@@ -2,7 +2,7 @@
 
 namespace App\Entity\Subscription;
 
-use App\Repository\OrderRepository;
+use App\Repository\Subscription\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]

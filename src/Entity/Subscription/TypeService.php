@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Subscription;
 
-use App\Repository\TypeServiceRepository;
+use App\Repository\Subscription\TypeServiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TypeServiceRepository::class)]

@@ -3,7 +3,7 @@
 namespace App\Entity\Subscription;
 
 use App\Enum\SubscriptionStatus;
-use App\Repository\SubscriptionRepository;
+use App\Repository\Subscription\SubscriptionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
