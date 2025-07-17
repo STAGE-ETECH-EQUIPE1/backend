@@ -2,6 +2,8 @@
 
 namespace App\Entity\Subscription;
 
+use App\Entity\Client;
+use App\Entity\Payment\Payment;
 use App\Enum\SubscriptionStatus;
 use App\Repository\Subscription\SubscriptionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,6 +31,14 @@ class Subscription
 
     #[ORM\Column]
     private ?\DateTimeImmutable $endedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Payment $payment = null;
 
     public function getId(): ?int
     {
@@ -91,6 +101,30 @@ class Subscription
     public function setEndedAt(\DateTimeImmutable $endedAt): static
     {
         $this->endedAt = $endedAt;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): static
+    {
+        $this->payment = $payment;
 
         return $this;
     }
