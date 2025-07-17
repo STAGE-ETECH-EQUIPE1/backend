@@ -21,6 +21,11 @@ serve: vendor/autoload.php ## Run Development Server
 dev: vendor/autoload.php ## Alias for serve
 	$(MAKE) serve
 
+.PHONY: clear
+clear: vendor/autoload.php ## Clear cache
+	$(CONSOLE) cache:clear --env=dev
+	$(CONSOLE) cache:clear --env=test
+
 ##
 ## ----------------------------------
 ## Database
@@ -50,10 +55,6 @@ database-test: ## Create test database if not exist
 lint: vendor/autoload.php ## Analyze code
 	$(PHP) ./vendor/bin/phpstan analyze
 	$(PHP) ./vendor/bin/php-cs-fixer fix src --dry-run --diff
-
-.PHONY: clear
-clear: ## Clear cache
-	$(CONSOLE) cache:clear
 
 .PHONY: help
 help: ## List commands
