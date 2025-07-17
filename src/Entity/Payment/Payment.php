@@ -41,6 +41,10 @@ class Payment
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $fee = null;
 
+    #[ORM\ManyToOne(inversedBy: 'payments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?PaymentMethod $paymentMethod = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +154,18 @@ class Payment
     public function setFee(?string $fee): static
     {
         $this->fee = $fee;
+
+        return $this;
+    }
+
+    public function getPaymentMethod(): ?PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPaymentMethod(?PaymentMethod $paymentMethod): static
+    {
+        $this->paymentMethod = $paymentMethod;
 
         return $this;
     }

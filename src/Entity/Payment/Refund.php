@@ -23,6 +23,10 @@ class Refund
     #[ORM\Column]
     private ?\DateTimeImmutable $processedAt = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Payment $payment = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class Refund
     public function setProcessedAt(\DateTimeImmutable $processedAt): static
     {
         $this->processedAt = $processedAt;
+
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): static
+    {
+        $this->payment = $payment;
 
         return $this;
     }
