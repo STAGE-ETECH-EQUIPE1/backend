@@ -1,6 +1,6 @@
-# 📝 Backlog - Portail Client Symfony
+# 📝 Backlog - ORBIXUP: Digital Premium Ingrastructure
 
-Ce fichier suit les fonctionnalités et tâches à faire pour le développement du portail client.
+Ce fichier suit les fonctionnalités et tâches à faire pour le développement du projet `ORBIXUP: Digital Premium Ingrastructure`
 
 ---
 
@@ -17,11 +17,12 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Tâche                               | Priorité | Statut | Notes                                |
 | ----------------------------------- | -------- | ------ | ------------------------------------ |
-| Créer entité `User` avec JWT        | 🔥       | ✅     | Utilise LexikJWTAuthenticationBundle |
-| Créer entité `Client` liée à `User` | 🔥       | ✅     | Relation OneToOne                    |
-| Implémenter `/api/login`            | 🔥       | ✅     | JSON Login + JWT                     |
-| Protéger les routes `/api/client/*` | 🔥       | ✅     | ROLE_CLIENT                          |
-| Endpoint `/api/client/me`           | 🔥       | 🚧     | Affiche données du client connecté   |
+| Créer entité `User` avec JWT        |    🔥    |   ✅   | Utilise LexikJWTAuthenticationBundle |
+| Créer entité `Client` liée à `User` |    🔥    |   ✅   | Relation OneToOne                    |
+| Implémenter `/api/login`            |    🔥    |   ✅   | JSON Login + JWT                     |
+| Protéger les routes `/api/client/*` |    🔥    |   🕓   | ROLE_CLIENT                          |
+| Endpoint `/api/client/me`           |    🔥    |   🕓   | Affiche données du client connecté   |
+| Ajout 2FA avec Google Authenticator |    🕓    |   🚧   | Affiche données du client connecté   |
 
 ---
 
@@ -29,10 +30,10 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Tâche                             | Priorité | Statut | Notes                            |
 | --------------------------------- | -------- | ------ | -------------------------------- |
-| Affichage tableau de bord client  | 🔥       | 🕓     | Inclure données de l'utilisateur |
-| Ajouter gestion de profil client  | 🔥       | 🕓     | Modifier nom, entreprise, etc.   |
-| Afficher historique des commandes | 🕓       | 🕓     | Requiert entité Order            |
-| Ajout avatar/photo de profil      | 🕓       | 🕓     | Upload avec VichUploaderBundle   |
+| Affichage tableau de bord client  |    🔥    |   🕓   | Inclure données de l'utilisateur |
+| Ajouter gestion de profil client  |    🔥    |   🕓   | Modifier nom, entreprise, etc.   |
+| Afficher historique des commandes |    🕓    |   🕓   | Requiert entité Order            |
+| Ajout avatar/photo de profil      |    🕓    |   🕓   | Upload avec VichUploaderBundle   |
 
 ---
 
@@ -40,10 +41,10 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Tâche                             | Priorité | Statut | Notes                     |
 | --------------------------------- | -------- | ------ | ------------------------- |
-| Créer entité `Admin`              | 🕓       | 🕓     | Utilise même table `user` |
-| Accès au back-office `/admin`     | 🕓       | 🕓     | ROLE_ADMIN                |
-| Voir liste des clients            | 🕓       | 🕓     | Données paginées          |
-| Supprimer un client (soft delete) | 🕓       | 🕓     | Ajouter champ `deletedAt` |
+| Créer entité `Admin`              |    🕓    |   🕓   | Utilise même table `user` |
+| Accès au back-office `/admin`     |    🕓    |   🕓   | ROLE_ADMIN                |
+| Voir liste des clients            |    🕓    |   🕓   | Données paginées          |
+| Supprimer un client (soft delete) |    🕓    |   🕓   | Ajouter champ `deletedAt` |
 
 ---
 
@@ -51,14 +52,13 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Bug                                               | Statut | Notes                  |
 | ------------------------------------------------- | ------ | ---------------------- |
-| L’authentification échoue si mauvais mot de passe | ✅     | Géré par handler Lexik |
-| Problème CORS avec React en local                 | 🚧     | En cours de résolution |
+| L’authentification échoue si mauvais mot de passe |   ✅   | Géré par handler Lexik |
+| Problème CORS avec React en local                 |   🚧   | En cours de résolution |
 
 ---
 
 ## 📌 Idées futures (non priorisées)
 
 -   Intégrer envoi d’e-mails (reset password, confirmation)
--   Ajout 2FA avec Google Authenticator
 -   Multilingue : FR / EN / AR
 -   Mobile-friendly portail client
