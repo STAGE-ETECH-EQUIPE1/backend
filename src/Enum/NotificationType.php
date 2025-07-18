@@ -4,5 +4,9 @@ namespace App\Enum;
 
 enum NotificationType: string
 {
-    case CREATED = '';
+    case SUCCESS = 'success';
+
+    case WARNING = 'updated';
+
+    case ERROR = 'error';
 }
