@@ -42,7 +42,6 @@ class PackFixtures extends Fixture implements DependentFixtureInterface
             $pack = (new Pack())
                 ->setName($data['name'])
                 ->setPrice($this->getPrice())
-                ->setIsActive($this->getFaker()->boolean(75))
                 ->setStartedAt($startedAt)
                 ->setExpiredAt($startedAt->modify('+30 days'))
                 ->setCreatedAt($this->getDateTimeImmutable());
