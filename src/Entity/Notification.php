@@ -95,5 +95,4 @@ class Notification
 
         return $this;
     }
-
 }
