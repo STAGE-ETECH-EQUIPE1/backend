@@ -2,12 +2,14 @@
 
 namespace App\Entity\Subscription;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\Subscription\ServiceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 #[ORM\Table(name: '`subscription_services`')]
+#[ApiResource()]
 class Service
 {
     #[ORM\Id]
