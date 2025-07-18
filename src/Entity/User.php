@@ -14,9 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
-#[ORM\InheritanceType('JOINED')]
-#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
-#[ORM\DiscriminatorMap(['user' => User::class, 'client' => Client::class])]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
@@ -65,6 +62,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      */
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'owner', orphanRemoval: true)]
     private Collection $notifications;
+
+    #[ORM\OneToOne(mappedBy: 'userInfo', cascade: ['persist', 'remove'])]
+    private ?Client $client = null;
 
     public function __construct()
     {
@@ -246,6 +246,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
                 $notification->setOwner(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(Client $client): static
+    {
+        // set the owning side of the relation if necessary
+        if ($client->getUserInfo() !== $this) {
+            $client->setUserInfo($this);
+        }
+
+        $this->client = $client;
 
         return $this;
     }

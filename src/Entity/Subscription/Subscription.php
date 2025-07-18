@@ -2,7 +2,6 @@
 
 namespace App\Entity\Subscription;
 
-use App\Entity\Client;
 use App\Entity\Payment\Payment;
 use App\Enum\SubscriptionStatus;
 use App\Repository\Subscription\SubscriptionRepository;
@@ -33,10 +32,6 @@ class Subscription
 
     #[ORM\Column]
     private ?\DateTimeImmutable $endedAt = null;
-
-    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Client $client = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -114,18 +109,6 @@ class Subscription
     public function setEndedAt(\DateTimeImmutable $endedAt): static
     {
         $this->endedAt = $endedAt;
-
-        return $this;
-    }
-
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
-
-    public function setClient(?Client $client): static
-    {
-        $this->client = $client;
 
         return $this;
     }
