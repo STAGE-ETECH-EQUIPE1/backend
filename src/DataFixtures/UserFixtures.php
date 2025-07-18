@@ -5,11 +5,12 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
+    use FakerTrait;
+
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
     ) {
@@ -17,8 +18,6 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_FR');
-
         $user = new User();
         $user->setEmail('user@domain.com')
             ->setUsername('main.user')
@@ -26,7 +25,7 @@ class UserFixtures extends Fixture
                 $user,
                 'Admin@123'
             ))
-            ->setPhone($faker->phoneNumber())
+            ->setPhone($this->getFaker()->phoneNumber())
             ->setFullName('Main User')
             ->setRoles(['ROLE_USER'])
             ->setCreatedAt(new \DateTimeImmutable())
@@ -40,12 +39,30 @@ class UserFixtures extends Fixture
                 $userAdmin,
                 'Admin@123'
             ))
-            ->setPhone($faker->phoneNumber())
+            ->setPhone($this->getFaker()->phoneNumber())
             ->setFullName('Admin User')
             ->setRoles(['ROLE_ADMIN', 'ROLE_USER'])
             ->setCreatedAt(new \DateTimeImmutable())
             ->setIsVerified(true);
         $manager->persist($userAdmin);
+
+        for ($i = 1; $i <= 10; ++$i) {
+            $userClient = (new User())
+                ->setEmail($this->getFaker()->unique()->email())
+                ->setUsername($this->getFaker()->unique()->userName())
+                ->setFullName($this->getFaker()->lastName().' '.$this->getFaker()->firstName())
+                ->setPhone($this->getFaker()->phoneNumber())
+                ->setRoles(['ROLE_CLIENT', 'ROLE_USER'])
+                ->setIsVerified(true)
+                ->setCreatedAt($this->getDateTimeImmutable())
+            ;
+            $userClient->setPassword($this->passwordHasher->hashPassword(
+                $userClient,
+                'Admin@123'
+            ));
+            $manager->persist($userClient);
+            $this->addReference("client.user.$i", $userClient);
+        }
 
         $manager->flush();
     }

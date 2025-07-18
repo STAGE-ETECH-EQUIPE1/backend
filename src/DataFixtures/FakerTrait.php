@@ -9,7 +9,7 @@ trait FakerTrait
 {
     public function getFaker(): Generator
     {
-        return Factory::create();
+        return Factory::create('fr_FR');
     }
 
     public function numberBetween(int $min, int $max): int
