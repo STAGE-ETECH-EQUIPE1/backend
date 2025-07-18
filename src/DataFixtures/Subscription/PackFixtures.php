@@ -37,9 +37,14 @@ class PackFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         foreach ($this->getData() as $data) {
+            $startedAt = $this->getDateTimeImmutable();
+
             $pack = (new Pack())
                 ->setName($data['name'])
                 ->setPrice($this->getPrice())
+                ->setIsActive($this->getFaker()->boolean(75))
+                ->setStartedAt($startedAt)
+                ->setExpiredAt($startedAt->modify('+30 days'))
                 ->setCreatedAt($this->getDateTimeImmutable());
             foreach ($data['services'] as $serviceCode) {
                 $pack->addService(
