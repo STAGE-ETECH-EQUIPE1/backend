@@ -11,4 +11,19 @@ trait FakerTrait
     {
         return Factory::create();
     }
+
+    public function numberBetween(int $min, int $max): int
+    {
+        return $this->getFaker()->unique(true)->numberBetween($min, $max);
+    }
+
+    public function getPrice(): string
+    {
+        return $this->getFaker()->randomFloat(2, 10, 5000).'';
+    }
+
+    public function getDateTimeImmutable(): \DateTimeImmutable
+    {
+        return \DateTimeImmutable::createFromMutable($this->getFaker()->dateTimeThisYear('now'));
+    }
 }

@@ -13,16 +13,32 @@ final class ServiceFixtures extends Fixture implements DependentFixtureInterface
 {
     use FakerTrait;
 
+    private function getData(): array
+    {
+        return
+        [
+            ['code' => 'VISA-BASIC', 'name' => 'Assistance Visa Basique'],
+            ['code' => 'VISA-PREMIUM', 'name' => 'Visa Premium (Accéléré)'],
+            ['code' => 'BRANDING-LOGO', 'name' => 'Création de Logo'],
+            ['code' => 'ECOMMERCE-STARTER', 'name' => 'Site E-Commerce Basique'],
+            ['code' => 'STRATEGY-ANALYSIS', 'name' => 'Analyse de Marché'],
+            ['code' => 'LEGAL-REG', 'name' => 'Immatriculation Société'],
+        ];
+    }
+
     public function load(ObjectManager $manager): void
     {
-        $service = (new Service())
-            ->setName('Branding')
-            ->setPrice($this->getFaker()->randomFloat(1, 5, 100).'')
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setTypeService(
-                $this->getReference('type_service_'.$this->getFaker()->numberBetween(1, 5), TypeService::class)
-            );
-        $manager->persist($service);
+        foreach ($this->getData() as $data) {
+            $service = (new Service())
+                ->setName($data['name'])
+                ->setPrice($this->getPrice())
+                ->setCreatedAt($this->getDateTimeImmutable())
+                ->setTypeService(
+                    $this->getReference('type_service_'.$this->numberBetween(1, 5), TypeService::class)
+                );
+            $manager->persist($service);
+            $this->addReference('service_'.$data['code'], $service);
+        }
 
         $manager->flush();
     }
