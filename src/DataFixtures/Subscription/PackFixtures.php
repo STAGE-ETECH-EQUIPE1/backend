@@ -17,17 +17,14 @@ class PackFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             [
-                'code' => 'DUBAI-STARTER',
                 'name' => 'Pack Dubai Starter',
                 'services' => ['VISA-BASIC', 'ECOMMERCE-STARTER', 'LEGAL-REG'],
             ],
             [
-                'code' => 'DUBAI-PRO',
                 'name' => 'Pack Dubai Pro',
                 'services' => ['VISA-PREMIUM', 'ECOMMERCE-STARTER', 'LEGAL-REG', 'BRANDING-LOGO'],
             ],
             [
-                'code' => 'GLOBAL-EXPANSION',
                 'name' => 'Pack Expansion Globale',
                 'services' => ['VISA-PREMIUM', 'STRATEGY-ANALYSIS', 'BRANDING-LOGO', 'LEGAL-REG'],
             ],
@@ -36,6 +33,7 @@ class PackFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        $i = 1;
         foreach ($this->getData() as $data) {
             $startedAt = $this->getDateTimeImmutable();
 
@@ -52,7 +50,8 @@ class PackFixtures extends Fixture implements DependentFixtureInterface
             }
 
             $manager->persist($pack);
-            $this->addReference('pack_'.$data['code'], $pack);
+            $this->addReference("pack_$i", $pack);
+            ++$i;
         }
         $manager->flush();
     }
