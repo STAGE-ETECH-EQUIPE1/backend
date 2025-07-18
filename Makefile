@@ -40,7 +40,7 @@ migrate: vendor/autoload.php ## Migrate migration to database
 
 .PHONY: fixtures
 fixtures: vendor/autoload.php ## Load fixtures
-	$(CONSOLE) doctrine:fixtures:load --no-interaction
+	$(CONSOLE) doctrine:fixtures:load --purge-with-truncate --no-interaction
 
 .PHONY: database-test
 database-test: ## Create test database if not exist

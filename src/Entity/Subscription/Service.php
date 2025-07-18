@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
-#[ORM\Table(name: '`subscription_services`')]
+#[ORM\Table(name: '`services`')]
 #[ApiResource()]
 class Service
 {
