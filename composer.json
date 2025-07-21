@@ -38,6 +38,7 @@
         "symfonycasts/verify-email-bundle": "^1.17"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^8.3",
         "doctrine/doctrine-fixtures-bundle": "^4.1",
         "fakerphp/faker": "^1.24",
         "friendsofphp/php-cs-fixer": "^3.82",
@@ -57,7 +58,8 @@
         "symfony/phpunit-bridge": "^7.3",
         "symfony/stopwatch": "7.3.*",
         "symfony/web-profiler-bundle": "7.3.*",
-        "theofidry/alice-data-fixtures": "^1.9"
+        "theofidry/alice-data-fixtures": "^1.9",
+        "zenstruck/foundry": "^2.6"
     },
     "config": {
         "allow-plugins": {
