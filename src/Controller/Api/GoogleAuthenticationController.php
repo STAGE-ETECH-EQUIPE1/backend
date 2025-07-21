@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Auth;
+namespace App\Controller\Api;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;

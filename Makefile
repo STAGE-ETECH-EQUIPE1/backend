@@ -1,7 +1,7 @@
-PHP := php
-SYMFONY := symfony
+PHP := @php
+SYMFONY := @symfony
 CONSOLE := $(PHP) bin/console
-COMPOSER := composer
+COMPOSER := @composer
 
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
 RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
@@ -64,6 +64,10 @@ database-test: ## Create test database if not exist
 lint: vendor/autoload.php ## Analyze code
 	$(PHP) ./vendor/bin/phpstan analyze
 	$(PHP) ./vendor/bin/php-cs-fixer fix src --dry-run --diff
+
+.PHONY: messenger-consume
+messenger-consume: vendor/autoload.php ## For symfony messenger
+	$(CONSOLE) messenger:consume async -vv
 
 .PHONY: help
 help: ## List commands
