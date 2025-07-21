@@ -21,6 +21,11 @@ serve: vendor/autoload.php ## Run Development Server
 dev: vendor/autoload.php ## Alias for serve
 	$(MAKE) serve
 
+.PHONY: clear
+clear: vendor/autoload.php ## Clear cache
+	$(CONSOLE) cache:clear --env=dev
+	$(CONSOLE) cache:clear --env=test
+
 ##
 ## ----------------------------------
 ## Database
@@ -37,6 +42,11 @@ migrate: vendor/autoload.php ## Migrate migration to database
 fixtures: vendor/autoload.php ## Load fixtures
 	$(CONSOLE) doctrine:fixtures:load --no-interaction
 
+.PHONY: database-test
+database-test: ## Create test database if not exist
+	$(CONSOLE) doctrine:database:create --if-not-exists --env=test
+	$(CONSOLE) doctrine:schema:update --env=test --force
+
 ##
 ## ----------------------------------
 ## Others
@@ -45,10 +55,6 @@ fixtures: vendor/autoload.php ## Load fixtures
 lint: vendor/autoload.php ## Analyze code
 	$(PHP) ./vendor/bin/phpstan analyze
 	$(PHP) ./vendor/bin/php-cs-fixer fix src --dry-run --diff
-
-.PHONY: clear
-clear: ## Clear cache
-	$(CONSOLE) cache:clear
 
 .PHONY: help
 help: ## List commands
