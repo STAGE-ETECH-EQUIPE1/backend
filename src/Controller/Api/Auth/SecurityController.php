@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Auth;
 
 use App\DTO\Request\UserRegistrationDTO;
 use App\Entity\User;
@@ -17,7 +17,7 @@ class SecurityController extends AbstractController
     public function __construct(
         private readonly UserServiceInterface $userService,
         private readonly EntityManagerInterface $entityManager,
-    ){
+    ) {
     }
 
     #[Route('/me', name: 'current_user', methods: ['GET'])]
@@ -43,8 +43,7 @@ class SecurityController extends AbstractController
     public function registerUser(
         #[MapRequestPayload]
         UserRegistrationDTO $userRegistrationDto,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $user = $this->userService->convertUserRegistrationDtoToUser($userRegistrationDto);
 
         $this->entityManager->persist($user);
