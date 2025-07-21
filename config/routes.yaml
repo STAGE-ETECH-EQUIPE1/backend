@@ -22,3 +22,8 @@ connect_google_start:
 
 connect_google_check:
     path: /connect/google/check
+
+app.swagger:
+    path: /api/doc.json
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger }
