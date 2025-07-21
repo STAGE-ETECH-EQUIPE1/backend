@@ -2,51 +2,28 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\User;
+use App\DataFixtures\Payment\PaymentMethodFixtures;
+use App\DataFixtures\Subscription\PackFixtures;
+use App\DataFixtures\Subscription\ServiceFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class AppFixtures extends Fixture
+class AppFixtures extends Fixture implements DependentFixtureInterface
 {
-    public function __construct(
-        private readonly UserPasswordHasherInterface $passwordHasher,
-    ) {
-    }
-
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create('fr_FR');
-
-        $user = new User();
-        $user->setEmail('user@domain.com')
-            ->setUsername('main.user')
-            ->setPassword($this->passwordHasher->hashPassword(
-                $user,
-                'Admin@123'
-            ))
-            ->setPhone($faker->phoneNumber())
-            ->setFullName('Main User')
-            ->setRoles(['ROLE_USER'])
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setIsVerified(true);
-        $manager->persist($user);
-
-        $userAdmin = new User();
-        $userAdmin->setEmail('admin@domain.com')
-            ->setUsername('admin.user')
-            ->setPassword($this->passwordHasher->hashPassword(
-                $userAdmin,
-                'Admin@123'
-            ))
-            ->setPhone($faker->phoneNumber())
-            ->setFullName('Admin User')
-            ->setRoles(['ROLE_ADMIN', 'ROLE_USER'])
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setIsVerified(true);
-        $manager->persist($userAdmin);
-
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class,
+            ServiceFixtures::class,
+            PackFixtures::class,
+            PaymentMethodFixtures::class,
+            // SubscriptionFixtures::class,
+        ];
     }
 }
