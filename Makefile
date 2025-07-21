@@ -3,6 +3,9 @@ SYMFONY := symfony
 CONSOLE := $(PHP) bin/console
 COMPOSER := composer
 
+GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
+RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
+
 ## ----------------------------------
 ## App
 ## ----------------------------------
@@ -23,8 +26,14 @@ dev: vendor/autoload.php ## Alias for serve
 
 .PHONY: clear
 clear: vendor/autoload.php ## Clear cache
+	@$(call GREEN,"Clear cache")
 	$(CONSOLE) cache:clear --env=dev
 	$(CONSOLE) cache:clear --env=test
+
+.PHONY: swagger-json
+swagger-json: vendor/autoload.php ## Generate doc with swagger
+	php ./vendor/bin/openapi --format json --output ./swagger/swagger.json src
+	$(call GREEN,"Api Documentation generated successfully")
 
 ##
 ## ----------------------------------
