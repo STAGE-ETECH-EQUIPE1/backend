@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Auth;
+namespace App\Controller\Api;
 
 use App\DTO\Request\ResetPasswordDTO;
 use App\DTO\Request\UpdatePasswordDTO;
