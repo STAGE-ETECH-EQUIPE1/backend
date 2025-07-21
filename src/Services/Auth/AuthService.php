@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -21,6 +22,8 @@ class AuthService implements AuthServiceInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly MailerInterface $mailer,
+        #[Autowire('%app.frontend_url%')]
+        private readonly string $frontendUrl,
     ) {
     }
 
@@ -41,6 +44,7 @@ class AuthService implements AuthServiceInterface
                 ->htmlTemplate('email/reset_password.html.twig')
                 ->context([
                     'resetToken' => $resetToken,
+                    'frontendUrl' => $this->frontendUrl
                 ])
             ;
             $this->mailer->send($email);
