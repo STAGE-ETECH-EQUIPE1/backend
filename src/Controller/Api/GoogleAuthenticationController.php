@@ -13,8 +13,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class GoogleAuthenticationController extends AbstractController
 {
     public function __construct(
-        private GoogleAuthenticationService $googleAuthService
-    ) {}
+        private GoogleAuthenticationService $googleAuthService,
+    ) {
+    }
 
     #[Route('/auth/google', name: 'auth_google', methods: ['POST'])]
     public function googleLogin(Request $request, ValidatorInterface $validator): JsonResponse
@@ -28,12 +29,12 @@ class GoogleAuthenticationController extends AbstractController
         if (count($errors) > 0) {
             return $this->json(['error' => (string) $errors], 400);
         }
-        
+
         try {
             $token = $this->googleAuthService->authenticate($dto);
+
             return $this->json(['token' => $token]);
-        } 
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], 400);
         }
     }

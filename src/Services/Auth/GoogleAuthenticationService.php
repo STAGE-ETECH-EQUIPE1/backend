@@ -15,7 +15,8 @@ class GoogleAuthenticationService
         private ClientRegistry $clientRegistry,
         private EntityManagerInterface $em,
         private JWTTokenManagerInterface $jwtManager,
-    ) {}
+    ) {
+    }
 
     public function authenticate(GoogleAuthenticationDTO $dto): string
     {
@@ -42,6 +43,7 @@ class GoogleAuthenticationService
             $this->em->persist($user);
             $this->em->flush();
         }
+
         return $this->jwtManager->create($user);
     }
 }
