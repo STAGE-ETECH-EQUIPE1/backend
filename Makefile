@@ -32,7 +32,7 @@ clear: vendor/autoload.php ## Clear cache
 
 .PHONY: swagger-json
 swagger-json: vendor/autoload.php ## Generate doc with swagger
-	php ./vendor/bin/openapi --format json --output ./swagger/swagger.json src
+	$(PHP) ./vendor/bin/openapi --format json --output ./swagger/swagger.json ./swagger/swagger.php src
 	$(call GREEN,"Api Documentation generated successfully")
 
 ##

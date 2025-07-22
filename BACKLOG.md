@@ -1,6 +1,5 @@
 # 📝 Backlog - ORBIXUP: Digital Premium Infrastructure
 
-
 Ce fichier suit les fonctionnalités et tâches à faire pour le développement du projet `ORBIXUP: Digital Premium Ingrastructure`
 
 ---
@@ -16,36 +15,58 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 ## 🚀 Épopée 1 : Authentification
 
-| Tâche                               | Priorité | Statut | Notes                                |
-| ----------------------------------- | -------- | ------ | ------------------------------------ |
-| Créer entité `User` avec JWT        |    🔥    |   ✅   | Utilise LexikJWTAuthenticationBundle |
-| Créer entité `Client` liée à `User` |    🔥    |   ✅   | Relation OneToOne                    |
-| Implémenter `/api/login`            |    🔥    |   ✅   | JSON Login + JWT                     |
-| Protéger les routes `/api/client/*` |    🔥    |   🕓   | ROLE_CLIENT                          |
-| Endpoint `/api/client/me`           |    🔥    |   🕓   | Affiche données du client connecté   |
-| Ajout 2FA avec Google Authenticator |    🕓    |   🚧   | Affiche données du client connecté   |
+| Tâche                               | Priorité | Statut | Notes                                                 |
+| ----------------------------------- | -------- | ------ | ----------------------------------------------------- |
+| Créer entité `User` avec JWT        | 🔥       | ✅     | Utilise LexikJWTAuthenticationBundle                  |
+| Créer entité `Client` liée à `User` | 🔥       | ✅     | Relation OneToOne                                     |
+| Implémenter `/api/login`            | 🔥       | ✅     | JSON Login + JWT                                      |
+| Protéger les routes `/api/client/*` | 🔥       | 🕓     | ROLE_CLIENT                                           |
+| Endpoint `/api/client/me`           | 🔥       | 🕓     | Affiche données du client connecté                    |
+| Ajout 2FA avec Google Authenticator | 🕓       | 🚧     | Se connecter avec son compte Google                   |
+| Système de mot de passe oublié      | 🕓       | 🚧     | Envoyer un email lorsque l'on oublie son mot de passe |
 
 ---
 
-## 🛠️ Épopée 2 : Portail Client
+## 🛠️ Épopée 2 : Abonnement
+
+| Tâche                                       | Priorité | Statut | Notes                                      |
+| ------------------------------------------- | -------- | ------ | ------------------------------------------ |
+| Liste des services                          | 🔥       | 🕓     | CRUD pour les services                     |
+| Liste des packs pour un ensemble de service | 🔥       | 🕓     | Generation des packs à partir des services |
+
+---
+
+## 🛠️ Épopée 3 : Branding
+
+| Tâche                                              | Priorité | Statut | Notes                                                       |
+| -------------------------------------------------- | -------- | ------ | ----------------------------------------------------------- |
+| Aider le client à choisir ses préférences          | 🔥       | 🕓     | Créer une table en base de donnée pour les `colors palette` |
+| Génération de la liste des logos à partir d'une IA | 🔥       | 🕓     | Générer à partir des informations entrés par le client      |
+
+---
+
+## 🛠️ Épopée 4 : Portail Client
 
 | Tâche                             | Priorité | Statut | Notes                            |
 | --------------------------------- | -------- | ------ | -------------------------------- |
-| Affichage tableau de bord client  |    🔥    |   🕓   | Inclure données de l'utilisateur |
-| Ajouter gestion de profil client  |    🔥    |   🕓   | Modifier nom, entreprise, etc.   |
-| Afficher historique des commandes |    🕓    |   🕓   | Requiert entité Order            |
-| Ajout avatar/photo de profil      |    🕓    |   🕓   | Upload avec VichUploaderBundle   |
+| Affichage tableau de bord client  | 🔥       | 🕓     | Inclure données de l'utilisateur |
+| Ajouter gestion de profil client  | 🔥       | 🕓     | Modifier nom, entreprise, etc.   |
+| Afficher historique des commandes | 🕓       | 🕓     | Requiert entité Order            |
+| Ajout avatar/photo de profil      | 🕓       | 🕓     | Upload avec VichUploaderBundle   |
 
----
+## 🛠️ Épopée 5 : Mise en place du système de paiement
 
-## ⚙️ Épopée 3 : Administration
+| Tâche | Priorité | Statut | Notes |
+| ----- | -------- | ------ | ----- |
+
+## ⚙️ Épopée 6 : Administration
 
 | Tâche                             | Priorité | Statut | Notes                     |
 | --------------------------------- | -------- | ------ | ------------------------- |
-| Créer entité `Admin`              |    🕓    |   🕓   | Utilise même table `user` |
-| Accès au back-office `/admin`     |    🕓    |   🕓   | ROLE_ADMIN                |
-| Voir liste des clients            |    🕓    |   🕓   | Données paginées          |
-| Supprimer un client (soft delete) |    🕓    |   🕓   | Ajouter champ `deletedAt` |
+| Créer entité `Admin`              | 🕓       | 🕓     | Utilise même table `user` |
+| Accès au back-office `/admin`     | 🕓       | 🕓     | ROLE_ADMIN                |
+| Voir liste des clients            | 🕓       | 🕓     | Données paginées          |
+| Supprimer un client (soft delete) | 🕓       | 🕓     | Ajouter champ `deletedAt` |
 
 ---
 
@@ -53,13 +74,12 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Bug                                               | Statut | Notes                  |
 | ------------------------------------------------- | ------ | ---------------------- |
-| L’authentification échoue si mauvais mot de passe |   ✅   | Géré par handler Lexik |
-| Problème CORS avec React en local                 |   🚧   | En cours de résolution |
+| L’authentification échoue si mauvais mot de passe | ✅     | Géré par handler Lexik |
+| Problème CORS avec React en local                 | 🚧     | En cours de résolution |
 
 ---
 
 ## 📌 Idées futures (non priorisées)
 
--   Intégrer envoi d’e-mails (reset password, confirmation)
 -   Multilingue : FR / EN / AR
 -   Mobile-friendly portail client
