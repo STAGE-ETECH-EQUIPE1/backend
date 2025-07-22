@@ -10,6 +10,11 @@ use App\Entity\User;
 interface UserServiceInterface
 {
     /**
+     * Get User by ID.
+     */
+    public function getById(int $id): User;
+
+    /**
      * Convert UserRegistrationDTO to User entity.
      */
     public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User;
