@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Tests\Authentication;
+namespace App\Tests\Controller\Api\Auth;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class LoginTest extends WebTestCase
+class SecurityControllerTest extends WebTestCase
 {
-    public function testLogin(): void
+    public function testProfile(): void
     {
         $client = static::createClient();
         $email = 'user'.uniqid().'@gmail.com';
         $client->request('POST', '/api/register', [], [], [
             'CONTENT_TYPE' => 'application/ld+json',
-            'HPTTP_ACCEPT' => 'application/ld+json',
+            'HTTP_ACCEPT' => 'application/ld+json',
         ], json_encode([
             'email' => $email,
             'username' => 'testuser1',
@@ -33,5 +33,15 @@ class LoginTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $data = json_decode($client->getResponse()->getContent(), true);
         $this->assertArrayHasKey('token', $data);
+
+        // $token = $data['token'];
+        // $client->request('GET', '/api/me', [], [], [
+        //     'authorization' => 'Bearer '.$token,
+        // ]);
+        // $this->assertResponseStatusCodeSame(200);
+        // $meData = json_decode($client->getResponse()->getContent(), true);
+        // $this->assertArrayHasKey('data', $meData);
+        // $this->assertArrayHasKey('email', $meData['data']);
+        // $this->assertSame($email, $meData['data']['email']);
     }
 }
