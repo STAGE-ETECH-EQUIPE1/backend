@@ -29,21 +29,19 @@ class GoogleAuthenticationService
         if (!is_string($email)) {
             throw new \InvalidArgumentException('Email must be a string');
         }
-
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
 
         if (!$user) {
             $user = new User();
             $user->setEmail($email);
-            $user->setFullName($googleUser->getName());
-            $user->setUsername($googleUser->getName());
-            $user->setPassword(''); // Tu peux générer un mot de passe ou laisser vide
+            $user->setFullName('');
+            $user->setUsername('');
+            $user->setPassword('');
             $user->setPhone('');
 
             $this->em->persist($user);
             $this->em->flush();
         }
-
         return $this->jwtManager->create($user);
     }
 }
