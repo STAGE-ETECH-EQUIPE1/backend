@@ -35,4 +35,5 @@ phpstan.neon
 
 ###> swagger/openapi ###
 /swagger/
+/public/swagger-ui/
 ###< swagger/openapi ###
