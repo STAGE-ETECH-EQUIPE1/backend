@@ -2,54 +2,40 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Token\AccessToken;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use App\DTO\Request\GoogleAuthenticationDTO;
+use App\Services\Auth\GoogleAuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GoogleAuthenticationController extends AbstractController
 {
+    public function __construct(
+        private GoogleAuthenticationService $googleAuthService,
+    ) {
+    }
+
     #[Route('/auth/google', name: 'auth_google', methods: ['POST'])]
-    public function googleLogin(Request $request, ClientRegistry $clientRegistry, EntityManagerInterface $em, JWTTokenManagerInterface $jwtManager): JsonResponse
+    public function googleLogin(Request $request, ValidatorInterface $validator): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['access_token'])) {
-            return new JsonResponse(['error' => 'access_token manquant'], 400);
-        }
-        $client = $clientRegistry->getClient('google');
-        $accessToken = new AccessToken(['access_token' => $data['access_token']]);
-        $googleUser = $client->fetchUserFromToken($accessToken);
+        $dto = new GoogleAuthenticationDTO();
+        $dto->accessToken = $data['access_token'] ?? '';
 
-        /** @var \League\OAuth2\Client\Provider\GoogleUser $googleUser */
-        $email = $googleUser->getEmail();
-        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-
-        if (!$user) {
-            $user = new User();
-            if (!is_string($email)) {
-                throw new \InvalidArgumentException('Email must be a string');
-            }
-            /* @var \App\Entity\User $user */
-            $user->setEmail($email);
-            $user->setFullName($googleUser->getName());
-            $user->setUsername($googleUser->getName());
-            $user->setPassword(''); // à verifier
-            // autre info : Phone, etc
-
-            $em->persist($user);
-            $em->flush();
+        $errors = $validator->validate($dto);
+        if (count($errors) > 0) {
+            return $this->json(['error' => (string) $errors], 400);
         }
 
-        $token = $jwtManager->create($user);
+        try {
+            $token = $this->googleAuthService->authenticate($dto);
 
-        return new JsonResponse([
-            'token' => $token,
-        ]);
+            return $this->json(['token' => $token]);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], 400);
+        }
     }
 }

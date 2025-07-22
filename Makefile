@@ -15,7 +15,7 @@ install: vendor/autoload.php ## Install dependencies
 
 .PHONY: serve
 serve: vendor/autoload.php ## Run Development Server
-	$(SYMFONY) serve
+	$(SYMFONY) serve --no-tls
 
 .PHONY: dev
 dev: vendor/autoload.php ## Alias for serve
