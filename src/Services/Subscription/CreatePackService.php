@@ -7,7 +7,7 @@ use App\Entity\Subscription\Pack;
 
 class CreatePackService
 {
-    public function createPackFormDTO(CreatePackDTO $dto): Pack
+    public function createPackFormDTO(CreatePackDTO $dto) // Error : Pack
     {
         $pack = new Pack;
 
