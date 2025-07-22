@@ -23,7 +23,7 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 | Protéger les routes `/api/client/*` | 🔥       | 🕓     | ROLE_CLIENT                                           |
 | Endpoint `/api/client/me`           | 🔥       | 🕓     | Affiche données du client connecté                    |
 | Ajout 2FA avec Google Authenticator | 🕓       | 🚧     | Se connecter avec son compte Google                   |
-| Système de mot de passe oublié      | 🕓       | 🚧     | Envoyer un email lorsque l'on oublie son mot de passe |
+| Système de mot de passe oublié      | 🕓       | ✅     | Envoyer un email lorsque l'on oublie son mot de passe |
 
 ---
 
