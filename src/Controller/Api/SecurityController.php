@@ -6,6 +6,7 @@ use App\DTO\Request\UserRegistrationDTO;
 use App\Entity\User;
 use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,15 @@ class SecurityController extends AbstractController
     ) {
     }
 
+    #[OA\Get(
+        path: '/api/me',
+        responses: [
+            new OA\Response(
+                response: '200',
+                description: 'Current User'
+            )
+        ]
+    )]
     #[Route('/me', name: 'current_user', methods: ['GET'])]
     public function getCurrentUser(): JsonResponse
     {
