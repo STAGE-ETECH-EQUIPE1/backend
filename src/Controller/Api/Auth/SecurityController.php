@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Auth;
 
 use App\DTO\Request\UserRegistrationDTO;
 use App\Entity\User;

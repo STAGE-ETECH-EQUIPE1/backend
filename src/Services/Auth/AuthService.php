@@ -44,7 +44,7 @@ class AuthService implements AuthServiceInterface
                 ->htmlTemplate('email/reset_password.html.twig')
                 ->context([
                     'resetToken' => $resetToken,
-                    'frontendUrl' => $this->frontendUrl
+                    'frontendUrl' => $this->frontendUrl,
                 ])
             ;
             $this->mailer->send($email);
