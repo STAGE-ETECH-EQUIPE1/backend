@@ -26,8 +26,8 @@ class SecurityController extends AbstractController
         responses: [
             new OA\Response(
                 response: '200',
-                description: 'Current User'
-            )
+                description: 'Current User',
+            ),
         ]
     )]
     #[Route('/me', name: 'current_user', methods: ['GET'])]
