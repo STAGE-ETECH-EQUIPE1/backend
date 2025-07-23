@@ -32,8 +32,3 @@ phpstan.neon
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 ###< php-cs-fixer/shim ###
-
-###> swagger/openapi ###
-/swagger/
-/public/swagger-ui/
-###< swagger/openapi ###
