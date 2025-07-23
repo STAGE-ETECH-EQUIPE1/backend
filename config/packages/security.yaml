@@ -6,12 +6,12 @@ security:
     providers:
         jwt_provider:
             lexik_jwt:
-                class: App\Entity\User
+                class: App\Entity\Auth\User
 
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\User
+                class: App\Entity\Auth\User
                 property: email
 
     firewalls:

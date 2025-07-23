@@ -5,9 +5,9 @@ namespace App\Services\User;
 use App\DTO\Output\JWTUser;
 use App\DTO\Request\UserRegistrationDTO;
 use App\DTO\UserDTO;
-use App\Entity\User;
+use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
-use App\Repository\UserRepository;
+use App\Repository\Auth\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserService implements UserServiceInterface

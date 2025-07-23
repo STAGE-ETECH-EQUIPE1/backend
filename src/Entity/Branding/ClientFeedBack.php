@@ -2,7 +2,7 @@
 
 namespace App\Entity\Branding;
 
-use App\Entity\Client;
+use App\Entity\Auth\Client;
 use App\Repository\Branding\ClientFeedBackRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

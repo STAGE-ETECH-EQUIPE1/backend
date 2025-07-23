@@ -2,7 +2,7 @@
 
 namespace App\Entity\Branding;
 
-use App\Entity\Client;
+use App\Entity\Auth\Client;
 use App\Enum\BrandingStatus;
 use App\Repository\Branding\BrandingProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;

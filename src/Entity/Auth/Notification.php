@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Auth;
 
 use App\Enum\NotificationType;
-use App\Repository\NotificationRepository;
+use App\Repository\Auth\NotificationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NotificationRepository::class)]
