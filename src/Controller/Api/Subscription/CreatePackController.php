@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CreatePackController extends AbstractController
 {
-    #[Route('/pack/create', name:'create_pack', methode:['POST'])]
+    #[Route('/pack/create', name: 'create_pack', methods: ['POST'])]
     public function createPack(Request $request, ValidatorInterface $validator): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
