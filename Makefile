@@ -44,10 +44,9 @@ clear: vendor/autoload.php ## Clear cache
 	$(CONSOLE) cache:clear --env=dev
 	$(CONSOLE) cache:clear --env=test
 
-.PHONY: swagger-json
-swagger-json: vendor/autoload.php ## Generate doc with swagger
-	$(PHP) ./vendor/bin/openapi --format json --output ./swagger/swagger.json ./swagger/swagger.php src
-	$(call GREEN,"Api Documentation generated successfully")
+.PHONY: messenger-consume
+messenger-consume: vendor/autoload.php ## For symfony messenger
+	$(CONSOLE) messenger:consume async -vv
 
 ##
 ## ----------------------------------
@@ -74,21 +73,20 @@ database-test: ## Create test database if not exist
 ## ----------------------------------
 ## Docker
 ## ----------------------------------
-
 .PHONY: docker-build
 docker-build: ## Build docker image
 	@$(call GREEN,"Build docker image")
-	docker compose build
+	$(COMPOSE) build
 
 .PHONY: docker-up
 docker-up: ## Start docker containers
 	@$(call GREEN,"Start docker containers")
-	docker compose up -d
+	$(COMPOSE) up -d
 
 .PHONY: docker-down
 docker-down: ## Stop docker containers
 	@$(call GREEN,"Stop docker containers")
-	docker compose down
+	$(COMPOSE) down
 
 .PHONY: docker-restart
 docker-restart: ## Restart docker containers
@@ -99,7 +97,7 @@ docker-restart: ## Restart docker containers
 .PHONY: docker-logs
 docker-logs: ## Show docker logs
 	@$(call GREEN,"Show docker logs")
-	docker compose logs -f
+	$(COMPOSE) logs -f
 
 ##
 ## ----------------------------------
@@ -109,10 +107,6 @@ docker-logs: ## Show docker logs
 lint: vendor/autoload.php ## Analyze code
 	$(PHP) ./vendor/bin/phpstan analyze
 	$(PHP) ./vendor/bin/php-cs-fixer fix src --dry-run --diff
-
-.PHONY: messenger-consume
-messenger-consume: vendor/autoload.php ## For symfony messenger
-	$(CONSOLE) messenger:consume async -vv
 
 .PHONY: help
 help: ## List commands
