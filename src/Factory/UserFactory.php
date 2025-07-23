@@ -2,7 +2,7 @@
 
 namespace App\Factory;
 
-use App\Entity\User;
+use App\Entity\Auth\User;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**

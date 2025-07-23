@@ -1,9 +1,10 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\Auth;
 
-use App\Entity\Client;
-use App\Entity\User;
+use App\DataFixtures\FakerTrait;
+use App\Entity\Auth\Client;
+use App\Entity\Auth\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
