@@ -2,6 +2,7 @@
 
 namespace App\Entity\Branding;
 
+use App\Entity\Client;
 use App\Repository\Branding\ClientFeedBackRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,6 +20,14 @@ class ClientFeedBack
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'clientFeedBacks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?LogoVersion $logoVersion = null;
 
     public function getId(): ?int
     {
@@ -45,6 +54,30 @@ class ClientFeedBack
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getLogoVersion(): ?LogoVersion
+    {
+        return $this->logoVersion;
+    }
+
+    public function setLogoVersion(?LogoVersion $logoVersion): static
+    {
+        $this->logoVersion = $logoVersion;
 
         return $this;
     }

@@ -36,6 +36,10 @@ class BackgroundJob
     #[ORM\Column]
     private ?int $attempts = null;
 
+    #[ORM\ManyToOne(inversedBy: 'backgroundJobs')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?BackgroundJobType $jobType = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +125,18 @@ class BackgroundJob
     public function setAttempts(int $attempts): static
     {
         $this->attempts = $attempts;
+
+        return $this;
+    }
+
+    public function getJobType(): ?BackgroundJobType
+    {
+        return $this->jobType;
+    }
+
+    public function setJobType(?BackgroundJobType $jobType): static
+    {
+        $this->jobType = $jobType;
 
         return $this;
     }

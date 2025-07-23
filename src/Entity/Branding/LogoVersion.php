@@ -3,6 +3,8 @@
 namespace App\Entity\Branding;
 
 use App\Repository\Branding\LogoVersionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LogoVersionRepository::class)]
@@ -22,8 +24,19 @@ class LogoVersion
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $approvedAt = null;
 
-    #[ORM\Column]
-    private ?int $iterationNumber = null;
+    #[ORM\Column(options: ['default' => 0])]
+    private int $iterationNumber = 0;
+
+    /**
+     * @var Collection<int, ClientFeedBack>
+     */
+    #[ORM\OneToMany(targetEntity: ClientFeedBack::class, mappedBy: 'logoVersion', orphanRemoval: true)]
+    private Collection $clientFeedBacks;
+
+    public function __construct()
+    {
+        $this->clientFeedBacks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -74,6 +87,36 @@ class LogoVersion
     public function setIterationNumber(int $iterationNumber): static
     {
         $this->iterationNumber = $iterationNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ClientFeedBack>
+     */
+    public function getClientFeedBacks(): Collection
+    {
+        return $this->clientFeedBacks;
+    }
+
+    public function addClientFeedBack(ClientFeedBack $clientFeedBack): static
+    {
+        if (!$this->clientFeedBacks->contains($clientFeedBack)) {
+            $this->clientFeedBacks->add($clientFeedBack);
+            $clientFeedBack->setLogoVersion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClientFeedBack(ClientFeedBack $clientFeedBack): static
+    {
+        if ($this->clientFeedBacks->removeElement($clientFeedBack)) {
+            // set the owning side to null (unless already changed)
+            if ($clientFeedBack->getLogoVersion() === $this) {
+                $clientFeedBack->setLogoVersion(null);
+            }
+        }
 
         return $this;
     }

@@ -20,6 +20,10 @@ class BrandAiPromptHistory
     #[ORM\Column]
     private ?\DateTimeImmutable $executedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'brandAiPromptHistories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?BrandingProject $branding = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class BrandAiPromptHistory
     public function setExecutedAt(\DateTimeImmutable $executedAt): static
     {
         $this->executedAt = $executedAt;
+
+        return $this;
+    }
+
+    public function getBranding(): ?BrandingProject
+    {
+        return $this->branding;
+    }
+
+    public function setBranding(?BrandingProject $branding): static
+    {
+        $this->branding = $branding;
 
         return $this;
     }

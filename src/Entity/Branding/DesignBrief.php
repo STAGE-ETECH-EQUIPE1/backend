@@ -20,6 +20,10 @@ class DesignBrief
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\ManyToOne(inversedBy: 'designBriefs')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?BrandingProject $branding = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class DesignBrief
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getBranding(): ?BrandingProject
+    {
+        return $this->branding;
+    }
+
+    public function setBranding(?BrandingProject $branding): static
+    {
+        $this->branding = $branding;
 
         return $this;
     }
