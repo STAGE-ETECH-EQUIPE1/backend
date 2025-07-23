@@ -38,10 +38,12 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 ## 🛠️ Épopée 3 : Branding
 
-| Tâche                                              | Priorité | Statut | Notes                                                       |
-| -------------------------------------------------- | -------- | ------ | ----------------------------------------------------------- |
-| Aider le client à choisir ses préférences          | 🔥       | 🕓     | Créer une table en base de donnée pour les `colors palette` |
-| Génération de la liste des logos à partir d'une IA | 🔥       | 🕓     | Générer à partir des informations entrés par le client      |
+| Tâche                                                                    | Priorité | Statut | Notes                                                       |
+| ------------------------------------------------------------------------ | -------- | ------ | ----------------------------------------------------------- |
+| Aider le client à choisir ses préférences                                | 🔥       | 🕓     | Créer une table en base de donnée pour les `colors palette` |
+| Génération de la liste des logos à partir d'une IA                       | 🔥       | 🕓     | Générer à partir des informations entrés par le client      |
+| Mettre en place un système de feedback pour connaître le choix du client | 🔥       | 🕓     | un petit système de commentaire pour chaque logo généré     |
+| Endpoint pour chaque fonctionnalité                                      | 🔥       | 🕓     | Création des routes pour chaque fonctionnalité              |
 
 ---
 
@@ -56,8 +58,9 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 ## 🛠️ Épopée 5 : Mise en place du système de paiement
 
-| Tâche | Priorité | Statut | Notes |
-| ----- | -------- | ------ | ----- |
+| Tâche                                                    | Priorité | Statut | Notes                                             |
+| -------------------------------------------------------- | -------- | ------ | ------------------------------------------------- |
+| Utilisation de `Cybersource` pour le système de paiement | 🔥       | 🕓     | Utiliser `cybersource` pour les paiement en ligne |
 
 ## ⚙️ Épopée 6 : Administration
 
@@ -72,10 +75,10 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 ## 🐞 Bugs connus
 
-| Bug                                               | Statut | Notes                  |
-| ------------------------------------------------- | ------ | ---------------------- |
-| L’authentification échoue si mauvais mot de passe | ✅     | Géré par handler Lexik |
-| Problème CORS avec React en local                 | 🚧     | En cours de résolution |
+| Bug                                               | Statut | Notes                     |
+| ------------------------------------------------- | ------ | ------------------------- |
+| L’authentification échoue si mauvais mot de passe | ✅     | Géré par handler LexikJWT |
+| Mise en place du docker sur le projet             | 🚧     | En cours de résolution    |
 
 ---
 
@@ -83,3 +86,6 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 -   Multilingue : FR / EN / AR
 -   Mobile-friendly portail client
+-   Mise en place d'un système de notification pour l'utilisateur
+-   Utilisation de MVola Api pour le paiement en local
+-   Créer un système de remboursement si non satisfait des offres
