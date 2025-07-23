@@ -3,7 +3,7 @@
 namespace App\Tests\Controller\Api\Auth;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use App\Entity\User;
+use App\Entity\Auth\User;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\DependencyInjection\Container;
 
