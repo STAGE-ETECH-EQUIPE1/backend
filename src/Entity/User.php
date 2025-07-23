@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -11,11 +13,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\Table(name: '`users`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
+    use SocialLoggableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -53,9 +57,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     #[ORM\Column]
     private bool $isVerified = false;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $notifications;
+
+    #[ORM\OneToOne(mappedBy: 'userInfo', cascade: ['persist', 'remove'])]
+    private ?Client $client = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->notifications = new ArrayCollection();
     }
 
     public function setId(int $id): static
@@ -204,5 +218,52 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
             ->setEmail($payload['email'])
             ->setRoles($payload['roles'])
         ;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getOwner() === $this) {
+                $notification->setOwner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(Client $client): static
+    {
+        // set the owning side of the relation if necessary
+        if ($client->getUserInfo() !== $this) {
+            $client->setUserInfo($this);
+        }
+
+        $this->client = $client;
+
+        return $this;
     }
 }

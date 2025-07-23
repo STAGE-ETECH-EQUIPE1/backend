@@ -6,13 +6,25 @@ use App\DTO\Output\JWTUser;
 use App\DTO\Request\UserRegistrationDTO;
 use App\DTO\UserDTO;
 use App\Entity\User;
+use App\Exception\UserNotFoundException;
+use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserService implements UserServiceInterface
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
+        private readonly UserRepository $userRepository,
     ) {
+    }
+
+    public function getById(int $id): User
+    {
+        $user = $this->userRepository->getByUserId($id);
+        if ($user) {
+            return $user;
+        }
+        throw new UserNotFoundException();
     }
 
     public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User

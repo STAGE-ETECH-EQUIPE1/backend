@@ -1,5 +1,5 @@
 # Image PHP avec extensions pour Symfony
-FROM php:8.3-cli
+FROM php:8.3-fpm
 
 # Installation des dépendances système nécessaires
 RUN apt-get update && apt-get install -y \
@@ -31,9 +31,6 @@ COPY composer.json composer.lock ./
 # Installer les dépendances PHP sans exécuter de script
 RUN composer install --prefer-dist --no-scripts --no-interaction --optimize-autoloader
 
-# Créer un fichier .env vide pour éviter l'erreur
-RUN touch .env
-
 # Copier le reste du code source
 COPY . .
 
@@ -44,7 +41,7 @@ RUN composer dump-autoload --optimize
 RUN mkdir -p var/cache var/log && chmod -R 777 var
 
 # Nettoyer le cache Symfony sans échouer si bin/console échoue
-RUN php bin/console cache:clear --env=prod --no-debug || true
+RUN php bin/console cache:clear --env=dev --no-debug || true
 
 # Exposer le port par défaut
 EXPOSE 8000

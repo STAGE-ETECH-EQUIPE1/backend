@@ -2,6 +2,7 @@ controllers:
     resource:
         path: ../src/Controller/
         namespace: App\Controller
+    exclude: ../src/Controller/Api/
     type: attribute
 
 api_controllers:
@@ -14,3 +15,15 @@ api_controllers:
 
 api_login_check:
     path: /api/login
+
+connect_google_start:
+    path: /connect/google
+    controller: App\Controller\SecurityController::connectGoogle
+
+connect_google_check:
+    path: /connect/google/check
+
+app.swagger:
+    path: /api/doc.json
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger }
