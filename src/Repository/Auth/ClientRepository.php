@@ -1,40 +1,40 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Auth;
 
-use App\Entity\Notification;
+use App\Entity\Auth\Client;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Notification>
+ * @extends ServiceEntityRepository<Client>
  */
-class NotificationRepository extends ServiceEntityRepository
+class ClientRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Notification::class);
+        parent::__construct($registry, Client::class);
     }
 
     //    /**
-    //     * @return Notification[] Returns an array of Notification objects
+    //     * @return Client[] Returns an array of Client objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('n')
-    //            ->andWhere('n.exampleField = :val')
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('n.id', 'ASC')
+    //            ->orderBy('c.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Notification
+    //    public function findOneBySomeField($value): ?Client
     //    {
-    //        return $this->createQueryBuilder('n')
-    //            ->andWhere('n.exampleField = :val')
+    //        return $this->createQueryBuilder('c')
+    //            ->andWhere('c.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

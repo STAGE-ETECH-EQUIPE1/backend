@@ -1,9 +1,10 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\Auth;
 
-use App\Entity\Notification;
-use App\Entity\User;
+use App\DataFixtures\FakerTrait;
+use App\Entity\Auth\Notification;
+use App\Entity\Auth\User;
 use App\Enum\NotificationType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

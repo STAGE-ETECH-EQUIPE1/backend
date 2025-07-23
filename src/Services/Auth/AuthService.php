@@ -3,8 +3,8 @@
 namespace App\Services\Auth;
 
 use App\DTO\Request\UpdatePasswordDTO;
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Entity\Auth\User;
+use App\Repository\Auth\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;

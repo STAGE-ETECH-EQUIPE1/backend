@@ -3,7 +3,7 @@
 namespace App\Services\Auth;
 
 use App\DTO\Request\GoogleAuthenticationDTO;
-use App\Entity\User;
+use App\Entity\Auth\User;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Token\AccessToken;

@@ -5,7 +5,7 @@ namespace App\Services\User;
 use App\DTO\Output\JWTUser;
 use App\DTO\Request\UserRegistrationDTO;
 use App\DTO\UserDTO;
-use App\Entity\User;
+use App\Entity\Auth\User;
 
 interface UserServiceInterface
 {

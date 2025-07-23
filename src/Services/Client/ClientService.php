@@ -3,8 +3,8 @@
 namespace App\Services\Client;
 
 use App\DTO\ClientDTO;
-use App\Entity\Client;
-use App\Entity\User;
+use App\Entity\Auth\Client;
+use App\Entity\Auth\User;
 use App\Services\AbstractService;
 use App\Services\User\UserServiceInterface;
 use Symfony\Bundle\SecurityBundle\Security;
