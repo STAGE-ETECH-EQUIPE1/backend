@@ -3,28 +3,23 @@
 namespace App\Tests\Controller\Api\Auth;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use ApiPlatform\Symfony\Bundle\Test\Client;
 use App\Entity\User;
-use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\DependencyInjection\Container;
 
 class ResetPasswordControllerTest extends ApiTestCase
 {
-    use ReloadDatabaseTrait;
-
-    protected Client $client;
-
+    use RefreshDatabaseTrait;
     protected Container $container;
 
     public function setUp(): void
     {
-        $this->client = self::createClient([], [
-            'base_uri' => $_ENV['TEST_BASE_URL'] ?? 'http://localhost',
-        ]);
+        parent::bootKernel();
+
         $this->container = self::getContainer();
     }
 
-    public function sendResetPasswordRequest(): void
+    public function testSendResetPasswordRequest(): void
     {
         $user = (new User())
             ->setEmail('test@example.com')
@@ -43,7 +38,9 @@ class ResetPasswordControllerTest extends ApiTestCase
         $manager->persist($user);
         $manager->flush();
 
-        $this->client->request('POST', '/api/reset-password', [
+        self::createClient([], [
+            'base_uri' => $_ENV['TEST_BASE_URL'] ?? 'http://localhost',
+        ])->request('POST', '/api/reset-password', [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
