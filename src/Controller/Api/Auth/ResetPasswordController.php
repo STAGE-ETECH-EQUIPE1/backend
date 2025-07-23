@@ -18,7 +18,7 @@ class ResetPasswordController extends AbstractController
     ) {
     }
 
-    #[Route('/reset-password', name: 'forgot_password_request')]
+    #[Route('/reset-password', name: 'forgot_password_request', methods: ['POST'])]
     public function sendResetPasswordRequest(
         #[MapRequestPayload]
         ResetPasswordDTO $resetPasswordDTO,
@@ -36,7 +36,7 @@ class ResetPasswordController extends AbstractController
         }
     }
 
-    #[Route('/reset-password/reset/{token}', name: 'reset_password')]
+    #[Route('/reset-password/reset/{token}', name: 'reset_password', methods: ['POST'])]
     public function resetPassword(
         #[MapRequestPayload]
         UpdatePasswordDTO $updatePasswordDTO,
