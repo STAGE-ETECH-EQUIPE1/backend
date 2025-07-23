@@ -1,16 +1,30 @@
+IS_DOCKER := $(shell docker info > /dev/null 2>&1 && echo 1)
+
 PHP := @php
 SYMFONY := @symfony
 CONSOLE := $(PHP) bin/console
 COMPOSER := @composer
+DOCKER := @docker
+
+#ifeq ($(IS_DOCKER), 1)
+#	COMPOSE := $(DOCKER) compose
+#	EXEC := $(COMPOSE) exec
+#	CONSOLE := $(EXEC) php bin/console
+#	PHP := $(COMPOSE) run  --rm --no-deps php
+#endif
 
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
 RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
+
+.DEFAULT_GOAL := help
 
 ## ----------------------------------
 ## App
 ## ----------------------------------
 .PHONY: install
 install: vendor/autoload.php ## Install dependencies
+	@cp .env .env.local
+	@$(call GREEN,"Install dependencies")
 	$(COMPOSER) install --no-interaction
 	$(CONSOLE) lexik:jwt:generate-keypair --no-interaction
 	$(CONSOLE) doctrine:database:create --if-not-exists
@@ -55,6 +69,37 @@ fixtures: vendor/autoload.php ## Load fixtures
 database-test: ## Create test database if not exist
 	$(CONSOLE) doctrine:database:create --if-not-exists --env=test
 	$(CONSOLE) doctrine:schema:update --env=test --force
+
+##
+## ----------------------------------
+## Docker
+## ----------------------------------
+
+.PHONY: docker-build
+docker-build: ## Build docker image
+	@$(call GREEN,"Build docker image")
+	docker compose build
+
+.PHONY: docker-up
+docker-up: ## Start docker containers
+	@$(call GREEN,"Start docker containers")
+	docker compose up -d
+
+.PHONY: docker-down
+docker-down: ## Stop docker containers
+	@$(call GREEN,"Stop docker containers")
+	docker compose down
+
+.PHONY: docker-restart
+docker-restart: ## Restart docker containers
+	@$(call GREEN,"Restart docker containers")
+	$(MAKE) docker-down
+	$(MAKE) docker-up
+
+.PHONY: docker-logs
+docker-logs: ## Show docker logs
+	@$(call GREEN,"Show docker logs")
+	docker compose logs -f
 
 ##
 ## ----------------------------------
