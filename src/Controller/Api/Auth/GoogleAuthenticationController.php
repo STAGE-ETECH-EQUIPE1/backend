@@ -32,7 +32,6 @@ class GoogleAuthenticationController extends AbstractController
 
         try {
             $token = $this->googleAuthService->authenticate($dto);
-
             return $this->json(['token' => $token]);
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], 400);
