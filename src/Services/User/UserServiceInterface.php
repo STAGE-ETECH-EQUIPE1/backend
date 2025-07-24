@@ -15,6 +15,11 @@ interface UserServiceInterface
     public function getById(int $id): User;
 
     /**
+     * Get User from security.
+     */
+    public function getConnectedUser(): User;
+
+    /**
      * Convert UserRegistrationDTO to User entity.
      */
     public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User;

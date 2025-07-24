@@ -5,6 +5,7 @@ namespace App\Services\Client;
 use App\DTO\ClientDTO;
 use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
+use App\Exception\ClientNotAssociedException;
 use App\Services\AbstractService;
 use App\Services\User\UserServiceInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -40,7 +41,7 @@ class ClientService extends AbstractService implements ClientServiceInterface
     {
         $client = $clientUser->getClient();
         if (!$client) {
-            throw new \RuntimeException('No client associated with the user.');
+            throw new ClientNotAssociedException();
         }
 
         return (new ClientDTO())
