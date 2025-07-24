@@ -31,7 +31,7 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Tâche                                       | Priorité | Statut | Notes                                      |
 | ------------------------------------------- | -------- | ------ | ------------------------------------------ |
-| Liste des services                          | 🔥       | 🕓     | CRUD pour les services                     |
+| Liste des services                          | 🔥       | 🚧     | CRUD pour les services                     |
 | Liste des packs pour un ensemble de service | 🔥       | 🕓     | Generation des packs à partir des services |
 
 ---

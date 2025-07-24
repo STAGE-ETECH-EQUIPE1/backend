@@ -4,12 +4,12 @@ namespace App\Tests\Controller\Api\Auth;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Auth\User;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\DependencyInjection\Container;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ResetPasswordControllerTest extends ApiTestCase
 {
-    use RefreshDatabaseTrait;
+    use ResetDatabase;
     protected Container $container;
 
     public function setUp(): void
