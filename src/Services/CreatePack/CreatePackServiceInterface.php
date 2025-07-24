@@ -7,5 +7,5 @@ use App\Entity\Subscription\Pack;
 
 interface CreatePackServiceInterface
 {
-    public function createFormDTO(CreatePackDTO $dto): Pack;
+    public function createPackFormDTO(CreatePackDTO $dto): Pack;
 }

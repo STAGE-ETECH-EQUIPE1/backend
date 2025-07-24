@@ -8,5 +8,5 @@ class GoogleAuthenticationDTO
 {
     #[Assert\NotBlank]
     #[Assert\Type('string')]
-    public string $accessToken;
+    public string $idToken;
 }

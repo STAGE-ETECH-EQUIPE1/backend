@@ -40,6 +40,7 @@ class Pack
 
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->services = new ArrayCollection();
     }
 

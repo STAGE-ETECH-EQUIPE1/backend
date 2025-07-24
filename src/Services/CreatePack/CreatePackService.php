@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Subscription;
+namespace App\Services\CreatePack;
 
 use App\DTO\Subscription\CreatePackDTO;
 use App\Entity\Subscription\Pack;
@@ -16,7 +16,7 @@ class CreatePackService implements CreatePackServiceInterface
     )
     {}
 
-    public function createPackFormDTO(CreatePackDTO $dto) // Error : Pack
+    public function createPackFormDTO(CreatePackDTO $dto): Pack
     {
         $pack = new Pack();
         $pack->setName($dto->name);

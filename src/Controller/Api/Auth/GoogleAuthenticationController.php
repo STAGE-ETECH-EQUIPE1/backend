@@ -22,8 +22,11 @@ class GoogleAuthenticationController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
+        if (!is_array($data) || !isset($data['id_token'])) {
+            return $this->json(['error' => 'Missing or invalid id_token'], 400);
+        }
         $dto = new GoogleAuthenticationDTO();
-        $dto->accessToken = $data['access_token'] ?? '';
+        $dto->idToken = $data['id_token'];
 
         $errors = $validator->validate($dto);
         if (count($errors) > 0) {
