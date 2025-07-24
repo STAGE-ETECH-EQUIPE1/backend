@@ -7,6 +7,11 @@ use App\DTO\Request\UpdatePasswordDTO;
 interface AuthServiceInterface
 {
     /**
+     * Send an email to verify the user's email address.
+     */
+    public function sendVerificationEmail(string $email): void;
+
+    /**
      * Send email to reset password.
      */
     public function sendResetPasswordEmail(string $email): void;

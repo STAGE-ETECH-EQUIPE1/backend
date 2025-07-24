@@ -29,6 +29,15 @@ final class UserService implements UserServiceInterface
         throw new UserNotFoundException();
     }
 
+    public function getByEmail(string $email): User
+    {
+        $user = $this->userRepository->getByEmail($email);
+        if ($user) {
+            return $user;
+        }
+        throw new UserNotFoundException();
+    }
+
     public function getConnectedUser(): User
     {
         /** @var User|null $currentUser */

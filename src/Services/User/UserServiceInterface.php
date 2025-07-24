@@ -15,6 +15,11 @@ interface UserServiceInterface
     public function getById(int $id): User;
 
     /**
+     * Get User by email.
+     */
+    public function getByEmail(string $email): User;
+
+    /**
      * Get User from security.
      */
     public function getConnectedUser(): User;

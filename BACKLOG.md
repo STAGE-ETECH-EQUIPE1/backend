@@ -15,15 +15,15 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 ## 🚀 Épopée 1 : Authentification
 
-| Tâche                               | Priorité | Statut | Notes                                                 |
-| ----------------------------------- | -------- | ------ | ----------------------------------------------------- |
-| Créer entité `User` avec JWT        | 🔥       | ✅     | Utilise LexikJWTAuthenticationBundle                  |
-| Créer entité `Client` liée à `User` | 🔥       | ✅     | Relation OneToOne                                     |
-| Implémenter `/api/login`            | 🔥       | ✅     | JSON Login + JWT                                      |
-| Protéger les routes `/api/client/*` | 🔥       | 🕓     | ROLE_CLIENT                                           |
-| Endpoint `/api/client/me`           | 🔥       | ✅     | Affiche données du client connecté                    |
-| Ajout 2FA avec Google Authenticator | 🕓       | 🚧     | Se connecter avec son compte Google                   |
-| Système de mot de passe oublié      | 🕓       | ✅     | Envoyer un email lorsque l'on oublie son mot de passe |
+| Tâche                               | Priorité | Statut | Notes                                                       |
+| ----------------------------------- | -------- | ------ | ----------------------------------------------------------- |
+| Créer entité `User` avec JWT        | 🔥       | ✅     | Utilise LexikJWTAuthenticationBundle                        |
+| Créer entité `Client` liée à `User` | 🔥       | ✅     | Relation OneToOne                                           |
+| Implémenter `/api/login`            | 🔥       | ✅     | JSON Login + JWT                                            |
+| Protéger les routes `/api/client/*` | 🔥       | 🕓     | ROLE_CLIENT                                                 |
+| Endpoint `/api/client/me`           | 🔥       | ✅     | Affiche données du client connecté                          |
+| Ajout 2FA avec Google Authenticator | 🕓       | 🚧     | Se connecter avec son compte Google et vérification d'email |
+| Système de mot de passe oublié      | 🕓       | ✅     | Envoyer un email lorsque l'on oublie son mot de passe       |
 
 ---
 
