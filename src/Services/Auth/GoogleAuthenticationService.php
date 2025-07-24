@@ -5,9 +5,8 @@ namespace App\Services\Auth;
 use App\DTO\Request\GoogleAuthenticationDTO;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
+use Firebase\JWT\JWT;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class GoogleAuthenticationService
@@ -20,7 +19,7 @@ class GoogleAuthenticationService
 
     public function authenticate(GoogleAuthenticationDTO $dto): string
     {
-        $idToken = $dto->idToken;
+        $jwt = $dto->idToken;
 
         $keysJson = file_get_contents('https://www.googleapis.com/oauth2/v3/certs');
         if (!$keysJson) {
@@ -32,7 +31,10 @@ class GoogleAuthenticationService
             throw new \RuntimeException('Les clés Google sont invalides.');
         }
 
-        $decoded = JWT::decode($idToken, JWK::parseKeySet($keys), ['RS256']);
+        $publicKeys = JWK::parseKeySet($keys);
+
+        $decoded = JWT::decode($jwt, $publicKeys);
+
         if ($decoded->aud !== $_ENV['GOOGLE_CLIENT_ID']) {
             throw new \Exception('Audience invalide pour le token Google');
         }
@@ -49,7 +51,7 @@ class GoogleAuthenticationService
                 ->setEmail($email)
                 ->setFullName($decoded->name ?? '')
                 ->setUsername($email)
-                ->setPassword('') 
+                ->setPassword('')
                 ->setPhone('');
 
             $this->em->persist($user);

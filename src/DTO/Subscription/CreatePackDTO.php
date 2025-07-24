@@ -2,7 +2,6 @@
 
 namespace App\DTO\Subscription;
 
-use Doctrine\DBAL\Types\DecimalType;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreatePackDTO
@@ -10,7 +9,7 @@ class CreatePackDTO
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     public string $name;
-    
+
     #[Assert\NotBlank]
     #[Assert\Type(\DateTimeInterface::class)]
     public \DateTimeImmutable $startedAt;
@@ -20,7 +19,6 @@ class CreatePackDTO
     public \DateTimeImmutable $expiredAt;
 
     #[Assert\NotBlank]
-    #[Assert\Type('float')]
-    #[Assert\PositiveOrZero]
-    public float $price;
+    #[Assert\Type('string')]
+    public string $price;
 }
