@@ -1,16 +1,30 @@
+IS_DOCKER := $(shell docker info > /dev/null 2>&1 && echo 1)
+
 PHP := @php
 SYMFONY := @symfony
 CONSOLE := $(PHP) bin/console
 COMPOSER := @composer
+DOCKER := @docker
+
+#ifeq ($(IS_DOCKER), 1)
+#	COMPOSE := $(DOCKER) compose
+#	EXEC := $(COMPOSE) exec
+#	CONSOLE := $(EXEC) php bin/console
+#	PHP := $(COMPOSE) run  --rm --no-deps php
+#endif
 
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
 RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
+
+.DEFAULT_GOAL := help
 
 ## ----------------------------------
 ## App
 ## ----------------------------------
 .PHONY: install
 install: vendor/autoload.php ## Install dependencies
+	@cp .env .env.local
+	@$(call GREEN,"Install dependencies")
 	$(COMPOSER) install --no-interaction
 	$(CONSOLE) lexik:jwt:generate-keypair --no-interaction
 	$(CONSOLE) doctrine:database:create --if-not-exists
@@ -30,10 +44,9 @@ clear: vendor/autoload.php ## Clear cache
 	$(CONSOLE) cache:clear --env=dev
 	$(CONSOLE) cache:clear --env=test
 
-.PHONY: swagger-json
-swagger-json: vendor/autoload.php ## Generate doc with swagger
-	$(PHP) ./vendor/bin/openapi --format json --output ./swagger/swagger.json ./swagger/swagger.php src
-	$(call GREEN,"Api Documentation generated successfully")
+.PHONY: messenger-consume
+messenger-consume: vendor/autoload.php ## For symfony messenger
+	$(CONSOLE) messenger:consume async -vv
 
 ##
 ## ----------------------------------
@@ -58,16 +71,42 @@ database-test: ## Create test database if not exist
 
 ##
 ## ----------------------------------
+## Docker
+## ----------------------------------
+.PHONY: docker-build
+docker-build: ## Build docker image
+	@$(call GREEN,"Build docker image")
+	$(COMPOSE) build
+
+.PHONY: docker-up
+docker-up: ## Start docker containers
+	@$(call GREEN,"Start docker containers")
+	$(COMPOSE) up -d
+
+.PHONY: docker-down
+docker-down: ## Stop docker containers
+	@$(call GREEN,"Stop docker containers")
+	$(COMPOSE) down
+
+.PHONY: docker-restart
+docker-restart: ## Restart docker containers
+	@$(call GREEN,"Restart docker containers")
+	$(MAKE) docker-down
+	$(MAKE) docker-up
+
+.PHONY: docker-logs
+docker-logs: ## Show docker logs
+	@$(call GREEN,"Show docker logs")
+	$(COMPOSE) logs -f
+
+##
+## ----------------------------------
 ## Others
 ## ----------------------------------
 .PHONY: lint
 lint: vendor/autoload.php ## Analyze code
 	$(PHP) ./vendor/bin/phpstan analyze
 	$(PHP) ./vendor/bin/php-cs-fixer fix src --dry-run --diff
-
-.PHONY: messenger-consume
-messenger-consume: vendor/autoload.php ## For symfony messenger
-	$(CONSOLE) messenger:consume async -vv
 
 .PHONY: help
 help: ## List commands

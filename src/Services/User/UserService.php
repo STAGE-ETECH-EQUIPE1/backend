@@ -8,6 +8,7 @@ use App\DTO\UserDTO;
 use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
 use App\Repository\Auth\UserRepository;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserService implements UserServiceInterface
@@ -15,6 +16,7 @@ final class UserService implements UserServiceInterface
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly UserRepository $userRepository,
+        private readonly Security $security,
     ) {
     }
 
@@ -25,6 +27,25 @@ final class UserService implements UserServiceInterface
             return $user;
         }
         throw new UserNotFoundException();
+    }
+
+    public function getByEmail(string $email): User
+    {
+        $user = $this->userRepository->getByEmail($email);
+        if ($user) {
+            return $user;
+        }
+        throw new UserNotFoundException();
+    }
+
+    public function getConnectedUser(): User
+    {
+        /** @var User|null $currentUser */
+        $currentUser = $this->security->getUser();
+        if ($currentUser) {
+            return $this->getById((int) $currentUser->getId());
+        }
+        throw new \RuntimeException('No connected user found.');
     }
 
     public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User

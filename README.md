@@ -1,23 +1,27 @@
-# Projet de stage
+# ORBIXUP
 
-1. Installation du projet
+## Installation du projet
 
-Pour l'installation du projet (Configurer le fichier d'environnement avant d'éxecuter ce code)
+1.  Prérequis
+
+    -   [Php](https://www.php.net/)
+    -   [Composer](https://getcomposer.org/)
+    -   [MakeGNU](https://www.gnu.org/software/make/manual/make.html)
+    -   Base de données: `PostgreSQL`
+
+    -   [Docker](https://www.docker.com/)
+
+Pour l'installation du projet,
+configurer le fichier d'environnement `.env` ou créer un nouveau fichier `.env.local`
+conforme avant d'éxecuter ce code
+
+2.  Installation
 
 ```bash
 make install
 ```
 
-OU
-
-```bash
-composer install
-php bin/console lexik:jwt:generate-keypair # Générer une clé pour le token jwt
-php bin/console doctrine:database:create --if-not-exists
-php doctrine:fixtures:load --no-interaction
-```
-
-2. Pour lancer le serveur de développement
+## Pour lancer le serveur de développement
 
 ```bash
 symfony serve
@@ -28,3 +32,9 @@ OU
 ```bash
 make dev
 ```
+
+3. Fonctionnalités
+
+-   Endpoint
+
+`/api`: pour la documentation des api

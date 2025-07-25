@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Factory;
+namespace App\Factory\Auth;
 
 use App\Entity\Auth\User;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
@@ -12,8 +12,6 @@ final class UserFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
-     *
-     * @todo inject services if required
      */
     public function __construct()
     {
@@ -32,7 +30,6 @@ final class UserFactory extends PersistentProxyObjectFactory
         return [
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'email' => self::faker()->email(),
-            'fullName' => self::faker()->firstName().' '.self::faker()->lastName(),
             'isVerified' => self::faker()->boolean(),
             'password' => 'Admin@123',
             'phone' => self::faker()->phoneNumber(),

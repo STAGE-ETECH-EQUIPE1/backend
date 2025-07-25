@@ -3,13 +3,13 @@
 namespace App\Tests\Controller\Api\Auth;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use App\Entity\Auth\User;
-use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\DependencyInjection\Container;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
-class AuthenticationControllerTest extends ApiTestCase
+class SecurityControllerTest extends ApiTestCase
 {
-    use ReloadDatabaseTrait;
+    use ResetDatabase;
+    use CreateTestUserTrait;
 
     protected Container $container;
 
@@ -18,28 +18,6 @@ class AuthenticationControllerTest extends ApiTestCase
         parent::setUp();
         self::bootKernel();
         $this->container = static::getContainer();
-    }
-
-    protected function createTestUser(): User
-    {
-        $user = (new User())
-            ->setEmail('test@example.com')
-            ->setFullName('Test User')
-            ->setPhone('0341234567')
-            ->setRoles(['ROLE_USER'])
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setIsVerified(true)
-            ->setUsername('testuser');
-
-        $user->setPassword(
-            $this->container->get('security.user_password_hasher')->hashPassword($user, '$3CR3T')
-        );
-
-        $manager = $this->container->get('doctrine')->getManager();
-        $manager->persist($user);
-        $manager->flush();
-
-        return $user;
     }
 
     public function testLogin(): void

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73b8bb43f6dd5bd3ac74d3885910db37",
+    "content-hash": "540ccc730266733c9aa8ff2e141b7fd4",
     "packages": [
         {
             "name": "api-platform/doctrine-common",
@@ -10015,80 +10015,6 @@
                 }
             ],
             "time": "2025-07-08T21:13:15+00:00"
-        },
-        {
-            "name": "hautelook/alice-bundle",
-            "version": "2.15.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/theofidry/AliceBundle.git",
-                "reference": "e33d72e4df48b846dd5fb99039dbcfc5401daf2c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/theofidry/AliceBundle/zipball/e33d72e4df48b846dd5fb99039dbcfc5401daf2c",
-                "reference": "e33d72e4df48b846dd5fb99039dbcfc5401daf2c",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/data-fixtures": "^1.7 || ^2.0",
-                "doctrine/doctrine-bundle": "^2.11.3",
-                "doctrine/orm": "^3.1",
-                "doctrine/persistence": "^3.3.1 || ^4.0",
-                "php": "^8.2",
-                "psr/log": "^1.0 || ^2.0 || ^3.0",
-                "symfony/finder": "^6.4 || ^7.0",
-                "symfony/framework-bundle": "^6.4 || ^7.0",
-                "theofidry/alice-data-fixtures": "^1.7"
-            },
-            "require-dev": {
-                "monolog/monolog": "^3.5",
-                "phpspec/prophecy": "^1.14.0",
-                "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9.6.17",
-                "symfony/phpunit-bridge": "^6.4.4 || ^7.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "bin-dir": "bin",
-                "branch-alias": {
-                    "dev-master": "2.x-dev"
-                },
-                "sort-packages": true
-            },
-            "autoload": {
-                "psr-4": {
-                    "Hautelook\\AliceBundle\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Baldur Rensch",
-                    "email": "brensch@gmail.com"
-                },
-                {
-                    "name": "Théo FIDRY",
-                    "email": "theo.fidry@gmail.com",
-                    "homepage": "https://github.com/theofidry"
-                }
-            ],
-            "description": "Symfony bundle to manage fixtures with Alice and Faker.",
-            "keywords": [
-                "Fixture",
-                "alice",
-                "faker",
-                "orm",
-                "symfony"
-            ],
-            "support": {
-                "issues": "https://github.com/theofidry/AliceBundle/issues",
-                "source": "https://github.com/theofidry/AliceBundle/tree/2.15.1"
-            },
-            "time": "2025-03-27T09:27:25+00:00"
         },
         {
             "name": "masterminds/html5",

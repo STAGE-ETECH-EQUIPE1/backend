@@ -2,9 +2,14 @@
 
 namespace App\DTO\Request;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class UpdatePasswordDTO
 {
+    #[Assert\NotBlank()]
     private string $currentPassword;
+
+    #[Assert\NotBlank()]
     private string $newPassword;
 
     public function getCurrentPassword(): string
