@@ -32,9 +32,5 @@ class CreateServiceController extends AbstractController
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], 400);
         }
-
-        return $this->json([
-            'message' => 'Ok',
-        ]);
     }
 }
