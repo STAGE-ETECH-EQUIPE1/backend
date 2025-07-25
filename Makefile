@@ -22,13 +22,13 @@ RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
 ## App
 ## ----------------------------------
 .PHONY: install
-install: vendor/autoload.php ## Install dependencies
+install: composer.lock ## Install dependencies
 	@cp .env .env.local
 	@$(call GREEN,"Install dependencies")
 	$(COMPOSER) install --no-interaction
 	$(CONSOLE) lexik:jwt:generate-keypair --no-interaction
-	$(CONSOLE) doctrine:database:create --if-not-exists
-	$(CONSOLE) doctrine:fixtures:load --no-interaction
+	$(MAKE) reset-database
+	$(MAKE) fixtures
 
 .PHONY: serve
 serve: vendor/autoload.php ## Run Development Server
@@ -68,6 +68,13 @@ fixtures: vendor/autoload.php ## Load fixtures
 database-test: ## Create test database if not exist
 	$(CONSOLE) doctrine:database:create --if-not-exists --env=test
 	$(CONSOLE) doctrine:schema:update --env=test --force
+
+.PHONY: reset-database
+reset-database: vendor/autoload.php ## Reset database
+	@$(call GREEN,"Reset database")
+	$(CONSOLE) doctrine:database:drop --force --if-exists --no-interaction
+	$(CONSOLE) doctrine:database:create --if-not-exists --no-interaction
+	$(MAKE) migrate --no-interaction
 
 ##
 ## ----------------------------------
