@@ -5,10 +5,10 @@ services:
       dockerfile: Dockerfile
     container_name: symfony_php
     volumes:
-      - .:/var/www/app
-    working_dir: /var/www/app
+      - .:/app
+    working_dir: /app
     depends_on:
-      - db
+      - database
     environment:
       DATABASE_URL: "pgsql://app:app@db:5432/guard"
     networks:
@@ -38,7 +38,7 @@ services:
     volumes:
       - database_data:/var/lib/postgresql/data:rw
     networks:
-      - backend
+      - symfony
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 
@@ -46,7 +46,7 @@ services:
     image: nginx:alpine
     container_name: symfony_nginx
     volumes:
-      - .:/var/www/app
+      - .:/app
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
@@ -57,5 +57,5 @@ volumes:
   database_data:
 
 networks:
-  backend:
+  symfony:
     driver: bridge
