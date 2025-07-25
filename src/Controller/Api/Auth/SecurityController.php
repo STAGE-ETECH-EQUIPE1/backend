@@ -47,7 +47,7 @@ class SecurityController extends AbstractController
         $user = $this->userService->convertUserRegistrationDtoToUser($userRegistrationDto);
 
         $this->entityManager->persist($user);
-        // $this->entityManager->flush();
+        $this->entityManager->flush();
 
         return $this->json([
             'message' => 'User registered successfully',
