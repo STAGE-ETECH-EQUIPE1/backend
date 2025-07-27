@@ -11,10 +11,10 @@ EXEC := $(DOCKER) exec
 #---------------------------------------------------------------
 # If you are using docker, please discomment this line
 #---------------------------------------------------------------
-ifeq ($(IS_DOCKER), 1)
-	CONSOLE := $(EXEC) php bin/console
-	PHP := $(COMPOSE) run  --rm --no-deps php
-endif
+# ifeq ($(IS_DOCKER), 1)
+# 	CONSOLE := $(EXEC) php bin/console
+# 	PHP := $(COMPOSE) run  --rm --no-deps php
+# endif
 #---------------------------------------------------------------
 
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
@@ -157,4 +157,7 @@ help: ## List commands
 # Dependencies
 #-----------------------------------
 vendor/autoload.php:
+	$(COMPOSER) install --no-interaction
+
+composer.lock:
 	$(COMPOSER) install --no-interaction
