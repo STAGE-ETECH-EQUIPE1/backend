@@ -5,8 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.frontend_url: '%env(FRONTEND_URL)%'
-    app.google_ai_token: '%env(GOOGLE_AI_TOKEN)%'
-    app.google_ai_url: '%env(GOOGLE_AI_URL)%'
+    app.gemini_api_key: '%env(GEMINI_API_KEY)%'
+    app.gemini_api_url: '%env(GEMINI_API_URL)%'
 
 services:
     # default configuration for services in *this* file

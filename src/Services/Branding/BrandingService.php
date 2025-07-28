@@ -22,9 +22,9 @@ class BrandingService extends AbstractService implements BrandingServiceInterfac
         private readonly ClientServiceInterface $clientService,
         private readonly EntityManagerInterface $entityManager,
         private readonly DesignBriefRepository $designBriefRepository,
-        #[Autowire('%app.google_ai_token%')]
+        #[Autowire('%app.gemini_api_key%')]
         private readonly string $googleAiToken,
-        #[Autowire('%app.google_ai_url%')]
+        #[Autowire('%app.gemini_api_url%')]
         private readonly string $googleAiUrl,
     ) {
     }
