@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Entity;
+namespace App\Tests\Entity\Auth;
 
 use App\Entity\Auth\User;
 use App\Tests\DTO\ValidationTestTrait;
