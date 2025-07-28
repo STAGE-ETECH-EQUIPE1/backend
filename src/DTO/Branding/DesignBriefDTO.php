@@ -2,16 +2,24 @@
 
 namespace App\DTO\Branding;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class DesignBriefDTO
 {
+    #[Assert\NotBlank()]
     private string $companyName = '';
 
+    #[Assert\Length(min: 2, max: 250)]
     private string $description = '';
 
+    #[Assert\NotNull]
+    #[Assert\Count(min: 1)]
     private array $colorPreferences = [];
 
+    #[Assert\Count(min: 1)]
     private array $brandKeywords = [];
 
+    #[Assert\Url(requireTld: false)]
     private string $moodBoardUrl = '';
 
     /**

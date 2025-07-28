@@ -42,10 +42,11 @@ class UserFixtures extends Fixture
             ))
             ->setPhone($this->getFaker()->phoneNumber())
             ->setFullName('Admin User')
-            ->setRoles(['ROLE_ADMIN', 'ROLE_USER'])
+            ->setRoles(['ROLE_ADMIN', 'ROLE_USER', 'ROLE_CLIENT'])
             ->setCreatedAt(new \DateTimeImmutable())
             ->setIsVerified(true);
         $manager->persist($userAdmin);
+        $this->addReference('admin.client', $userAdmin);
 
         for ($i = 1; $i <= 10; ++$i) {
             $userClient = (new User())

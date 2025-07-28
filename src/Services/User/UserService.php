@@ -51,15 +51,15 @@ final class UserService implements UserServiceInterface
     public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User
     {
         $user = new User();
-        $user->setEmail($userDto->email)
-            ->setUsername($userDto->username)
-            ->setFullName($userDto->fullName)
-            ->setPhone($userDto->phone)
+        $user->setEmail($userDto->getEmail())
+            ->setUsername($userDto->getUsername())
+            ->setFullName($userDto->getFullName())
+            ->setPhone($userDto->getPhone())
             ->setRoles(['ROLE_USER'])
             ->setCreatedAt(new \DateTimeImmutable())
             ->setPassword($this->passwordHasher->hashPassword(
                 $user,
-                $userDto->password
+                $userDto->getPassword()
             ));
 
         return $user;

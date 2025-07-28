@@ -12,6 +12,22 @@ class UpdatePasswordDTO
     #[Assert\NotBlank()]
     private string $newPassword;
 
+    #[Assert\NotBlank()]
+    #[Assert\EqualTo(propertyPath: 'newPassword')]
+    private string $confirmPassword;
+
+    public function getConfirmPassword(): string
+    {
+        return $this->confirmPassword;
+    }
+
+    public function setConfirmPassword(string $confirmPassword): UpdatePasswordDTO
+    {
+        $this->confirmPassword = $confirmPassword;
+
+        return $this;
+    }
+
     public function getCurrentPassword(): string
     {
         return $this->currentPassword;

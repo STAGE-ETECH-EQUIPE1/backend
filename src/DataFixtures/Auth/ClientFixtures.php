@@ -15,6 +15,14 @@ class ClientFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        $adminClient = (new Client())
+            ->setCompanyName($this->getFaker()->company())
+            ->setUserInfo(
+                $this->getReference('admin.client', User::class)
+            )
+        ;
+        $manager->persist($adminClient);
+
         for ($i = 1; $i <= 10; ++$i) {
             $client = (new Client())
                 ->setCompanyName($this->getFaker()->company())
