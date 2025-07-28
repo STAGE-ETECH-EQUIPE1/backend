@@ -20,7 +20,7 @@ class DesignBrief
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'designBriefs')]
+    #[ORM\ManyToOne(inversedBy: 'designBriefs', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?BrandingProject $branding = null;
 
