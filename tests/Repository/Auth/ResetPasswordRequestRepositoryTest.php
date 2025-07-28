@@ -2,8 +2,6 @@
 
 namespace App\Tests\Repository\Auth;
 
-use App\Factory\Auth\ClientFactory;
-use App\Repository\Auth\ClientRepository;
 use App\Repository\Auth\ResetPasswordRequestRepository;
 use App\Tests\Repository\RepositoryTestCase;
 use Zenstruck\Foundry\Test\Factories;
