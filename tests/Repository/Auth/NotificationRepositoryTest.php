@@ -22,5 +22,4 @@ class NotificationRepositoryTest extends RepositoryTestCase
         NotificationFactory::createMany(10);
         $this->assertEquals(10, $this->repository->count([]));
     }
-
 }

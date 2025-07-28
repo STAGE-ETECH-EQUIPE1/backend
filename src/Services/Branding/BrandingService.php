@@ -51,7 +51,7 @@ class BrandingService extends AbstractService implements BrandingServiceInterfac
             ->setClient(
                 $this->clientService->getConnectedUserClient()
             )
-            ->setDeadLine(new \DateTimeImmutable()->modify('+1 month'))
+            ->setDeadLine((new \DateTimeImmutable())->modify('+1 month'))
             ->setCreatedAt(new \DateTimeImmutable())
             ->setUpdatedAt(new \DateTimeImmutable())
         ;
