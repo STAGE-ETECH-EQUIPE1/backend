@@ -22,5 +22,4 @@ class ResetPasswordRequestRepositoryTest extends RepositoryTestCase
         self::bootKernel();
         $this->assertEquals(0, $this->repository->count([]));
     }
-
 }
