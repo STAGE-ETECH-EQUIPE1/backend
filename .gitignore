@@ -11,6 +11,10 @@
 /.vscode/
 ###< symfony/framework-bundle ###
 
+###> branding/ai-token ###
+/public/generated-ai/
+###< branding/ai-token ###
+
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
