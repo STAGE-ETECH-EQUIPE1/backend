@@ -15,17 +15,17 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-class AuthService implements AuthServiceInterface
+final readonly class AuthService implements AuthServiceInterface
 {
     public function __construct(
-        private readonly ResetPasswordHelperInterface $resetPasswordHelper,
-        private readonly UserServiceInterface $userService,
-        private readonly EntityManagerInterface $entityManager,
-        private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly MailerInterface $mailer,
-        private readonly EmailVerifier $emailVerifier,
+        private ResetPasswordHelperInterface $resetPasswordHelper,
+        private UserServiceInterface $userService,
+        private EntityManagerInterface $entityManager,
+        private UserPasswordHasherInterface $passwordHasher,
+        private MailerInterface $mailer,
+        private EmailVerifier $emailVerifier,
         #[Autowire('%app.frontend_url%')]
-        private readonly string $frontendUrl,
+        private string $frontendUrl,
     ) {
     }
 
