@@ -7,6 +7,7 @@ use App\Message\Branding\GenerateLogoMessage;
 use App\Services\Branding\BrandingServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -37,7 +38,7 @@ class BrandingProjectController extends AbstractController
         } catch (ExceptionInterface $e) {
             return $this->json([
                 'message' => 'There is an error when submitting logo debrief',
-                'status' => 'error',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
                 'data' => $e->getMessage(),
             ]);
         }

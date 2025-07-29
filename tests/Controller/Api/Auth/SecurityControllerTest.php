@@ -25,7 +25,7 @@ class SecurityControllerTest extends ApiTestCase
         $this->createTestUser();
         self::$alwaysBootKernel = false;
 
-        $response = static::createClient([], [])->request('POST', '/api/login', [
+        $response = static::createClient()->request('POST', '/api/login', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'test@example.com',
@@ -43,7 +43,7 @@ class SecurityControllerTest extends ApiTestCase
         $this->createTestUser();
         self::$alwaysBootKernel = false;
 
-        static::createClient([], [])->request('POST', '/api/login', [
+        static::createClient()->request('POST', '/api/login', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'test@example.com',
@@ -60,7 +60,7 @@ class SecurityControllerTest extends ApiTestCase
     {
         self::$alwaysBootKernel = false;
 
-        $response = static::createClient([], [])->request('POST', '/api/register', [
+        $response = static::createClient()->request('POST', '/api/register', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'user'.uniqid().'@gmail.com',
@@ -82,7 +82,7 @@ class SecurityControllerTest extends ApiTestCase
         $this->createTestUser();
         self::$alwaysBootKernel = false;
 
-        $response = static::createClient([], [])->request('POST', '/api/login', [
+        $response = static::createClient()->request('POST', '/api/login', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'test@example.com',
