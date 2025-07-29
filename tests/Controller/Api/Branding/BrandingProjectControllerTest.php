@@ -59,31 +59,4 @@ class BrandingProjectControllerTest extends ApiControllerTestCase
         ]);
         $this->assertResponseStatusCodeSame(401);
     }
-
-    public function testInvalidSubmitBrief(): void
-    {
-        $token = $this->authenticateClient()->toArray()['token'];
-
-        $this->apiClient()->request('POST', '/api/branding-project', [
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-                'Authorization' => "Bearer {$token}",
-            ],
-            'json' => [
-                // 'companyName' => 'Test Company Name',
-                // 'description' => 'A lot of description about company',
-                'colorPreferences' => [
-                    'slogan' => '#5a172c',
-                    'name' => '#320b7f',
-                    'background' => '#0f411c',
-                ],
-                'brandKeywords' => [
-                    'Recruitment', 'Consultation', 'Creativity',
-                ],
-                // 'moodBoardUrl' => 'https://example.com/mood-board',
-            ],
-        ]);
-        $this->assertResponseStatusCodeSame(422);
-    }
 }

@@ -92,9 +92,7 @@ class SecurityControllerTest extends ApiTestCase
 
         $token = $response->toArray()['token'];
 
-        static::createClient([], [
-            'base_uri' => $_ENV['TEST_BASE_URL'] ?? 'http://localhost',
-        ])->request('GET', '/api/me', [
+        static::createClient()->request('GET', '/api/me', [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer '.$token,
