@@ -32,10 +32,7 @@ final class ServiceFixtures extends Fixture implements DependentFixtureInterface
             $service = (new Service())
                 ->setName($data['name'])
                 ->setPrice($this->getPrice())
-                ->setCreatedAt($this->getDateTimeImmutable())
-                ->setTypeService(
-                    $this->getReference('type_service_'.$this->numberBetween(1, 5), TypeService::class)
-                );
+                ->setCreatedAt($this->getDateTimeImmutable());
             $manager->persist($service);
             $this->addReference('service_'.$data['code'], $service);
         }
@@ -46,7 +43,6 @@ final class ServiceFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            TypeServiceFixtures::class,
         ];
     }
 }

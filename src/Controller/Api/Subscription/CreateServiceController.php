@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateServiceController extends AbstractController
 {
-    #[Route('packe/service/create', name: "create_service", methods:['POST'])]
+    #[Route('/service/create', name: "create_service", methods:['POST'])]
     public function createService(Request $request, ValidatorInterface $validator, SerializerInterface $serializer, CreateServiceServiceInterface $createServiceService): JsonResponse
     {
         $dto = $serializer->deserialize($request->getContent(), CreateServiceDTO::class, 'json');
@@ -24,7 +24,6 @@ class CreateServiceController extends AbstractController
 
         try {
             $service = $createServiceService->createServiceForm($dto);
-
             return $this->json([
                 'message' => 'Service créé',
                 'serviceId' => $service->getId(),

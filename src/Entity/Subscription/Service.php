@@ -23,11 +23,7 @@ class Service
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?TypeService $typeService = null;
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -69,15 +65,8 @@ class Service
         return $this;
     }
 
-    public function getTypeService(): ?TypeService
+    public function __construct()
     {
-        return $this->typeService;
-    }
-
-    public function setTypeService(?TypeService $typeService): static
-    {
-        $this->typeService = $typeService;
-
-        return $this;
+        $this->createdAt = new \DateTimeImmutable();
     }
 }

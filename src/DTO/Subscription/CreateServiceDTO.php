@@ -13,6 +13,4 @@ class CreateServiceDTO
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     public string $price;
-
-    // Type Service
 }
