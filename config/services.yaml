@@ -7,6 +7,7 @@ parameters:
     app.frontend_url: '%env(FRONTEND_URL)%'
     app.gemini_api_key: '%env(GEMINI_API_KEY)%'
     app.gemini_api_url: '%env(GEMINI_API_URL)%'
+    app.ai_generated_path: '%env(AI_LOGO_GENERATED_PATH)%'
 
 services:
     # default configuration for services in *this* file

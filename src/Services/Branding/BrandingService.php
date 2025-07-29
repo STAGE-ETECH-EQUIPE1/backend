@@ -12,6 +12,7 @@ use App\Services\AbstractService;
 use App\Services\Client\ClientServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -26,6 +27,8 @@ class BrandingService extends AbstractService implements BrandingServiceInterfac
         private readonly string $googleAiToken,
         #[Autowire('%app.gemini_api_url%')]
         private readonly string $googleAiUrl,
+        #[Autowire('%app.ai_generated_path%')]
+        private readonly ?string $aiGeneratedLogoPath,
     ) {
     }
 
@@ -33,13 +36,31 @@ class BrandingService extends AbstractService implements BrandingServiceInterfac
     {
         $response = $this->getResponseFromLogoGoogleAiStudiologoGeneration($message);
 
-        dd($response->toArray());
-        // if ($response->getStatusCode() !== 200) {
-        //     throw new \RuntimeException('Failed to generate logo: ' . $response->getContent(false));
-        // }
+        if ($response->getStatusCode() !== 200) {
+            throw new \RuntimeException('Failed to generate logo: '.$response->getContent(false));
+        }
 
-        // $content = $response->toArray();
-        // $imageData = $content['candidates'][0]['content']['parts'][0]['text'];
+        try {
+            foreach ($response->toArray()['candidates'][0]['content']['parts'] as $part) {
+                // if (array_key_exists('text', $part)) {
+                //     var_dump($part['text']);
+                // }
+                if (array_key_exists('inlineData', $part)) {
+                    // var_dump(
+                    //    $part['inlineData']['mimeType'],
+                    //    $part['inlineData']['data']
+                    // );
+                    $imageData = $part['inlineData']['data'];
+                    $filesystem = new Filesystem();
+                    $filesystem->dumpFile(
+                        ($this->aiGeneratedLogoPath ?? 'public/generated-ai/logo/').uniqid().'.png',
+                        base64_decode($imageData)
+                    );
+                }
+            }
+        } catch (\Exception $e) {
+            printf('Failed to generate logo: '.$e->getMessage());
+        }
     }
 
     public function createNewBrandingProject(DesignBriefDTO $designBriefDTO): DesignBrief
