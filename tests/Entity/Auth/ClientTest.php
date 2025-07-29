@@ -7,7 +7,6 @@ use App\Factory\Auth\UserFactory;
 use App\Tests\DTO\ValidationTestTrait;
 use App\Tests\Entity\EntityTestCase;
 use Zenstruck\Foundry\Test\Factories;
-use Zenstruck\Foundry\Test\ResetDatabase;
 
 class ClientTest extends EntityTestCase
 {
