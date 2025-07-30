@@ -41,6 +41,8 @@ class Pack
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+
     }
 
     public function getId(): ?int

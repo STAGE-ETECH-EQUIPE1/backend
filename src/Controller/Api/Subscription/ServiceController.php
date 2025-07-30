@@ -18,10 +18,6 @@ class ServiceController extends AbstractController
         CreateServiceDTO $serviceDTO,
         CreateServiceServiceInterface $createServiceService,
     ): JsonResponse {
-        return $this->json([
-            'error' => 'Oui',
-        ], 400);
-
         try {
             $service = $createServiceService->createServiceForm($serviceDTO);
 
