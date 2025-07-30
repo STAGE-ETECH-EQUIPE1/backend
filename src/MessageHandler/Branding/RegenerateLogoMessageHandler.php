@@ -9,7 +9,6 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final class RegenerateLogoMessageHandler
 {
-
     public function __construct(
         private readonly LogoGenerationServiceInterface $logoGenerationService,
     ) {

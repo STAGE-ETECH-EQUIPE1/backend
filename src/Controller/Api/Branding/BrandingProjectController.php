@@ -4,6 +4,7 @@ namespace App\Controller\Api\Branding;
 
 use App\DTO\Branding\DesignBriefDTO;
 use App\Entity\Branding\BrandingProject;
+use App\Entity\Branding\DesignBrief;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Message\Branding\RegenerateLogoMessage;
 use App\Services\Branding\BrandingServiceInterface;
@@ -52,7 +53,7 @@ class BrandingProjectController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route(path: '/branding/{id}/brief', name: 'branding_logo_brief', methods: ['POST'])]
+    #[Route(path: '/branding-project/{id}/brief', name: 'branding_logo_brief', methods: ['POST'])]
     #[IsGranted('ROLE_CLIENT')]
     public function submitLogo(
         BrandingProject $brandingProject,
@@ -80,5 +81,22 @@ class BrandingProjectController extends AbstractController
             'status' => Response::HTTP_OK,
             'data' => $designBriefDTO,
         ], Response::HTTP_OK);
+    }
+
+    #[Route(path: '/branding/test', name: 'test_branding', methods: ['POST'])]
+    public function testDesignValidation(
+        #[MapRequestPayload]
+        DesignBriefDTO $designBriefDTO,
+    ): JsonResponse {
+        $brief = (new DesignBrief())
+            ->setColorPreferences($designBriefDTO->getColorPreferences())
+            ->setLogoStyle('modern')
+            ->setSlogan($designBriefDTO->getSlogan());
+
+        return $this->json([
+            'message' => 'Validation Design Brief DTO',
+            'data' => $designBriefDTO,
+            'brief' => $brief,
+        ]);
     }
 }

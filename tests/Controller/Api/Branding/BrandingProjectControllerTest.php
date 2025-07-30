@@ -20,12 +20,13 @@ class BrandingProjectControllerTest extends ApiControllerTestCase
                 'Authorization' => "Bearer {$token}",
             ],
             'json' => [
-                'companyName' => 'Test Company Name',
                 'description' => 'A lot of description about company',
+                'slogan' => 'slogan of company',
+                'logoStyle' => 'modern',
                 'colorPreferences' => [
-                    'slogan' => '#5a172c',
-                    'name' => '#320b7f',
-                    'background' => '#0f411c',
+                    '#5a172c',
+                    '#320b7f',
+                    '#0f411c',
                 ],
                 'brandKeywords' => [
                     'Recruitment', 'Consultation', 'Creativity',
