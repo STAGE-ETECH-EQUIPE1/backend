@@ -4,7 +4,7 @@ namespace App\Services\ListPack;
 
 use App\Repository\Subscription\PackRepository;
 
-class ListPackService
+class ListPackService implements ListPackServiceInterface
 {
     public function __construct(private PackRepository $packRepository)
     {

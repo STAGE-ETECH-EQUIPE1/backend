@@ -4,6 +4,7 @@ namespace App\Controller\Api\Subscription;
 
 use App\DTO\Subscription\CreateServiceDTO;
 use App\Services\CreateService\CreateServiceServiceInterface;
+use App\Services\ListService\ListServiceService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -32,4 +33,15 @@ class ServiceController extends AbstractController
             ], 400);
         }
     }
+
+    // #[IsGranted('ROLE_ADMIN')]
+    #[Route('/service/show', name: 'show_service', methods: ['GET'])]
+    public function showServices(ListServiceService $listService): JsonResponse
+    {
+        $services = $listService->getAllServices();
+
+        return $this->json($services);
+    }
+
+    
 }
