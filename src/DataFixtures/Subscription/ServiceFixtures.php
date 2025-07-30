@@ -4,7 +4,6 @@ namespace App\DataFixtures\Subscription;
 
 use App\DataFixtures\FakerTrait;
 use App\Entity\Subscription\Service;
-use App\Entity\Subscription\TypeService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;

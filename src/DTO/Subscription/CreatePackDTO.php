@@ -26,5 +26,6 @@ class CreatePackDTO
     #[Assert\All([
         new Assert\Type('integer'),
     ])]
+    /** @var int[] */
     public array $services;
 }

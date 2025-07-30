@@ -11,5 +11,6 @@ class ListPackDTO
         public \DateTimeImmutable $startedAt,
         public \DateTimeImmutable $expiredAt,
         public array $services)
-    {} 
+    {
+    }
 }

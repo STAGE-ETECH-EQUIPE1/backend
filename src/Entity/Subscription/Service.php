@@ -23,7 +23,7 @@ class Service
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
-    
+
     public function getId(): ?int
     {
         return $this->id;

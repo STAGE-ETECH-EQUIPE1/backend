@@ -3,31 +3,24 @@
 namespace App\Controller\Api\Subscription;
 
 use App\DTO\Subscription\CreatePackDTO;
-use App\Repository\Subscription\PackRepository;
-use App\Services\ListPack\ListPackService;
 use App\Services\CreatePack\CreatePackServiceInterface;
-use PHPUnit\Util\Json;
+use App\Services\ListPack\ListPackService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PackController extends AbstractController
 {
+    // #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/create', name: 'create_pack', methods: ['POST'])]
-    public function createPack(Request $request, ValidatorInterface $validator, SerializerInterface $serializer, CreatePackServiceInterface $createPackService): JsonResponse
-    {
-        $dto = $serializer->deserialize($request->getContent(), CreatePackDTO::class, 'json');
-        $error = $validator->validate($dto);
-        if (count($error) > 0) {
-            return $this->json(['error' => 'invalid_dto'], 400);
-        }
-
+    public function createPack(
+        #[MapRequestPayload]
+        CreatePackDTO $packDTO,
+        CreatePackServiceInterface $createPackService,
+    ): JsonResponse {
         try {
-            $pack = $createPackService->createPackForm($dto);
+            $pack = $createPackService->createPackForm($packDTO);
 
             return $this->json([
                 'message' => 'Pack créé',
@@ -43,6 +36,7 @@ class PackController extends AbstractController
     public function showPack(ListPackService $listPackService): JsonResponse
     {
         $packsDto = $listPackService->getAllPacks();
+
         return $this->json($packsDto);
     }
 }

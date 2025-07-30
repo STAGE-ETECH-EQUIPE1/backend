@@ -2,15 +2,13 @@
 
 namespace App\Services\ListPack;
 
-use App\DTO\Subscription\ListPackDTO;
-use App\DTO\Subscription\ListServiceDTO;
-use App\Entity\Pack;
 use App\Repository\Subscription\PackRepository;
 
 class ListPackService
 {
-    public function __construct(private PackRepository $packRepository) 
-    {}
+    public function __construct(private PackRepository $packRepository)
+    {
+    }
 
     /**
      * @return array<int, array<string, mixed>>
@@ -26,7 +24,7 @@ class ListPackService
             foreach ($pack->getServices() as $service) {
                 $services[] = [
                     'id' => $service->getId(),
-                    'name' => $service->getName()
+                    'name' => $service->getName(),
                 ];
             }
 
@@ -34,9 +32,10 @@ class ListPackService
                 'id' => $pack->getId(),
                 'name' => $pack->getName(),
                 'price' => (string) $pack->getPrice(),
-                'services' => $services
+                'services' => $services,
             ];
         }
+
         return $result;
     }
 }
