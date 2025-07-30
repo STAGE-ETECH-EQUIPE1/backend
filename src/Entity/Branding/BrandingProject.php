@@ -18,9 +18,6 @@ class BrandingProject
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 200)]
-    private ?string $name = null;
-
     #[ORM\Column(enumType: BrandingStatus::class)]
     private ?BrandingStatus $status = null;
 
@@ -52,27 +49,22 @@ class BrandingProject
     #[ORM\OneToMany(targetEntity: BrandAiPromptHistory::class, mappedBy: 'branding')]
     private Collection $brandAiPromptHistories;
 
+    /**
+     * @var Collection<int, LogoVersion>
+     */
+    #[ORM\OneToMany(targetEntity: LogoVersion::class, mappedBy: 'branding', cascade: ['persist'])]
+    private Collection $logos;
+
     public function __construct()
     {
         $this->designBriefs = new ArrayCollection();
         $this->brandAiPromptHistories = new ArrayCollection();
+        $this->logos = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getStatus(): ?BrandingStatus
@@ -201,6 +193,36 @@ class BrandingProject
             // set the owning side to null (unless already changed)
             if ($brandAiPromptHistory->getBranding() === $this) {
                 $brandAiPromptHistory->setBranding(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LogoVersion>
+     */
+    public function getLogos(): Collection
+    {
+        return $this->logos;
+    }
+
+    public function addLogo(LogoVersion $logo): static
+    {
+        if (!$this->logos->contains($logo)) {
+            $this->logos->add($logo);
+            $logo->setBranding($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLogo(LogoVersion $logo): static
+    {
+        if ($this->logos->removeElement($logo)) {
+            // set the owning side to null (unless already changed)
+            if ($logo->getBranding() === $this) {
+                $logo->setBranding(null);
             }
         }
 

@@ -15,6 +15,10 @@ class ClientFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        $companyAreas = [
+            'health', 'industry', 'sports', 'healthcare',
+        ];
+
         $adminClient = (new Client())
             ->setCompanyName($this->getFaker()->company())
             ->setUserInfo(
@@ -26,6 +30,7 @@ class ClientFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 1; $i <= 10; ++$i) {
             $client = (new Client())
                 ->setCompanyName($this->getFaker()->company())
+                ->setCompanyArea($companyAreas[array_rand($companyAreas)])
                 ->setUserInfo(
                     $this->getReference("client.user.$i", User::class)
                 )

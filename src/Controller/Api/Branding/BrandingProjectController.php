@@ -3,7 +3,9 @@
 namespace App\Controller\Api\Branding;
 
 use App\DTO\Branding\DesignBriefDTO;
+use App\Entity\Branding\BrandingProject;
 use App\Message\Branding\GenerateLogoMessage;
+use App\Message\Branding\RegenerateLogoMessage;
 use App\Services\Branding\BrandingServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,9 +47,38 @@ class BrandingProjectController extends AbstractController
 
         return $this->json([
             'message' => 'Design brief submitted successfully.',
-            'status' => 'success',
-            'prompt' => $this->brandingService->buildPromptText($designBriefDTO),
+            'status' => Response::HTTP_OK,
             'data' => $designBriefDTO,
-        ]);
+        ], Response::HTTP_OK);
+    }
+
+    #[Route(path: '/branding/{id}/brief', name: 'branding_logo_brief', methods: ['POST'])]
+    #[IsGranted('ROLE_CLIENT')]
+    public function submitLogo(
+        BrandingProject $brandingProject,
+        #[MapRequestPayload]
+        DesignBriefDTO $designBriefDTO,
+    ): JsonResponse {
+        $brief = $this->brandingService->submitDesignBriefByBrandingProjectId($brandingProject, $designBriefDTO);
+        try {
+            $this->messageBus->dispatch(
+                new RegenerateLogoMessage(
+                    (int) $brandingProject->getId(),
+                    (int) $brief->getId()
+                )
+            );
+        } catch (ExceptionInterface $e) {
+            return $this->json([
+                'message' => 'There is an error when submitting logo debrief',
+                'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
+                'data' => $e->getMessage(),
+            ]);
+        }
+
+        return $this->json([
+            'message' => 'logo submitted successfully',
+            'status' => Response::HTTP_OK,
+            'data' => $designBriefDTO,
+        ], Response::HTTP_OK);
     }
 }

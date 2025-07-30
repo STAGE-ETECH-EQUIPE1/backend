@@ -20,7 +20,6 @@ class BrandingProjectTest extends EntityTestCase
             ->setCreatedAt((new \DateTimeImmutable())::createFromMutable($this->getFaker()->dateTimeThisYear('now')))
             ->setUpdatedAt((new \DateTimeImmutable())::createFromMutable($this->getFaker()->dateTimeThisYear('now')))
             ->setClient(ClientFactory::new()->create())
-            ->setName($this->getFaker()->realText(50))
             ->setDescription($this->getFaker()->paragraph())
             ->setStatus(BrandingStatus::ACTIVE)
             ->setDeadLine((new \DateTimeImmutable())::createFromMutable($this->getFaker()->dateTimeThisYear('+1 month')))

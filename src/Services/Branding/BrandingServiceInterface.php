@@ -3,6 +3,7 @@
 namespace App\Services\Branding;
 
 use App\DTO\Branding\DesignBriefDTO;
+use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\DesignBrief;
 
 interface BrandingServiceInterface
@@ -12,5 +13,5 @@ interface BrandingServiceInterface
      */
     public function createNewBrandingProject(DesignBriefDTO $designBriefDTO): DesignBrief;
 
-    public function buildPromptText(DesignBriefDTO $designBrief): string;
+    public function submitDesignBriefByBrandingProjectId(BrandingProject $brandingProject, DesignBriefDTO $designBriefDTO): DesignBrief;
 }

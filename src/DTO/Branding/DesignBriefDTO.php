@@ -6,8 +6,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class DesignBriefDTO
 {
-    #[Assert\NotBlank()]
-    private string $companyName = '';
+    #[Assert\Length(min: 2, max: 200)]
+    private string $slogan = '';
+
+    #[Assert\Length(min: 2, max: 200)]
+    private string $logoStyle = '';
 
     #[Assert\Length(min: 2, max: 250)]
     private string $description = '';
@@ -94,20 +97,26 @@ class DesignBriefDTO
         return $this;
     }
 
-    /**
-     * Get the value of companyName.
-     */
-    public function getCompanyName(): string
+    public function getLogoStyle(): string
     {
-        return $this->companyName;
+        return $this->logoStyle;
     }
 
-    /**
-     * Set the value of companyName.
-     */
-    public function setCompanyName(string $companyName): static
+    public function setLogoStyle(string $logoStyle): static
     {
-        $this->companyName = $companyName;
+        $this->logoStyle = $logoStyle;
+
+        return $this;
+    }
+
+    public function getSlogan(): string
+    {
+        return $this->slogan;
+    }
+
+    public function setSlogan(string $slogan): static
+    {
+        $this->slogan = $slogan;
 
         return $this;
     }
