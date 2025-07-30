@@ -42,7 +42,6 @@ class Pack
     {
         $this->services = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
-
     }
 
     public function getId(): ?int
