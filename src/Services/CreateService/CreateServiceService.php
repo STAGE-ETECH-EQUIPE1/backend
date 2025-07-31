@@ -2,7 +2,7 @@
 
 namespace App\Services\CreateService;
 
-use App\DTO\Subscription\CreateServiceDTO;
+use App\DTO\Subscription\ServiceDTO;
 use App\Entity\Subscription\Service;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -13,7 +13,7 @@ class CreateServiceService implements CreateServiceServiceInterface
     ) {
     }
 
-    public function createServiceForm(CreateServiceDTO $dto): Service
+    public function createServiceForm(ServiceDTO $dto): Service
     {
         $service = new Service();
         $service->setName($dto->name);

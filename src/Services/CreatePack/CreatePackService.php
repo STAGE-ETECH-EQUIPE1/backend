@@ -2,7 +2,7 @@
 
 namespace App\Services\CreatePack;
 
-use App\DTO\Subscription\CreatePackDTO;
+use App\DTO\Subscription\PackDTO;
 use App\Entity\Subscription\Pack;
 use App\Repository\Subscription\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +15,7 @@ class CreatePackService implements CreatePackServiceInterface
     ) {
     }
 
-    public function createPackForm(CreatePackDTO $dto): Pack
+    public function createPackForm(PackDTO $dto): Pack
     {
         $pack = new Pack();
         $pack->setName($dto->name);

@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api\Subscription;
 
-use App\DTO\Subscription\CreatePackDTO;
+use App\DTO\Subscription\PackDTO;
 use App\Services\CreatePack\CreatePackServiceInterface;
 use App\Services\ListPack\ListPackService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +16,7 @@ class PackController extends AbstractController
     #[Route('/pack/create', name: 'create_pack', methods: ['POST'])]
     public function createPack(
         #[MapRequestPayload]
-        CreatePackDTO $packDTO,
+        PackDTO $packDTO,
         CreatePackServiceInterface $createPackService,
     ): JsonResponse {
         try {

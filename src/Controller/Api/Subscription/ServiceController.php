@@ -2,21 +2,25 @@
 
 namespace App\Controller\Api\Subscription;
 
-use App\DTO\Subscription\CreateServiceDTO;
+use App\DTO\Subscription\ServiceDTO;
+use App\Repository\Subscription\ServiceRepository;
 use App\Services\CreateService\CreateServiceServiceInterface;
 use App\Services\ListService\ListServiceService;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ServiceController extends AbstractController
 {
     // #[IsGranted('ROLE_ADMIN')]
     #[Route('/service/create', name: 'create_service', methods: ['POST'])]
     public function createService(
-        #[MapRequestPayload]
-        CreateServiceDTO $serviceDTO,
+        #[MapRequestPayload(validationGroups: ['create'])]
+        ServiceDTO $serviceDTO,
         CreateServiceServiceInterface $createServiceService,
     ): JsonResponse {
         try {
@@ -43,5 +47,22 @@ class ServiceController extends AbstractController
         return $this->json($services);
     }
 
-    
+    // // #[IsGranted('ROLE_ADMIN')]
+    // #[Route('/service/edit/{id}', name: 'edit_service', methods: ['PUT'])]
+    // public function editServices(
+    //     int $id,
+    //     Request
+    //     ServiceRepository $serviceRepository,
+    //     EntityManagerInterface $em,
+
+    // ) : JsonResponse {
+    //     $service = $serviceRepository->find($id);
+    //     if (!$service)
+    //     {
+    //         return $this->json([
+    //             'message' => 'Service Not Found',
+    //         ], 404);
+    //     }
+
+    // }
 }
