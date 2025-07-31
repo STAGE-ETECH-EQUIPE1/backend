@@ -2,9 +2,11 @@
 
 namespace App\Controller\Api\Subscription;
 
+use App\DTO\Subscription\PackDTO;
 use App\DTO\Subscription\ServiceDTO;
 use App\Repository\Subscription\ServiceRepository;
 use App\Services\CreateService\CreateServiceServiceInterface;
+use App\Services\editService\editServiceService;
 use App\Services\ListService\ListServiceService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,22 +49,22 @@ class ServiceController extends AbstractController
         return $this->json($services);
     }
 
-    // // #[IsGranted('ROLE_ADMIN')]
-    // #[Route('/service/edit/{id}', name: 'edit_service', methods: ['PUT'])]
-    // public function editServices(
-    //     int $id,
-    //     Request
-    //     ServiceRepository $serviceRepository,
-    //     EntityManagerInterface $em,
+    // #[IsGranted('ROLE_ADMIN')]
+    #[Route('/service/edit/{id}', name: 'edit_service', methods: ['PUT'])]
+    public function editServices(
+        int $id,
+        #[MapRequestPayload(validationGroups: ['update'])] ServiceDTO $dto,
+        editServiceService $service,
+    ) : JsonResponse {
 
-    // ) : JsonResponse {
-    //     $service = $serviceRepository->find($id);
-    //     if (!$service)
-    //     {
-    //         return $this->json([
-    //             'message' => 'Service Not Found',
-    //         ], 404);
-    //     }
-
-    // }
+        $updated  = $this->$service->handle($id, $dto);
+        if (!$updated) {
+            return $this->json(['error' => 'Service not found'], 404);
+        }
+        
+        return $this->json([
+            'message:' => 'Update Success',
+            'Service id' => $id,
+        ]);
+    }
 }
