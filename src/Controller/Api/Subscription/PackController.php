@@ -4,6 +4,7 @@ namespace App\Controller\Api\Subscription;
 
 use App\DTO\Subscription\PackDTO;
 use App\Services\CreatePack\CreatePackServiceInterface;
+use App\Services\EditPack\EditPackService;
 use App\Services\ListPack\ListPackService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,6 +13,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PackController extends AbstractController
 {
+    private EditPackService $editPackService;
+
+    public function __construct(EditPackService $editPackService)
+    {
+        $this->editPackService = $editPackService;
+    }
+
     // #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/create', name: 'create_pack', methods: ['POST'])]
     public function createPack(
@@ -38,5 +46,23 @@ class PackController extends AbstractController
         $packsDto = $listPackService->getAllPacks();
 
         return $this->json($packsDto);
+    }
+
+    // #[IsGranted('ROLE_ADMIN')]
+    #[Route('/pack/edit/{id}', name: 'edit_pack', methods: ['PUT'])]
+    public function editPack(
+        int $id,
+        #[MapRequestPayload] PackDTO $dto,
+    ): JsonResponse {
+        $updated = $this->editPackService->handle($id, $dto);
+
+        if (!$updated) {
+            return $this->json(['error' => 'Pack not found'], 404);
+        }
+
+        return $this->json([
+            'message:' => 'Update Success',
+            'Pack id' => $id,
+        ]);
     }
 }

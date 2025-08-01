@@ -29,4 +29,3 @@ class ListServiceService implements ListServiceServiceInterface
         return $result;
     }
 }
-

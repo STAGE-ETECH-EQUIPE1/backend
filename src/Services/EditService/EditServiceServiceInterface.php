@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\editService;
+namespace App\Services\EditService;
 
 use App\DTO\Subscription\ServiceDTO;
 use App\Entity\Subscription\Service;
 
-interface editServiceServiceInterface
+interface EditServiceServiceInterface
 {
     public function handle(int $id, ServiceDTO $dto): ?Service;
 }

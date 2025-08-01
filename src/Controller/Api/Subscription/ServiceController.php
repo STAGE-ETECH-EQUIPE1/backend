@@ -2,14 +2,10 @@
 
 namespace App\Controller\Api\Subscription;
 
-use App\DTO\Subscription\PackDTO;
 use App\DTO\Subscription\ServiceDTO;
-use App\Repository\Subscription\ServiceRepository;
 use App\Services\CreateService\CreateServiceServiceInterface;
-use App\Services\editService\editServiceService;
+use App\Services\EditService\EditServiceService;
 use App\Services\ListService\ListServiceService;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -18,6 +14,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ServiceController extends AbstractController
 {
+    private EditServiceService $editServiceService;
+
+    public function __construct(EditServiceService $editServiceService)
+    {
+        $this->editServiceService = $editServiceService;
+    }
+
     // #[IsGranted('ROLE_ADMIN')]
     #[Route('/service/create', name: 'create_service', methods: ['POST'])]
     public function createService(
@@ -54,16 +57,14 @@ class ServiceController extends AbstractController
     public function editServices(
         int $id,
         #[MapRequestPayload(validationGroups: ['update'])] ServiceDTO $dto,
-        editServiceService $service,
-    ) : JsonResponse {
-
-        $updated  = $this->$service->handle($id, $dto);
+    ): JsonResponse {
+        $updated = $this->editServiceService->handle($id, $dto);
         if (!$updated) {
             return $this->json(['error' => 'Service not found'], 404);
         }
-        
+
         return $this->json([
-            'message:' => 'Update Success',
+            'message' => 'Update Success',
             'Service id' => $id,
         ]);
     }

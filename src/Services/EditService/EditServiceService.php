@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\editService;
+namespace App\Services\EditService;
 
 use App\DTO\Subscription\ServiceDTO;
 use App\Entity\Subscription\Service;
 use App\Repository\Subscription\ServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class editServiceService implements editServiceServiceInterface
+class EditServiceService implements EditServiceServiceInterface
 {
     private ServiceRepository $serviceRepository;
     private EntityManagerInterface $em;
