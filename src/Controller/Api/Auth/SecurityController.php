@@ -11,12 +11,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class SecurityController extends AbstractController
 {
     public function __construct(
         private readonly UserServiceInterface $userService,
         private readonly EntityManagerInterface $entityManager,
+        private readonly JWTTokenManagerInterface $jwtManager,
     ) {
     }
 
@@ -47,10 +49,12 @@ class SecurityController extends AbstractController
         $user = $this->userService->convertUserRegistrationDtoToUser($userRegistrationDto);
 
         $this->entityManager->persist($user);
-        // $this->entityManager->flush();
+        $this->entityManager->flush();
+        $token = $this->jwtManager->create($user);
 
         return $this->json([
             'message' => 'User registered successfully',
+            'token' => $token,
             'user' => $this->userService->convertToDto($user),
         ], Response::HTTP_CREATED);
     }
