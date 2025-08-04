@@ -33,7 +33,7 @@ class ServiceController extends AbstractController
 
             return $this->json([
                 'message' => 'Service créé',
-                'serviceId' => $service->getId(),
+                'id' => $service->getId(),
             ], 201);
         } catch (\Exception $e) {
             return $this->json([

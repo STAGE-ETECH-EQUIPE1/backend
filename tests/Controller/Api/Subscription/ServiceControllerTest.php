@@ -46,37 +46,36 @@ class ServiceControllerTest extends ApiTestCase
         }
     }
 
-    // public function testUpdateService(): void
-    // {
-    //     $client = static::createClient();
+    public function testUpdateService(): void
+    {
+        $client = static::createClient();
 
-    //     $client->request('POST', '/api/service/create', ['json' => [
-    //         'name' => 'testName',
-    //         'price' => '25.2',
+        $client->request('POST', '/api/service/create', ['json' => [
+            'name' => 'testName',
+            'price' => '25.2',
             
-    //     ]]);
+        ]]);
         
-    //     $this->assertResponseIsSuccessful();
-    //     $response = $client->getResponse();
-    //     $this->assertJson($response->getContent());
+        $this->assertResponseIsSuccessful();
+        $response = $client->getResponse();
+        $this->assertJson($response->getContent());
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('id', $data);
+        $id = $data['id'];
 
-    //     $data = json_decode($response->getContent(), true);
-    //     $this->assertArrayHasKey('id', $data);
-    //     $id = $data['id'];
+        $client->request('PUT', "/api/service/edit/$id", ['json' => [
+            'name' => 'newName',
+            'price' => '258.25',
+        ]]);
 
-    //     $client->request('PUT', "/api/service/edit/$id", ['json' => [
-    //         'name' => 'newName',
-    //         'price' => '258.25',
-    //     ]]);
+        $this->assertResponseIsSuccessful();
+        $response = $client->getResponse();
+        $this->assertJson($response->getContent());
 
-    //     $this->assertResponseIsSuccessful();
-    //     $response = $client->getResponse();
-    //     $this->assertJson($response->getContent());
-
-    //     $services = $response->toArray();
+        $services = $response->toArray();
         
-    //     $this->assertEquals($id, $services['service']['id']);
-    //     $this->assertEquals('newName', $services['service']['name']);
-    //     $this->assertEquals('258.25', $services['service']['price']);
-    // }
+        $this->assertEquals($id, $services['service']['id']);
+        $this->assertEquals('newName', $services['service']['name']);
+        $this->assertEquals('258.25', $services['service']['price']);
+    }
 }

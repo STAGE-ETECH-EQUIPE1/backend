@@ -32,7 +32,7 @@ class PackController extends AbstractController
 
             return $this->json([
                 'message' => 'Pack créé',
-                'packId' => $pack->getId(),
+                'id' => $pack->getId(),
             ], 201);
         } catch (\Exception $e) {
             return $this->json(['error' => $e->getMessage()], 400);
@@ -62,7 +62,14 @@ class PackController extends AbstractController
 
         return $this->json([
             'message' => 'Update Success',
-            'id' => $updated->getId(),
+            'pack' => [
+                'id' => $updated->getId(),
+                'name' => $updated->getName(),
+                'price' => $updated->getPrice(),
+                'startedAt' => $updated->getStartedAt(),
+                'expiredAt' => $updated->getExpiredAt(),
+                'services' => $updated->getServices(),
+            ],
         ]);
     }
 }
