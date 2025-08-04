@@ -61,8 +61,8 @@ class PackController extends AbstractController
         }
 
         return $this->json([
-            'message:' => 'Update Success',
-            'Pack id' => $id,
+            'message' => 'Update Success',
+            'id' => $updated->getId(),
         ]);
     }
 }

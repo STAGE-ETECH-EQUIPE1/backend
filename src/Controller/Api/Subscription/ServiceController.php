@@ -63,9 +63,13 @@ class ServiceController extends AbstractController
             return $this->json(['error' => 'Service not found'], 404);
         }
 
-        return $this->json([
+       return $this->json([
             'message' => 'Update Success',
-            'Service id' => $id,
+            'service' => [
+                'id' => $updated->getId(),
+                'name' => $updated->getName(),
+                'price' => $updated->getPrice(),
+            ],
         ]);
     }
 }
