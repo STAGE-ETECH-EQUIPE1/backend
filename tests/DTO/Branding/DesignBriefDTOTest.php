@@ -13,7 +13,6 @@ class DesignBriefDTOTest extends KernelTestCase
     public function getDTO(): DesignBriefDTO
     {
         return (new DesignBriefDTO())
-            ->setCompanyName('TestDevCompany')
             ->setColorPreferences([
                 'primary' => 'yellow',
                 'secondary' => 'blue',
@@ -23,19 +22,14 @@ class DesignBriefDTOTest extends KernelTestCase
             ])
             ->setDescription('A lot of description about company')
             ->setMoodBoardUrl('https://loremflickr.com/2806/86?lock=3860409461985729')
+            ->setLogoStyle('modern')
+            ->setSlogan('GrowUp together')
         ;
     }
 
     public function testValidDTO(): void
     {
         $this->assertHasErrors($this->getDTO());
-    }
-
-    public function testBlankCompanyname(): void
-    {
-        $this->assertHasErrors(
-            $this->getDTO()->setCompanyName(''),
-            1);
     }
 
     public function testMinLengthDescription(): void
@@ -63,6 +57,13 @@ class DesignBriefDTOTest extends KernelTestCase
     {
         $this->assertHasErrors(
             $this->getDTO()->setBrandKeywords([]),
+            1);
+    }
+
+    public function testInvalidMinLogoStyle(): void
+    {
+        $this->assertHasErrors(
+            $this->getDTO()->setLogoStyle('a'),
             1);
     }
 }

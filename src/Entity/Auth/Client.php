@@ -29,6 +29,9 @@ class Client
     #[ORM\OneToMany(targetEntity: BrandingProject::class, mappedBy: 'client')]
     private Collection $brandingProjects;
 
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $companyArea = null;
+
     public function __construct()
     {
         $this->brandingProjects = new ArrayCollection();
@@ -89,6 +92,18 @@ class Client
                 $brandingProject->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompanyArea(): ?string
+    {
+        return $this->companyArea;
+    }
+
+    public function setCompanyArea(?string $companyArea): static
+    {
+        $this->companyArea = $companyArea;
 
         return $this;
     }

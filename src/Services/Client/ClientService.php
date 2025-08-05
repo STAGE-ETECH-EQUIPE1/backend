@@ -10,7 +10,7 @@ use App\Services\AbstractService;
 use App\Services\User\UserServiceInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
-class ClientService extends AbstractService implements ClientServiceInterface
+final class ClientService extends AbstractService implements ClientServiceInterface
 {
     public function __construct(
         private readonly Security $security,

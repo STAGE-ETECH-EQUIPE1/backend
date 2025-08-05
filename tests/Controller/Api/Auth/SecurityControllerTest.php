@@ -25,7 +25,7 @@ class SecurityControllerTest extends ApiTestCase
         $this->createTestUser();
         self::$alwaysBootKernel = false;
 
-        $response = static::createClient([], [])->request('POST', '/api/login', [
+        $response = static::createClient()->request('POST', '/api/login', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'test@example.com',
@@ -43,7 +43,7 @@ class SecurityControllerTest extends ApiTestCase
         $this->createTestUser();
         self::$alwaysBootKernel = false;
 
-        static::createClient([], [])->request('POST', '/api/login', [
+        static::createClient()->request('POST', '/api/login', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'test@example.com',
@@ -60,7 +60,7 @@ class SecurityControllerTest extends ApiTestCase
     {
         self::$alwaysBootKernel = false;
 
-        $response = static::createClient([], [])->request('POST', '/api/register', [
+        $response = static::createClient()->request('POST', '/api/register', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'user'.uniqid().'@gmail.com',
@@ -82,7 +82,7 @@ class SecurityControllerTest extends ApiTestCase
         $this->createTestUser();
         self::$alwaysBootKernel = false;
 
-        $response = static::createClient([], [])->request('POST', '/api/login', [
+        $response = static::createClient()->request('POST', '/api/login', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'email' => 'test@example.com',
@@ -92,9 +92,7 @@ class SecurityControllerTest extends ApiTestCase
 
         $token = $response->toArray()['token'];
 
-        static::createClient([], [
-            'base_uri' => $_ENV['TEST_BASE_URL'] ?? 'http://localhost',
-        ])->request('GET', '/api/me', [
+        static::createClient()->request('GET', '/api/me', [
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer '.$token,

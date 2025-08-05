@@ -33,6 +33,14 @@ class LogoVersion
     #[ORM\OneToMany(targetEntity: ClientFeedBack::class, mappedBy: 'logoVersion', orphanRemoval: true)]
     private Collection $clientFeedBacks;
 
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'logos')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?BrandingProject $branding = null;
+
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'logos')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?DesignBrief $brief = null;
+
     public function __construct()
     {
         $this->clientFeedBacks = new ArrayCollection();
@@ -117,6 +125,30 @@ class LogoVersion
                 $clientFeedBack->setLogoVersion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBranding(): ?BrandingProject
+    {
+        return $this->branding;
+    }
+
+    public function setBranding(?BrandingProject $branding): static
+    {
+        $this->branding = $branding;
+
+        return $this;
+    }
+
+    public function getBrief(): ?DesignBrief
+    {
+        return $this->brief;
+    }
+
+    public function setBrief(?DesignBrief $brief): static
+    {
+        $this->brief = $brief;
 
         return $this;
     }

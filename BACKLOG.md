@@ -38,12 +38,13 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 ## 🛠️ Épopée 3 : Branding
 
-| Tâche                                                                    | Priorité | Statut | Notes                                                       |
-| ------------------------------------------------------------------------ | -------- | ------ | ----------------------------------------------------------- |
-| Aider le client à choisir ses préférences                                | 🔥       | 🕓     | Créer une table en base de donnée pour les `colors palette` |
-| Génération de la liste des logos à partir d'une IA                       | 🔥       | 🕓     | Générer à partir des informations entrés par le client      |
-| Mettre en place un système de feedback pour connaître le choix du client | 🔥       | 🕓     | un petit système de commentaire pour chaque logo généré     |
-| Endpoint pour chaque fonctionnalité                                      | 🔥       | 🕓     | Création des routes pour chaque fonctionnalité              |
+| Tâche                                                                           | Priorité | Statut | Notes                                                       |
+| ------------------------------------------------------------------------------- | -------- | ------ | ----------------------------------------------------------- |
+| Aider le client à choisir ses préférences                                       | 🔥       | 🚧     | Créer une table en base de donnée pour les `colors palette` |
+| Génération de la liste des logos à partir d'une IA                              | 🔥       | ✅     | Générer à partir des informations entrés par le client      |
+| Mettre en place un système de feedback pour connaître les préférences du client | 🔥       | 🚧     | un petit système de commentaire pour chaque logo généré     |
+| Endpoint pour chaque fonctionnalité                                             | 🔥       | 🚧     | Création des routes pour chaque fonctionnalité              |
+| Persister l'historique des prompts lors du génération des logos                 | 🕓       | 🕓     |                                                             |
 
 ---
 
@@ -78,7 +79,7 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 | Bug                                               | Statut | Notes                     |
 | ------------------------------------------------- | ------ | ------------------------- |
 | L’authentification échoue si mauvais mot de passe | ✅     | Géré par handler LexikJWT |
-| Mise en place du docker sur le projet             | 🚧     | En cours de résolution    |
+| Mise en place du docker sur le projet             | ✅     | En cours de résolution    |
 
 ---
 
