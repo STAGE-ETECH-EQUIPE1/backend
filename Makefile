@@ -73,6 +73,17 @@ test: vendor/autoload.php ## Perform test for the project
 about: vendor/autoload.php ## Check
 	$(CONSOLE) about
 
+.PHONY: lint
+lint: vendor/autoload.php ## Analyze code
+	$(CONSOLE) lint:container
+	$(PHP) vendor/bin/phpstan analyze --memory-limit 500M
+	$(PHP) vendor/bin/php-cs-fixer fix src --dry-run --diff
+
+.PHONY: ci
+ci: vendor/autoload.php ## Test project like 'github action'
+	@make lint
+	@make test
+
 ##
 ##-----------------------------------
 ## Database
@@ -145,20 +156,9 @@ docker-logs: ## Show docker logs
 ##-----------------------------------
 ## Others
 ##-----------------------------------
-.PHONY: lint
-lint: vendor/autoload.php ## Analyze code
-	$(CONSOLE) lint:container
-	$(PHP) vendor/bin/phpstan analyze --memory-limit 500M
-	$(PHP) vendor/bin/php-cs-fixer fix src --dry-run --diff
-
 .PHONY: format
 format: vendor/autoload.php ## Format code
 	$(PHP) vendor/bin/php-cs-fixer fix
-
-.PHONY: ci
-ci: vendor/autoload.php ## Test project like 'github action'
-	@make lint
-	@make test
 
 .PHONY: help
 help: ## List commands
