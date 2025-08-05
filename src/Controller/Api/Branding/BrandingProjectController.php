@@ -4,10 +4,10 @@ namespace App\Controller\Api\Branding;
 
 use App\DTO\Branding\DesignBriefDTO;
 use App\Entity\Branding\BrandingProject;
-use App\Entity\Branding\DesignBrief;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Message\Branding\RegenerateLogoMessage;
 use App\Services\Branding\BrandingServiceInterface;
+use App\Services\LogoVersion\LogoVersionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,20 @@ class BrandingProjectController extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $messageBus,
         private readonly BrandingServiceInterface $brandingService,
+        private readonly LogoVersionServiceInterface $logoVersionService,
     ) {
+    }
+
+    #[Route('/branding-project', name: 'branding_project_list', methods: ['GET'])]
+    #[IsGranted('ROLE_CLIENT')]
+    public function getBrandingProjectForUser(): JsonResponse
+    {
+        return $this->json([
+            'message' => 'get All Branding Project for connected user',
+            'data' => $this->brandingService->convertAllToDTO(
+                $this->brandingService->getAllBrandingProject()
+            ),
+        ]);
     }
 
     #[Route(path: '/branding-project', name: 'branding_project_submit', methods: ['POST'])]
@@ -55,7 +68,7 @@ class BrandingProjectController extends AbstractController
 
     #[Route(path: '/branding-project/{id}/brief', name: 'branding_logo_brief', methods: ['POST'])]
     #[IsGranted('ROLE_CLIENT')]
-    public function submitLogo(
+    public function submitLogoBriefToBrandingProject(
         BrandingProject $brandingProject,
         #[MapRequestPayload]
         DesignBriefDTO $designBriefDTO,
@@ -83,20 +96,16 @@ class BrandingProjectController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route(path: '/branding/test', name: 'test_branding', methods: ['POST'])]
-    public function testDesignValidation(
-        #[MapRequestPayload]
-        DesignBriefDTO $designBriefDTO,
+    #[Route('/branding-project/{id}/logo', name: 'branding_logo_view', methods: ['GET'])]
+    #[IsGranted('ROLE_CLIENT')]
+    public function getAllLogoFromBrandingProject(
+        BrandingProject $brandingProject,
     ): JsonResponse {
-        $brief = (new DesignBrief())
-            ->setColorPreferences($designBriefDTO->getColorPreferences())
-            ->setLogoStyle('modern')
-            ->setSlogan($designBriefDTO->getSlogan());
-
         return $this->json([
-            'message' => 'Validation Design Brief DTO',
-            'data' => $designBriefDTO,
-            'brief' => $brief,
+            'message' => 'get All Logo from branding project',
+            'data' => $this->logoVersionService->convertAllToDTO(
+                $this->logoVersionService->getLogoByBrandingId($brandingProject)
+            ),
         ]);
     }
 }

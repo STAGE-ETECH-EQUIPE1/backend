@@ -44,7 +44,9 @@ class ApiControllerTestCase extends ApiTestCase
     protected function getClientUser(): User
     {
         $client = (new \App\Entity\Auth\Client())
-            ->setCompanyName('Test Client Company');
+            ->setCompanyName('Test Client Company')
+            ->setCompanyArea('Area Company')
+        ;
 
         return (new User())
             ->setEmail('client@domain.com')

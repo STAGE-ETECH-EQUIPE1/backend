@@ -1,20 +1,25 @@
 IS_DOCKER := $(shell docker info > /dev/null 2>&1 && echo 1)
 
+PHP_SERVICE_NAME := php
+USER_ID := $(shell id -u)
+GROUP_ID := $(shell id -g)
+
 PHP := @php
 SYMFONY := @symfony
 CONSOLE := $(PHP) bin/console
 COMPOSER := @composer
 DOCKER := @docker
-COMPOSE := $(DOCKER) compose
-EXEC := $(DOCKER) exec
+COMPOSE := @USER_ID=$(USER_ID) GROUP_ID=$(GROUP_ID) docker compose
+EXEC := $(COMPOSE) exec $(PHP_SERVICE_NAME)
 
 #---------------------------------------------------------------
 # If you are using docker, please discomment this line
 #---------------------------------------------------------------
-# ifeq ($(IS_DOCKER), 1)
-# 	CONSOLE := $(EXEC) php bin/console
-# 	PHP := $(COMPOSE) run  --rm --no-deps php
-# endif
+ifeq ($(IS_DOCKER), 1)
+	PHP := $(EXEC) php
+	CONSOLE := $(PHP) bin/console
+	COMPOSER := $(EXEC) composer
+endif
 #---------------------------------------------------------------
 
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
@@ -64,6 +69,10 @@ test: vendor/autoload.php ## Perform test for the project
 	$(CONSOLE) doctrine:schema:validate
 	$(PHP) bin/phpunit
 
+.PHONY: about
+about: vendor/autoload.php ## Check
+	$(CONSOLE) about
+
 ##
 ##-----------------------------------
 ## Database
@@ -102,10 +111,14 @@ reset-database: vendor/autoload.php ## Reset database
 ##-----------------------------------
 ## Docker
 ##-----------------------------------
+.PHONY: docker-bash
+docker-bash: ## Terminal in the container
+	$(COMPOSE) run -it $(PHP_SERVICE_NAME) bash
+
 .PHONY: docker-build
 docker-build: ## Build docker image
 	@$(call GREEN,"Build docker image")
-	$(COMPOSE) build --no-interaction
+	$(COMPOSE) build
 
 .PHONY: docker-up
 docker-up: ## Start docker containers
@@ -135,7 +148,7 @@ docker-logs: ## Show docker logs
 .PHONY: lint
 lint: vendor/autoload.php ## Analyze code
 	$(CONSOLE) lint:container
-	$(PHP) vendor/bin/phpstan analyze
+	$(PHP) vendor/bin/phpstan analyze --memory-limit 500M
 	$(PHP) vendor/bin/php-cs-fixer fix src --dry-run --diff
 
 .PHONY: format
