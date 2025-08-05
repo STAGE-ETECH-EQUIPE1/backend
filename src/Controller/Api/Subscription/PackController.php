@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PackController extends AbstractController
 {
@@ -20,7 +21,7 @@ class PackController extends AbstractController
         $this->editPackService = $editPackService;
     }
 
-    // #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/create', name: 'create_pack', methods: ['POST'])]
     public function createPack(
         #[MapRequestPayload]
@@ -39,7 +40,7 @@ class PackController extends AbstractController
         }
     }
 
-    // #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/show', name: 'show_pack', methods: ['GET'])]
     public function showPack(ListPackService $listPackService): JsonResponse
     {
@@ -48,7 +49,7 @@ class PackController extends AbstractController
         return $this->json($packsDto);
     }
 
-    // #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/edit/{id}', name: 'edit_pack', methods: ['PUT'])]
     public function editPack(
         int $id,

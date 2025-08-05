@@ -21,7 +21,7 @@ class ServiceController extends AbstractController
         $this->editServiceService = $editServiceService;
     }
 
-    // #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/service/create', name: 'create_service', methods: ['POST'])]
     public function createService(
         #[MapRequestPayload(validationGroups: ['create'])]
@@ -43,7 +43,7 @@ class ServiceController extends AbstractController
         }
     }
 
-    // #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/service/show', name: 'show_service', methods: ['GET'])]
     public function showServices(ListServiceService $listService): JsonResponse
     {
@@ -52,7 +52,7 @@ class ServiceController extends AbstractController
         return $this->json($services);
     }
 
-    // #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/service/edit/{id}', name: 'edit_service', methods: ['PUT'])]
     public function editServices(
         int $id,

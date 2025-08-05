@@ -5,6 +5,7 @@ namespace App\Tests\Controller\Api\Subscription;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Subscription\Service;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\This;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -13,17 +14,28 @@ class PackControllerTest extends ApiTestCase
     use Factories;
     use ResetDatabase;
 
+    private function createService(string $name = "testeService", string $price = "2.25"): Service 
+    {
+        $container = static::getContainer();
+        $entityManager = $container->get(EntityManagerInterface::class);
+
+        $service = new Service();
+        $service->setName($name);
+        $service->setPrice($price);
+
+        $entityManager->persist($service);
+        $entityManager->flush();
+
+        return $service;
+    }
+
     public function testCreatePack(): void
     {
         $client = static::createClient();
         $container = static::getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
 
-        $service = new Service();
-        $service->setName('testService');
-        $service->setPrice(30.0);
-        $entityManager->persist($service);
-        $entityManager->flush();
+        $service = $this->createService();
 
         $client->request('POST', '/api/pack/create', ['json' => [
             'name' => 'PackTest',
@@ -83,11 +95,7 @@ class PackControllerTest extends ApiTestCase
         $container = static::getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
 
-        $service = new Service();
-        $service->setName('testService');
-        $service->setPrice(30.0);
-        $entityManager->persist($service);
-        $entityManager->flush();
+        $service = $this->createService();
 
         $client->request('POST', '/api/pack/create', ['json' => [
             'name' => 'PackTest',
@@ -105,11 +113,7 @@ class PackControllerTest extends ApiTestCase
         $this->assertArrayHasKey('id', $data);
         $id = $data['id'];
 
-        $service2 = new Service();
-        $service2->setName('testService');
-        $service2->setPrice(30.0);
-        $entityManager->persist($service2);
-        $entityManager->flush();
+        $service2 = $this->createService("rakoto", "258");
 
         $client->request('PUT', "/api/pack/edit/$id", ['json' => [
             'name' => 'NewPackTest',
