@@ -69,20 +69,23 @@ class ApiControllerTestCase extends ApiTestCase
             $passwordHasher->hashPassword($user, (string) $user->getPassword())
         );
 
-        /** @var EntityManagerInterface $manager */
-        $manager = $this->container->get(EntityManagerInterface::class);
-        $manager->persist($user);
-        $manager->flush();
+        $this->saveEntity($user);
     }
 
-    protected function createAdminUser(): void
+    protected function createAdminUser(): User
     {
-        $this->persistUser($this->getAdminUser());
+        $user = $this->getAdminUser();
+        $this->persistUser($user);
+
+        return $user;
     }
 
-    protected function createClientUser(): void
+    protected function createClientUser(): User
     {
-        $this->persistUser($this->getClientUser());
+        $user = $this->getClientUser();
+        $this->persistUser($user);
+
+        return $user;
     }
 
     protected function authenticateClient(): ResponseInterface
@@ -109,5 +112,13 @@ class ApiControllerTestCase extends ApiTestCase
                 'password' => 'Admin@123',
             ],
         ]);
+    }
+
+    protected function saveEntity(object $entity): void
+    {
+        /** @var EntityManagerInterface $manager */
+        $manager = $this->container->get(EntityManagerInterface::class);
+        $manager->persist($entity);
+        $manager->flush();
     }
 }

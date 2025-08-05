@@ -33,12 +33,12 @@ class LogoVersion
     #[ORM\OneToMany(targetEntity: ClientFeedBack::class, mappedBy: 'logoVersion', orphanRemoval: true)]
     private Collection $clientFeedBacks;
 
-    #[ORM\ManyToOne(inversedBy: 'logos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'logos')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?BrandingProject $branding = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'logos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?DesignBrief $brief = null;
 
     public function __construct()
