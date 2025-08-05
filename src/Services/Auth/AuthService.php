@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
@@ -26,6 +27,7 @@ final readonly class AuthService implements AuthServiceInterface
         private EmailVerifier $emailVerifier,
         #[Autowire('%app.frontend_url%')]
         private string $frontendUrl,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
     }
 
@@ -50,6 +52,7 @@ final readonly class AuthService implements AuthServiceInterface
         } catch (ResetPasswordExceptionInterface $e) {
             throw new \Exception('Email could not be sent. Please try again later.');
         }
+
         $email = (new TemplatedEmail())
             ->from(new Address('no-reply@domain.com', 'ORBIXUP Mail Bot'))
             ->to((string) $user->getEmail())
@@ -57,7 +60,9 @@ final readonly class AuthService implements AuthServiceInterface
             ->htmlTemplate('email/reset_password.html.twig')
             ->context([
                 'resetToken' => $resetToken,
-                'frontendUrl' => $this->frontendUrl,
+                'resetLink' => rtrim($this->frontendUrl, '/').'/'.$this->urlGenerator->generate('api_reset_password', [
+                    'token' => $resetToken->getToken(),
+                ], UrlGeneratorInterface::RELATIVE_PATH),
             ])
         ;
         $this->mailer->send($email);
