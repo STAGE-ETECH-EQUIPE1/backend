@@ -2,8 +2,11 @@
 
 namespace App\Services\LogoVersion;
 
+use App\DTO\Branding\ClientFeedBackDTO;
 use App\DTO\Branding\LogoVersionDTO;
+use App\DTO\Request\CommentLogoDTO;
 use App\Entity\Branding\BrandingProject;
+use App\Entity\Branding\ClientFeedBack;
 use App\Entity\Branding\LogoVersion;
 
 interface LogoVersionServiceInterface
@@ -14,6 +17,18 @@ interface LogoVersionServiceInterface
      * @return LogoVersion[]
      */
     public function getLogoByBrandingId(BrandingProject $brandingProject): array;
+
+    /**
+     * Get all clients feedback from a specific logo.
+     *
+     * @return ClientFeedBack[]
+     */
+    public function getLogoFeedBackByLogoId(int $id): array;
+
+    /**
+     * Create feedback from client request.
+     */
+    public function commentLogo(LogoVersion $logo, CommentLogoDTO $comment): void;
 
     /**
      * Convert LogoVersion To DTO.
@@ -28,4 +43,18 @@ interface LogoVersionServiceInterface
      * @return LogoVersionDTO[]
      */
     public function convertAllToDTO(array $logoVersions): array;
+
+    /**
+     * Convert Client Feed Back to DTO.
+     */
+    public function convertClientFeedBackToDTO(ClientFeedBack $clientFeedBack): ClientFeedBackDTO;
+
+    /**
+     * Convert All Clients FeedBacks to DTO.
+     *
+     * @param ClientFeedBack[] $clientFeedBacks
+     *
+     * @return ClientFeedBackDTO[]
+     */
+    public function convertAllClientFeedBacksToDTO(array $clientFeedBacks): array;
 }
