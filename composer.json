@@ -16,7 +16,6 @@
         "knpuniversity/oauth2-client-bundle": "*",
         "league/oauth2-google": "*",
         "lexik/jwt-authentication-bundle": "^3.1",
-        "nelmio/api-doc-bundle": "^5.4",
         "nelmio/cors-bundle": "^2.5",
         "phpdocumentor/reflection-docblock": "^5.6",
         "symfony/asset": "7.3.*",

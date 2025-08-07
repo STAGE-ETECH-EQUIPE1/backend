@@ -2,9 +2,9 @@
 
 namespace App\Services\User;
 
-use App\DTO\Output\JWTUser;
 use App\DTO\Request\UserRegistrationDTO;
-use App\DTO\UserDTO;
+use App\DTO\Response\JWTUser;
+use App\DTO\User\UserDTO;
 use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
 use App\Repository\Auth\UserRepository;

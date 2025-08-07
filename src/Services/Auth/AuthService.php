@@ -4,6 +4,7 @@ namespace App\Services\Auth;
 
 use App\DTO\Request\UpdatePasswordDTO;
 use App\Entity\Auth\User;
+use App\Exception\UserNotFoundException;
 use App\Security\EmailVerifier;
 use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,26 +47,29 @@ final readonly class AuthService implements AuthServiceInterface
 
     public function sendResetPasswordEmail(string $email): void
     {
-        $user = $this->userService->getByEmail($email);
         try {
-            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
-            throw new \Exception('Email could not be sent. Please try again later.');
-        }
+            $user = $this->userService->getByEmail($email);
+            try {
+                $resetToken = $this->resetPasswordHelper->generateResetToken($user);
+            } catch (ResetPasswordExceptionInterface $e) {
+                throw new \Exception('Email could not be sent. Please try again later.');
+            }
 
-        $email = (new TemplatedEmail())
-            ->from(new Address('no-reply@domain.com', 'ORBIXUP Mail Bot'))
-            ->to((string) $user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('email/reset_password.html.twig')
-            ->context([
-                'resetToken' => $resetToken,
-                'resetLink' => rtrim($this->frontendUrl, '/').'/'.$this->urlGenerator->generate('api_reset_password', [
-                    'token' => $resetToken->getToken(),
-                ], UrlGeneratorInterface::RELATIVE_PATH),
-            ])
-        ;
-        $this->mailer->send($email);
+            $email = (new TemplatedEmail())
+                ->from(new Address('no-reply@domain.com', 'ORBIXUP Mail Bot'))
+                ->to((string) $user->getEmail())
+                ->subject('Your password reset request')
+                ->htmlTemplate('email/reset_password.html.twig')
+                ->context([
+                    'resetToken' => $resetToken,
+                    'resetLink' => rtrim($this->frontendUrl, '/').'/'.$this->urlGenerator->generate('api_reset_password', [
+                        'token' => $resetToken->getToken(),
+                    ], UrlGeneratorInterface::RELATIVE_PATH),
+                ])
+            ;
+            $this->mailer->send($email);
+        } catch (UserNotFoundException $e) {
+        }
     }
 
     public function updateUserPassword(string $token, UpdatePasswordDTO $updatePasswordDTO): void

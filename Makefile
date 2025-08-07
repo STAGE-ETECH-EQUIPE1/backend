@@ -15,11 +15,11 @@ EXEC := $(COMPOSE) exec $(PHP_SERVICE_NAME)
 #---------------------------------------------------------------
 # If you are using docker, please discomment this line
 #---------------------------------------------------------------
-ifeq ($(IS_DOCKER), 1)
-	PHP := $(EXEC) php
-	CONSOLE := $(PHP) bin/console
-	COMPOSER := $(EXEC) composer
-endif
+# ifeq ($(IS_DOCKER), 1)
+# 	PHP := $(EXEC) php
+# 	CONSOLE := $(PHP) bin/console
+# 	COMPOSER := $(EXEC) composer
+# endif
 #---------------------------------------------------------------
 
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"

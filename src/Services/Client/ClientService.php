@@ -2,7 +2,7 @@
 
 namespace App\Services\Client;
 
-use App\DTO\ClientDTO;
+use App\DTO\User\ClientDTO;
 use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
 use App\Exception\ClientNotAssociedException;

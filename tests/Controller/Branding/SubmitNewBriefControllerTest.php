@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Tests\Controller\Branding;
+
+use App\Tests\Controller\ApiControllerTestCase;
+use Symfony\Component\HttpFoundation\Response;
+use Zenstruck\Foundry\Test\ResetDatabase;
+
+class SubmitNewBriefControllerTest extends ApiControllerTestCase
+{
+    use ResetDatabase;
+
+    public function testValidSubmitBrief(): void
+    {
+        $token = $this->authenticateClient()->toArray()['token'];
+
+        $this->apiClient()->request('POST', '/api/branding-project', [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => "Bearer {$token}",
+            ],
+            'json' => [
+                'description' => 'A lot of description about company',
+                'slogan' => 'slogan of company',
+                'logoStyle' => 'modern',
+                'colorPreferences' => [
+                    '#5a172c',
+                    '#320b7f',
+                    '#0f411c',
+                ],
+                'brandKeywords' => [
+                    'Recruitment', 'Consultation', 'Creativity',
+                ],
+                'moodBoardUrl' => 'https://example.com/mood-board',
+            ],
+        ]);
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testUnauthorizedSubmitBrief(): void
+    {
+        $this->apiClient()->request('POST', '/api/branding-project', [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'companyName' => 'Test Company Name',
+                'description' => 'A lot of description about company',
+                'colorPreferences' => [
+                    'slogan' => '#5a172c',
+                    'name' => '#320b7f',
+                    'background' => '#0f411c',
+                ],
+                'brandKeywords' => [
+                    'Recruitment', 'Consultation', 'Creativity',
+                ],
+                'moodBoardUrl' => 'https://example.com/mood-board',
+            ],
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
+}

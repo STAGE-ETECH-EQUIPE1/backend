@@ -23,7 +23,7 @@ class DesignBrief
     private ?string $description = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'designBriefs')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?BrandingProject $branding = null;
 
     #[ORM\Column(length: 200, nullable: true)]
