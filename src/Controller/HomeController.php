@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/test', name: 'test_endpoint', methods: ['GET'])]
-    public function testServer(): JsonResponse
+    public function __invoke(): JsonResponse
     {
         return $this->json([
             'message' => 'Hello From Backend',

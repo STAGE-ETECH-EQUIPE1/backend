@@ -28,7 +28,7 @@ class SubmitNewBriefController extends AbstractController
         methods: ['POST']
     )]
     #[IsGranted('ROLE_CLIENT')]
-    public function submitBrief(
+    public function __invoke(
         #[MapRequestPayload]
         DesignBriefDTO $designBriefDTO,
     ): JsonResponse {

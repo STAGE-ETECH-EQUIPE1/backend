@@ -22,7 +22,7 @@ class GetCurrentClientController extends AbstractController
         name: 'client_form_connected_user',
         methods: ['GET']
     )]
-    public function getClientFromUser(): JsonResponse
+    public function __invoke(): JsonResponse
     {
         try {
             return $this->json([

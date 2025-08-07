@@ -19,7 +19,7 @@ class GetLogoFeedBacksController extends AbstractController
         name: 'logo_feedback_list',
         methods: ['GET']
     )]
-    public function getLogoFeedBacks(
+    public function __invoke(
         int $id,
     ): JsonResponse {
         return $this->json([

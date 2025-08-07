@@ -24,7 +24,7 @@ class GetUserBrandingController extends AbstractController
         ],
     )]
     #[IsGranted('ROLE_CLIENT')]
-    public function getBrandingProjectForUser(): JsonResponse
+    public function __invoke(): JsonResponse
     {
         return $this->json([
             'message' => 'get All Branding Project for connected user',

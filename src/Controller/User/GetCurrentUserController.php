@@ -21,7 +21,7 @@ class GetCurrentUserController extends AbstractController
         name: 'current_user',
         methods: ['GET']
     )]
-    public function getCurrentUser(): JsonResponse
+    public function __invoke(): JsonResponse
     {
         $user = $this->getUser();
         if ($user && $user instanceof User) {
