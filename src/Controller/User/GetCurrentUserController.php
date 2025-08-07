@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class CurrentUserController extends AbstractController
+class GetCurrentUserController extends AbstractController
 {
     public function __construct(
         private readonly UserServiceInterface $userService,

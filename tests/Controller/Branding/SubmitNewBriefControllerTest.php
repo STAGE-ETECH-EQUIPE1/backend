@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Tests\Controller\Api\Branding;
+namespace App\Tests\Controller\Branding;
 
-use App\Tests\Controller\Api\ApiControllerTestCase;
+use App\Tests\Controller\ApiControllerTestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class BrandingProjectControllerTest extends ApiControllerTestCase
+class SubmitNewBriefControllerTest extends ApiControllerTestCase
 {
     use ResetDatabase;
 
@@ -58,6 +59,7 @@ class BrandingProjectControllerTest extends ApiControllerTestCase
                 'moodBoardUrl' => 'https://example.com/mood-board',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(401);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 }

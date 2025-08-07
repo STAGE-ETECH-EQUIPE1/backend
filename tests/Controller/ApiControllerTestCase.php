@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Tests\Controller\Api;
+namespace App\Tests\Controller;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use App\Entity\Auth\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Factory;
+use Faker\Generator;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -120,5 +122,10 @@ class ApiControllerTestCase extends ApiTestCase
         $manager = $this->container->get(EntityManagerInterface::class);
         $manager->persist($entity);
         $manager->flush();
+    }
+
+    public function getFaker(): Generator
+    {
+        return Factory::create('fr_FR');
     }
 }

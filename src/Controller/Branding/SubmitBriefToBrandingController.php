@@ -29,7 +29,7 @@ class SubmitBriefToBrandingController extends AbstractController
         methods: ['POST']
     )]
     #[IsGranted('ROLE_CLIENT')]
-    public function submitLogoBriefToBrandingProject(
+    public function __invoke(
         BrandingProject $brandingProject,
         #[MapRequestPayload]
         DesignBriefDTO $designBriefDTO,

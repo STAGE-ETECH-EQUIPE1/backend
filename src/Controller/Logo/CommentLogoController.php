@@ -25,7 +25,7 @@ class CommentLogoController extends AbstractController
         methods: ['POST']
     )]
     #[IsGranted('ROLE_CLIENT')]
-    public function comentLogoById(
+    public function __invoke(
         LogoVersion $logoVersion,
         #[MapRequestPayload]
         CommentLogoDTO $commentLogoDTO,

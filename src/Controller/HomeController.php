@@ -9,13 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route(path: '/', name: 'app_home_index', methods: ['GET'])]
-    public function index(): Response
-    {
-        return $this->render('home/index.html.twig', []);
-    }
-
-    #[Route('/api/test', name: 'api_test_endpoint', methods: ['GET'])]
+    #[Route('/test', name: 'test_endpoint', methods: ['GET'])]
     public function testServer(): JsonResponse
     {
         return $this->json([
