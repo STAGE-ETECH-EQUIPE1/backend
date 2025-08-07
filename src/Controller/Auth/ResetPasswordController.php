@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
-class SendResetPasswordController extends AbstractController
+class ResetPasswordController extends AbstractController
 {
     public function __construct(
         private readonly AuthServiceInterface $authService,
