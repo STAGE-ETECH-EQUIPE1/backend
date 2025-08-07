@@ -19,8 +19,8 @@ services:
     App\:
         resource: '../src/'
 
-    App\Controller\Api\:
-        resource: '../src/Controller/Api/'
+    App\Controller\:
+        resource: '../src/Controller/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

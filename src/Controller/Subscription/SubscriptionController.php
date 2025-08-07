@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Subscription;
+namespace App\Controller\Subscription;
 
 use App\DTO\Subscription\SubscriptionDTO;
 use App\Services\Subscription\SubscriptionServiceInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Auth;
+namespace App\Controller\Auth;
 
 use App\DTO\Request\GoogleAuthenticationDTO;
 use App\Services\Auth\GoogleAuthenticationService;

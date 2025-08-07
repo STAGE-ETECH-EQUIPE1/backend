@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Auth;
+namespace App\Controller\Auth;
 
 use App\Exception\ClientNotAssociedException;
 use App\Services\Client\ClientServiceInterface;

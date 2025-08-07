@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Branding;
+namespace App\Controller\Branding;
 
 use App\DTO\Branding\DesignBriefDTO;
 use App\Message\Branding\GenerateLogoMessage;

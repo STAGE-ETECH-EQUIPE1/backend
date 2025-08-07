@@ -2,15 +2,15 @@ controllers:
     resource:
         path: ../src/Controller/
         namespace: App\Controller
-    exclude: ../src/Controller/Api/
+    exclude: ../src/Controller/
     type: attribute
 
 api_controllers:
     name_prefix: api_
     prefix: /api
     resource:
-        path: ../src/Controller/Api/
-        namespace: App\Controller\Api
+        path: ../src/Controller/
+        namespace: App\Controller
     type: attribute
 
 api_login_check:
