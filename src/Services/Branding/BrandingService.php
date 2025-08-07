@@ -2,95 +2,110 @@
 
 namespace App\Services\Branding;
 
-use App\Message\Branding\GenerateLogoMessage;
+use App\DTO\Branding\BrandingProjectDTO;
+use App\DTO\Branding\DesignBriefDTO;
+use App\Entity\Auth\Client;
+use App\Entity\Auth\User;
+use App\Entity\Branding\BrandingProject;
+use App\Entity\Branding\DesignBrief;
+use App\Enum\BrandingStatus;
+use App\Repository\Branding\BrandingProjectRepository;
+use App\Security\Voter\BrandingProjectVoter;
 use App\Services\AbstractService;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
+use App\Services\Client\ClientServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
-class BrandingService extends AbstractService implements BrandingServiceInterface
+final class BrandingService extends AbstractService implements BrandingServiceInterface
 {
     public function __construct(
-        private readonly HttpClientInterface $httpClient,
-        #[Autowire('%app.google_ai_token%')]
-        private readonly string $googleAiToken,
-        #[Autowire('%app.google_ai_url%')]
-        private readonly string $googleAiUrl,
+        private readonly ClientServiceInterface $clientService,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly BrandingProjectRepository $brandingProjectRepository,
+        private readonly Security $security,
     ) {
     }
 
-    public function generateLogoFromGoogleAiStudio(GenerateLogoMessage $message): void
+    public function getAllBrandingProject(): array
     {
-        $response = $this->getResponseFromLogoGoogleAiStudiologoGeneration($message);
+        if ($this->security->isGranted(BrandingProjectVoter::LIST_ALL)) {
+            return $this->brandingProjectRepository->findAll();
+        }
 
-        dd($response->toArray());
-        // if ($response->getStatusCode() !== 200) {
-        //     throw new \RuntimeException('Failed to generate logo: ' . $response->getContent(false));
-        // }
-
-        // $content = $response->toArray();
-        // $imageData = $content['candidates'][0]['content']['parts'][0]['text'];
+        return $this->brandingProjectRepository->findBy([
+            'client' => $this->clientService->getConnectedUserClient(),
+        ]);
     }
 
-    private function getResponseFromLogoGoogleAiStudiologoGeneration(GenerateLogoMessage $message): ResponseInterface
+    public function createNewBrandingProject(DesignBriefDTO $designBriefDTO): DesignBrief
     {
-        return $this->httpClient->request(
-            'POST',
-            "{$this->googleAiUrl}/gemini-2.0-flash-preview-image-generation:generateContent",
-            [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'X-goog-api-key' => $this->googleAiToken,
-                ],
-                'json' => [
-                    'contents' => [
-                        [
-                            'parts' => [
-                                [
-                                    'text' => $this->buildPrompt(),
-                                ],
-                            ],
-                        ],
-                    ],
-                    'generationConfig' => [
-                        'responseModalities' => [
-                            'TEXT', 'IMAGE',
-                        ],
-                    ],
-                ],
-            ]
+        $project = (new BrandingProject())
+            ->setStatus(BrandingStatus::ACTIVE)
+            ->setDescription($designBriefDTO->getDescription())
+            ->setClient(
+                $this->clientService->getConnectedUserClient()
+            )
+            ->setDeadLine((new \DateTimeImmutable())->modify('+1 month'))
+            ->setCreatedAt(new \DateTimeImmutable())
+            ->setUpdatedAt(new \DateTimeImmutable())
+        ;
+
+        $brief = (new DesignBrief())
+            ->setColorPreferences($designBriefDTO->getColorPreferences())
+            ->setDescription($designBriefDTO->getDescription())
+            ->setMoodBoardUrl($designBriefDTO->getMoodBoardUrl())
+            ->setLogoStyle($designBriefDTO->getLogoStyle())
+            ->setBrandKeywords($designBriefDTO->getBrandKeywords())
+            ->setSlogan($designBriefDTO->getSlogan())
+            ->setBranding($project)
+        ;
+
+        $this->entityManager->persist($brief);
+        $this->entityManager->flush();
+
+        return $brief;
+    }
+
+    public function submitDesignBriefByBrandingProjectId(BrandingProject $brandingProject, DesignBriefDTO $designBriefDTO): DesignBrief
+    {
+        $brief = (new DesignBrief())
+            ->setColorPreferences($designBriefDTO->getColorPreferences())
+            ->setDescription($designBriefDTO->getDescription())
+            ->setMoodBoardUrl($designBriefDTO->getMoodBoardUrl())
+            ->setLogoStyle($designBriefDTO->getLogoStyle())
+            ->setBrandKeywords($designBriefDTO->getBrandKeywords())
+            ->setSlogan($designBriefDTO->getSlogan())
+            ->setBranding($brandingProject)
+        ;
+
+        $this->entityManager->persist($brief);
+        $this->entityManager->flush();
+
+        return $brief;
+    }
+
+    public function convertToDTO(BrandingProject $brandingProject): BrandingProjectDTO
+    {
+        /** @var Client $client */
+        $client = $brandingProject->getClient();
+        /** @var User $user */
+        $user = $client->getUserInfo();
+
+        return (new BrandingProjectDTO())
+            ->setId((int) $brandingProject->getId())
+            ->setStatus($brandingProject->getStatus() ?? BrandingStatus::ACTIVE)
+            ->setDescription((string) $brandingProject->getDescription())
+            ->setDeadLine($brandingProject->getDeadLine() ?? new \DateTimeImmutable())
+            ->setCreatedAt($brandingProject->getCreatedAt() ?? new \DateTimeImmutable())
+            ->setUpdatedAt($brandingProject->getUpdatedAt() ?? new \DateTimeImmutable())
+        ;
+    }
+
+    public function convertAllToDTO(array $brandingProjects): array
+    {
+        return array_map(
+            fn ($brandingProject): BrandingProjectDTO => $this->convertToDto($brandingProject),
+            $brandingProjects
         );
-    }
-
-    private function buildPrompt(): string
-    {
-        return
-        <<<PROMPT
-            Create a modern logo for "GlobalBridge", a premium digital platform that helps businesses expand internationally with branding, e-commerce setup, and legal compliance services.
-
-            **Requirements:**
-            - Incorporate an abstract globe/connection symbol
-            - Use primary color #003366 (navy) and accent #FFD700 (gold)
-            - Include the wordmark "GlobalBridge" in a clean, sans-serif font
-            - Ensure scalability for favicon (16x16) and billboard use
-
-            **Audience:**
-            Targeting CEOs and founders (ages 30-50) of scaling tech startups in Middle Eastern markets.
-
-            **Style References:**
-            - Minimalist like Stripe's logo
-            - Geometric precision of IBM's design
-            - Gold accents reminiscent of Emirates Airlines
-
-            **Technical Specs:**
-            - SVG vector format
-            - Transparent background
-            - No photorealistic elements
-
-            **Avoid:**
-            - Cluttered designs
-            - Overused symbols like handshakes
-            - Gradient effects
-        PROMPT;
     }
 }

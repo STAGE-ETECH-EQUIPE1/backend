@@ -8,7 +8,6 @@
     -   [Composer](https://getcomposer.org/)
     -   [MakeGNU](https://www.gnu.org/software/make/manual/make.html)
     -   Base de données: `PostgreSQL`
-
     -   [Docker](https://www.docker.com/)
 
 Pour l'installation du projet,
@@ -17,21 +16,35 @@ conforme avant d'éxecuter ce code
 
 2.  Installation
 
+ - En production :
+
 ```bash
 make install
 ```
 
-## Pour lancer le serveur de développement
+ - En développement
 
 ```bash
-symfony serve
+make init
 ```
 
-OU
+## Pour lancer le serveur de développement
+
+1. Docker
+
+Veuillez avant tout décommenter la ligne qui requiert docker commen ligne de commande
 
 ```bash
 make dev
 ```
+
+2. En local
+
+```bash
+make serve
+```
+
+[Lien vers le projet](http://127.0.0.1:8000/api)
 
 3. Fonctionnalités
 

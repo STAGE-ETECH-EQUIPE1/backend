@@ -2,9 +2,9 @@
 
 namespace App\Services\User;
 
-use App\DTO\Output\JWTUser;
 use App\DTO\Request\UserRegistrationDTO;
-use App\DTO\UserDTO;
+use App\DTO\Response\JWTUser;
+use App\DTO\User\UserDTO;
 use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
 use App\Repository\Auth\UserRepository;
@@ -51,15 +51,15 @@ final class UserService implements UserServiceInterface
     public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User
     {
         $user = new User();
-        $user->setEmail($userDto->email)
-            ->setUsername($userDto->username)
-            ->setFullName($userDto->fullName)
-            ->setPhone($userDto->phone)
+        $user->setEmail($userDto->getEmail())
+            ->setUsername($userDto->getUsername())
+            ->setFullName($userDto->getFullName())
+            ->setPhone($userDto->getPhone())
             ->setRoles(['ROLE_USER'])
             ->setCreatedAt(new \DateTimeImmutable())
             ->setPassword($this->passwordHasher->hashPassword(
                 $user,
-                $userDto->password
+                $userDto->getPassword()
             ));
 
         return $user;

@@ -38,12 +38,17 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 ## 🛠️ Épopée 3 : Branding
 
-| Tâche                                                                    | Priorité | Statut | Notes                                                       |
-| ------------------------------------------------------------------------ | -------- | ------ | ----------------------------------------------------------- |
-| Aider le client à choisir ses préférences                                | 🔥       | 🕓     | Créer une table en base de donnée pour les `colors palette` |
-| Génération de la liste des logos à partir d'une IA                       | 🔥       | 🕓     | Générer à partir des informations entrés par le client      |
-| Mettre en place un système de feedback pour connaître le choix du client | 🔥       | 🕓     | un petit système de commentaire pour chaque logo généré     |
-| Endpoint pour chaque fonctionnalité                                      | 🔥       | 🕓     | Création des routes pour chaque fonctionnalité              |
+| Tâche                                                                           | Priorité | Statut | Notes                                                   |
+| ------------------------------------------------------------------------------- | -------- | ------ | ------------------------------------------------------- |
+| Génération de la liste des brandings appartenant à un client spécifique         | 🔥       | ✅     |                                                         |
+| Mise en place de la liste des logos à partir d'un projet de branding spécifique | 🔥       | ✅     |                                                         |
+| Création d'un prompt pour générer le logo                                       | 🔥       | ✅     |                                                         |
+| Génération de logo à partir d'une IA (ex: GEMINI)                               | 🔥       | ✅     | Générer à partir des informations entrés par le client  |
+| Génération de plusieurs logos à partir d'une requête de l'utilisateur (ex: 4)   | 🔥       | 🕓     |                                                         |
+| Mettre en place un système de feedback par logo                                 | 🔥       | 🚧     | un petit système de commentaire pour chaque logo généré |
+| Endpoint pour chaque fonctionnalité                                             | 🔥       | 🚧     | Création des routes pour chaque fonctionnalité          |
+| Protéger les endpoints par rapport au client                                    | 🔥       | 🚧     |                                                         |
+| Persister l'historique des prompts lors du génération des logos                 | 🕓       | 🕓     |                                                         |
 
 ---
 
@@ -78,13 +83,13 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 | Bug                                               | Statut | Notes                     |
 | ------------------------------------------------- | ------ | ------------------------- |
 | L’authentification échoue si mauvais mot de passe | ✅     | Géré par handler LexikJWT |
-| Mise en place du docker sur le projet             | 🚧     | En cours de résolution    |
+| Mise en place du docker sur le projet             | ✅     | En cours de résolution    |
 
 ---
 
 ## 📌 Idées futures (non priorisées)
 
--   Multilingue : FR / EN / AR
+-   Multilingue : FR / EN
 -   Mobile-friendly portail client
 -   Mise en place d'un système de notification pour l'utilisateur
 -   Utilisation de MVola Api pour le paiement en local

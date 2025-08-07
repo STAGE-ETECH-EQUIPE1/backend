@@ -8,7 +8,7 @@ use Symfony\Component\Messenger\Attribute\AsMessage;
 final class GenerateLogoMessage
 {
     public function __construct(
-        public readonly int $id,
+        public readonly int $briefId,
     ) {
     }
 }

@@ -1,11 +1,4 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    exclude: ../src/Controller/
-    type: attribute
-
-api_controllers:
     name_prefix: api_
     prefix: /api
     resource:

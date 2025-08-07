@@ -2,7 +2,7 @@
 
 namespace App\Services\Client;
 
-use App\DTO\ClientDTO;
+use App\DTO\User\ClientDTO;
 use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
 use App\Exception\ClientNotAssociedException;
@@ -10,7 +10,7 @@ use App\Services\AbstractService;
 use App\Services\User\UserServiceInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
-class ClientService extends AbstractService implements ClientServiceInterface
+final class ClientService extends AbstractService implements ClientServiceInterface
 {
     public function __construct(
         private readonly Security $security,

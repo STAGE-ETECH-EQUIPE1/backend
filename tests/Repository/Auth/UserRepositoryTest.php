@@ -8,10 +8,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class UserRepositoryTest extends KernelTestCase
+class UserRepositoryTest extends RepositoryTestCase
 {
     use ResetDatabase;
     use Factories;
+
+    /** @var string */
+    protected $repositoryClass = UserRepository::class;
 
     public function testUserCount(): void
     {

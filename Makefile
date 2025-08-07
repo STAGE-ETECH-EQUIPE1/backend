@@ -1,42 +1,57 @@
 IS_DOCKER := $(shell docker info > /dev/null 2>&1 && echo 1)
 
+PHP_SERVICE_NAME := php
+USER_ID := $(shell id -u)
+GROUP_ID := $(shell id -g)
+
 PHP := @php
 SYMFONY := @symfony
 CONSOLE := $(PHP) bin/console
 COMPOSER := @composer
 DOCKER := @docker
+COMPOSE := @USER_ID=$(USER_ID) GROUP_ID=$(GROUP_ID) docker compose
+EXEC := $(COMPOSE) exec $(PHP_SERVICE_NAME)
 
-#ifeq ($(IS_DOCKER), 1)
-#	COMPOSE := $(DOCKER) compose
-#	EXEC := $(COMPOSE) exec
-#	CONSOLE := $(EXEC) php bin/console
-#	PHP := $(COMPOSE) run  --rm --no-deps php
-#endif
+#---------------------------------------------------------------
+# If you are using docker, please discomment this line
+#---------------------------------------------------------------
+# ifeq ($(IS_DOCKER), 1)
+# 	PHP := $(EXEC) php
+# 	CONSOLE := $(PHP) bin/console
+# 	COMPOSER := $(EXEC) composer
+# endif
+#---------------------------------------------------------------
 
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
 RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
 
 .DEFAULT_GOAL := help
 
-## ----------------------------------
+##-----------------------------------
 ## App
-## ----------------------------------
+##-----------------------------------
 .PHONY: install
-install: vendor/autoload.php ## Install dependencies
-	@cp .env .env.local
+install: composer.lock composer.json ## Install the project for production only
+	APP_ENV=prod APP_DEBUG=0 $(COMPOSER) install --no-dev --optimize-autoloader
+	@make migrate
+	@make clear
+	$(CONSOLE) cache:pool:clear cache.global_clearer
+
+.PHONY: init
+init: composer.lock composer.json ## Initialize project for development
 	@$(call GREEN,"Install dependencies")
 	$(COMPOSER) install --no-interaction
 	$(CONSOLE) lexik:jwt:generate-keypair --no-interaction
-	$(CONSOLE) doctrine:database:create --if-not-exists
-	$(CONSOLE) doctrine:fixtures:load --no-interaction
+	@make reset-database
+	@make fixtures
 
 .PHONY: serve
 serve: vendor/autoload.php ## Run Development Server
 	$(SYMFONY) serve --no-tls
 
 .PHONY: dev
-dev: vendor/autoload.php ## Alias for serve
-	$(MAKE) serve
+dev: vendor/autoload.php ## Alias for starting docker container
+	@make docker-up
 
 .PHONY: clear
 clear: vendor/autoload.php ## Clear cache
@@ -45,13 +60,40 @@ clear: vendor/autoload.php ## Clear cache
 	$(CONSOLE) cache:clear --env=test
 
 .PHONY: messenger-consume
-messenger-consume: vendor/autoload.php ## For symfony messenger
+messenger-consume: vendor/autoload.php ## For symfony messenger 'async'
 	$(CONSOLE) messenger:consume async -vv
 
+.PHONY: test
+test: vendor/autoload.php ## Perform test for the project
+	@make clear
+	$(CONSOLE) doctrine:schema:validate
+	$(PHP) bin/phpunit
+
+.PHONY: about
+about: vendor/autoload.php ## Check
+	$(CONSOLE) about
+
+.PHONY: lint
+lint: vendor/autoload.php ## Analyze code
+	$(CONSOLE) lint:container
+	$(PHP) vendor/bin/phpstan analyze --memory-limit 500M
+	$(PHP) vendor/bin/php-cs-fixer fix src --dry-run --diff
+
+.PHONY: ci
+ci: vendor/autoload.php ## Test project like 'github action'
+	@make lint
+	@make test
+
 ##
-## ----------------------------------
+##-----------------------------------
 ## Database
-## ----------------------------------
+##-----------------------------------
+.PHONY: database
+database: vendor/autoload.php ## Create database for development
+	@$(call GREEN,"Creating database")
+	$(CONSOLE) doctrine:database:create --if-not-exists --no-interaction
+	$(CONSOLE) doctrine:migrations:migrate --no-interaction
+
 .PHONY: migration
 migration: vendor/autoload.php ## Make migration
 	$(CONSOLE) make:migration
@@ -65,14 +107,25 @@ fixtures: vendor/autoload.php ## Load fixtures
 	$(CONSOLE) doctrine:fixtures:load --purge-with-truncate --no-interaction
 
 .PHONY: database-test
-database-test: ## Create test database if not exist
+database-test: vendor/autoload.php ## Create test database if not exist
 	$(CONSOLE) doctrine:database:create --if-not-exists --env=test
 	$(CONSOLE) doctrine:schema:update --env=test --force
 
+.PHONY: reset-database
+reset-database: vendor/autoload.php ## Reset database
+	@$(call GREEN,"Reset database")
+	$(CONSOLE) doctrine:database:drop --force --if-exists --no-interaction
+	$(CONSOLE) doctrine:database:create --if-not-exists --no-interaction
+	$(CONSOLE) doctrine:migrations:migrate --no-interaction
+
 ##
-## ----------------------------------
+##-----------------------------------
 ## Docker
-## ----------------------------------
+##-----------------------------------
+.PHONY: docker-bash
+docker-bash: ## Terminal in the container
+	$(COMPOSE) run -it $(PHP_SERVICE_NAME) bash
+
 .PHONY: docker-build
 docker-build: ## Build docker image
 	@$(call GREEN,"Build docker image")
@@ -81,7 +134,7 @@ docker-build: ## Build docker image
 .PHONY: docker-up
 docker-up: ## Start docker containers
 	@$(call GREEN,"Start docker containers")
-	$(COMPOSE) up -d
+	$(COMPOSE) up --build -d
 
 .PHONY: docker-down
 docker-down: ## Stop docker containers
@@ -91,8 +144,8 @@ docker-down: ## Stop docker containers
 .PHONY: docker-restart
 docker-restart: ## Restart docker containers
 	@$(call GREEN,"Restart docker containers")
-	$(MAKE) docker-down
-	$(MAKE) docker-up
+	@make docker-down
+	@make docker-up
 
 .PHONY: docker-logs
 docker-logs: ## Show docker logs
@@ -100,14 +153,24 @@ docker-logs: ## Show docker logs
 	$(COMPOSE) logs -f
 
 ##
-## ----------------------------------
+##-----------------------------------
 ## Others
-## ----------------------------------
-.PHONY: lint
-lint: vendor/autoload.php ## Analyze code
-	$(PHP) ./vendor/bin/phpstan analyze
-	$(PHP) ./vendor/bin/php-cs-fixer fix src --dry-run --diff
+##-----------------------------------
+.PHONY: format
+format: vendor/autoload.php ## Format code
+	$(PHP) vendor/bin/php-cs-fixer fix
 
 .PHONY: help
 help: ## List commands
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+
+##
+
+#-----------------------------------
+# Dependencies
+#-----------------------------------
+vendor/autoload.php:
+	$(COMPOSER) install --no-interaction
+
+composer.lock:
+	$(COMPOSER) install --no-interaction

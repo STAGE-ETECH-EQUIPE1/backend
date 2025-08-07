@@ -2,16 +2,11 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class HomeControllerTest extends WebTestCase
+class HomeControllerTest extends ApiControllerTestCase
 {
     public function testIndex(): void
     {
-        $client = static::createClient();
-        $client->request('GET', '/');
-
+        $this->apiClient()->request('GET', '/api/test');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Welcome to the Symfony API');
     }
 }
