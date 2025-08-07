@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Auth;
+namespace App\Controller\User;
 
 use App\Exception\ClientNotAssociedException;
 use App\Services\Client\ClientServiceInterface;
@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-class UserClientController extends AbstractController
+class CurrentClientController extends AbstractController
 {
     public function __construct(
         private readonly ClientServiceInterface $clientService,
@@ -17,7 +17,11 @@ class UserClientController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/client/me', name: 'client_form_connected_user', methods: ['GET'])]
+    #[Route(
+        path: '/client/me',
+        name: 'client_form_connected_user',
+        methods: ['GET']
+    )]
     public function getClientFromUser(): JsonResponse
     {
         try {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Branding;
+namespace App\Controller\Logo;
 
 use App\DTO\Request\CommentLogoDTO;
 use App\Entity\Branding\LogoVersion;
@@ -12,26 +12,18 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class LogoVersionController extends AbstractController
+class CommentLogoController extends AbstractController
 {
     public function __construct(
         private readonly LogoVersionServiceInterface $logoVersionService,
     ) {
     }
 
-    #[Route('/logo/{id}/feedbacks', name: 'logo_feedback_list', methods: ['GET'])]
-    public function getLogoFeedBacks(
-        int $id,
-    ): JsonResponse {
-        return $this->json([
-            'message' => 'logo feedbacks',
-            'data' => $this->logoVersionService->convertAllClientFeedBacksToDTO(
-                $this->logoVersionService->getLogoFeedBackByLogoId($id)
-            ),
-        ]);
-    }
-
-    #[Route('/logo/{id}/comment', name: 'logo_comment', methods: ['POST'])]
+    #[Route(
+        path: '/logo/{id}/comment',
+        name: 'logo_comment',
+        methods: ['POST']
+    )]
     #[IsGranted('ROLE_CLIENT')]
     public function comentLogoById(
         LogoVersion $logoVersion,

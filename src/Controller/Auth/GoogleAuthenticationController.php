@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api\Auth;
+namespace App\Controller\Auth;
 
 use App\DTO\Request\GoogleAuthenticationDTO;
 use App\Services\Auth\GoogleAuthenticationService;
@@ -17,9 +17,15 @@ class GoogleAuthenticationController extends AbstractController
     ) {
     }
 
-    #[Route('/auth/google', name: 'auth_google', methods: ['POST'])]
-    public function googleLogin(Request $request, ValidatorInterface $validator): JsonResponse
-    {
+    #[Route(
+        path: '/auth/google',
+        name: 'auth_google',
+        methods: ['POST']
+    )]
+    public function __invoke(
+        Request $request,
+        ValidatorInterface $validator,
+    ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
         $dto = new GoogleAuthenticationDTO();

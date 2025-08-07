@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DTO;
+namespace App\DTO\User;
 
-class ClientDTO
+final class UserDTO
 {
     private int $id;
 
@@ -18,8 +18,6 @@ class ClientDTO
 
     private bool $isVerified;
 
-    private string $companyName;
-
     /**
      * Get the value of id.
      */
@@ -30,6 +28,8 @@ class ClientDTO
 
     /**
      * Set the value of id.
+     *
+     * @return self
      */
     public function setId(int $id): static
     {
@@ -48,6 +48,8 @@ class ClientDTO
 
     /**
      * Set the value of email.
+     *
+     * @return self
      */
     public function setEmail(string $email): static
     {
@@ -66,6 +68,8 @@ class ClientDTO
 
     /**
      * Set the value of username.
+     *
+     * @return self
      */
     public function setUsername(string $username): static
     {
@@ -84,6 +88,8 @@ class ClientDTO
 
     /**
      * Set the value of phone.
+     *
+     * @return self
      */
     public function setPhone(string $phone): static
     {
@@ -102,6 +108,8 @@ class ClientDTO
 
     /**
      * Set the value of fullName.
+     *
+     * @return self
      */
     public function setFullName(string $fullName): static
     {
@@ -120,6 +128,8 @@ class ClientDTO
 
     /**
      * Set the value of createdAt.
+     *
+     * @return self
      */
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
@@ -138,28 +148,12 @@ class ClientDTO
 
     /**
      * Set the value of isVerified.
+     *
+     * @return self
      */
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
-    /**
-     * Get Company Name.
-     */
-    public function getCompanyName(): string
-    {
-        return $this->companyName;
-    }
-
-    /**
-     * Set Company Name for the client.
-     */
-    public function setCompanyName(string $companyName): static
-    {
-        $this->companyName = $companyName;
 
         return $this;
     }

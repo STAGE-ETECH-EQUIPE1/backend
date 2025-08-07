@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO\Output;
+namespace App\DTO\Response;
 
 final class JWT
 {
