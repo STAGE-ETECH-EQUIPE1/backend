@@ -24,6 +24,9 @@ class Service
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $token = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,5 +71,17 @@ class Service
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function getToken(): ?int
+    {
+        return $this->token;
+    }
+
+    public function setToken(?int $token): static
+    {
+        $this->token = $token;
+
+        return $this;
     }
 }

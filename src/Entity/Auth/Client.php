@@ -3,6 +3,7 @@
 namespace App\Entity\Auth;
 
 use App\Entity\Branding\BrandingProject;
+use App\Entity\Subscription\Subscription;
 use App\Repository\Auth\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,9 +33,16 @@ class Client
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $companyArea = null;
 
+    /**
+     * @var Collection<int, Subscription>
+     */
+    #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'client')]
+    private Collection $subscriptions;
+
     public function __construct()
     {
         $this->brandingProjects = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -104,6 +112,36 @@ class Client
     public function setCompanyArea(?string $companyArea): static
     {
         $this->companyArea = $companyArea;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): static
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): static
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getClient() === $this) {
+                $subscription->setClient(null);
+            }
+        }
 
         return $this;
     }
