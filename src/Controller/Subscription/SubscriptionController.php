@@ -20,10 +20,10 @@ class SubscriptionController extends AbstractController
         SubscriptionServiceInterface $subscriptionServiceInterface
     ) : JsonResponse {
         
-        $subscription = $subscriptionServiceInterface->generateSubscription($subscriptionDTO);
+        $subscription = $subscriptionServiceInterface->createSubscription($subscriptionDTO);
 
         return $this->json([
-            'message' => 'No error',
+            'message' => 'Subscription Success',
             'id' => $subscription->getId(),
         ]);
     }

@@ -7,5 +7,5 @@ use App\Entity\Subscription\Subscription;
 
 interface SubscriptionServiceInterface
 {
-    public function generateSubscription(SubscriptionDTO $subscriptionDTO): Subscription;
+    public function createSubscription(SubscriptionDTO $subscriptionDTO): Subscription;
 }

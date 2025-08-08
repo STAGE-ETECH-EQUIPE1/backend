@@ -7,12 +7,24 @@ use App\Entity\Subscription\Subscription;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
-    public function generateSubscription(SubscriptionDTO $subscriptionDTO): Subscription
+    public function createSubscription(SubscriptionDTO $subscriptionDTO): Subscription
     {
-        $subscription = new Subscription;
+        // Verif existance Payments
+        $services = $this->serviceRepository->findBy(['id' => $subscriptionDTO->servicesIds]);
 
-        // logique Metier
+        $subscription = new Subscription;
+        $subscription->setReference($subscriptionDTO->reference);
+        $subscription->setStatus($subscriptionDTO->status ?? SubscriptionStatus::ACTIVE);
+        $subscription->setStartedAt($subscriptionDTO->startedAt);
+        $subscription->setEndedAt($subscriptionDTO->endedAt);
         
+        // $subscription->setPayment($payment);
+        foreach ($services as $service) 
+        {
+            $subscription->addService($service);
+        }
+
+        $this->subsciptionRepository->save($subscription, true);
         return $subscription;
     }
 }
