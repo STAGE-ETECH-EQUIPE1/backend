@@ -4,8 +4,8 @@ namespace App\Tests\Entity\Branding;
 
 use App\Entity\Branding\LogoVersion;
 use App\Factory\Branding\LogoVersionFactory;
-use App\Tests\DTO\ValidationTestTrait;
 use App\Tests\Entity\EntityTestCase;
+use App\Tests\Trait\ValidationTestTrait;
 use Zenstruck\Foundry\Test\Factories;
 
 class LogoVersionTest extends EntityTestCase

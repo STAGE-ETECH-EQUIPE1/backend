@@ -2,13 +2,16 @@
 
 namespace App\Controller\Auth;
 
-use App\DTO\Request\UserRegistrationDTO;
+use App\Request\Auth\UserRegistrationRequest;
 use App\Services\User\UserServiceInterface;
+use App\Utils\Validator\AppValidatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class RegisterController extends AbstractController
 {
@@ -16,13 +19,29 @@ class RegisterController extends AbstractController
         private readonly UserServiceInterface $userService,
         private readonly EntityManagerInterface $entityManager,
         private readonly JWTTokenManagerInterface $jwtManager,
+        private readonly AppValidatorInterface $validator,
     ) {
     }
 
+    #[Route(
+        path: '/register',
+        name: 'register_user',
+        methods: ['POST']
+    )]
     public function __invoke(
-        UserRegistrationDTO $userRegistrationDto,
+        Request $request,
     ): JsonResponse {
-        $user = $this->userService->convertUserRegistrationDtoToUser($userRegistrationDto);
+        $userRegistrationRequest = new UserRegistrationRequest($request);
+
+        $errorMessages = $this->validator->validateRequest($userRegistrationRequest);
+
+        if (count($errorMessages) > 0) {
+            return $this->json([
+                'error' => $errorMessages,
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $user = $this->userService->convertUserRegistrationDtoToUser($userRegistrationRequest);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

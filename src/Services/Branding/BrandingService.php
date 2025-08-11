@@ -3,13 +3,13 @@
 namespace App\Services\Branding;
 
 use App\DTO\Branding\BrandingProjectDTO;
-use App\DTO\Branding\DesignBriefDTO;
 use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\DesignBrief;
 use App\Enum\BrandingStatus;
 use App\Repository\Branding\BrandingProjectRepository;
+use App\Request\Branding\DesignBriefRequest;
 use App\Security\Voter\BrandingProjectVoter;
 use App\Services\AbstractService;
 use App\Services\Client\ClientServiceInterface;
@@ -37,7 +37,7 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
         ]);
     }
 
-    public function createNewBrandingProject(DesignBriefDTO $designBriefDTO): DesignBrief
+    public function createNewBrandingProject(DesignBriefRequest $designBriefDTO): DesignBrief
     {
         $project = (new BrandingProject())
             ->setStatus(BrandingStatus::ACTIVE)
@@ -66,7 +66,7 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
         return $brief;
     }
 
-    public function submitDesignBriefByBrandingProjectId(BrandingProject $brandingProject, DesignBriefDTO $designBriefDTO): DesignBrief
+    public function submitDesignBriefByBrandingProjectId(BrandingProject $brandingProject, DesignBriefRequest $designBriefDTO): DesignBrief
     {
         $brief = (new DesignBrief())
             ->setColorPreferences($designBriefDTO->getColorPreferences())

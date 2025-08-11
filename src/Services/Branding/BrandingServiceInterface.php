@@ -3,9 +3,9 @@
 namespace App\Services\Branding;
 
 use App\DTO\Branding\BrandingProjectDTO;
-use App\DTO\Branding\DesignBriefDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\DesignBrief;
+use App\Request\Branding\DesignBriefRequest;
 
 interface BrandingServiceInterface
 {
@@ -19,12 +19,12 @@ interface BrandingServiceInterface
     /**
      * Create new branding project based on the provided message.
      */
-    public function createNewBrandingProject(DesignBriefDTO $designBriefDTO): DesignBrief;
+    public function createNewBrandingProject(DesignBriefRequest $designBriefDTO): DesignBrief;
 
     /**
      * Submit Design brief to branding project for generating a new logo with the brief submitted.
      */
-    public function submitDesignBriefByBrandingProjectId(BrandingProject $brandingProject, DesignBriefDTO $designBriefDTO): DesignBrief;
+    public function submitDesignBriefByBrandingProjectId(BrandingProject $brandingProject, DesignBriefRequest $designBriefDTO): DesignBrief;
 
     /**
      * Convert BrandingProject to DTO for serialization.

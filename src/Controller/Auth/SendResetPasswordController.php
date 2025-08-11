@@ -2,18 +2,20 @@
 
 namespace App\Controller\Auth;
 
-use App\DTO\Request\ResetPasswordDTO;
+use App\Request\Auth\ResetPasswordRequest;
 use App\Services\Auth\AuthServiceInterface;
+use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SendResetPasswordController extends AbstractController
 {
     public function __construct(
         private readonly AuthServiceInterface $authService,
+        private readonly AppValidatorInterface $validator,
     ) {
     }
 
@@ -23,11 +25,20 @@ class SendResetPasswordController extends AbstractController
         methods: ['POST']
     )]
     public function __invoke(
-        #[MapRequestPayload]
-        ResetPasswordDTO $resetPasswordDTO,
+        Request $request,
     ): JsonResponse {
+        $resetPasswordRequest = new ResetPasswordRequest($request);
+
+        $errorMessages = $this->validator->validateRequest($resetPasswordRequest);
+
+        if (count($errorMessages) > 0) {
+            return $this->json([
+                'error' => $errorMessages,
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         try {
-            $this->authService->sendResetPasswordEmail($resetPasswordDTO->getEmail());
+            $this->authService->sendResetPasswordEmail($resetPasswordRequest->getEmail());
 
             return $this->json([
                 'message' => 'Reset password email sent for the provided email.',

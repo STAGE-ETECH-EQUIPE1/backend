@@ -2,10 +2,10 @@
 
 namespace App\Services\User;
 
-use App\DTO\Request\UserRegistrationDTO;
-use App\DTO\Response\JWTUser;
 use App\DTO\User\UserDTO;
 use App\Entity\Auth\User;
+use App\Request\Auth\UserRegistrationRequest;
+use App\Response\JWTUser;
 
 interface UserServiceInterface
 {
@@ -27,7 +27,7 @@ interface UserServiceInterface
     /**
      * Convert UserRegistrationDTO to User entity.
      */
-    public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User;
+    public function convertUserRegistrationDtoToUser(UserRegistrationRequest $userDto): User;
 
     /**
      * Convert User entity to UserDTO.
