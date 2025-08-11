@@ -8,7 +8,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-final class ServiceFixtures extends Fixture implements DependentFixtureInterface
+final class ServiceFixtures extends Fixture 
 {
     use FakerTrait;
 
@@ -37,11 +37,5 @@ final class ServiceFixtures extends Fixture implements DependentFixtureInterface
         }
 
         $manager->flush();
-    }
-
-    public function getDependencies(): array
-    {
-        return [
-        ];
     }
 }
