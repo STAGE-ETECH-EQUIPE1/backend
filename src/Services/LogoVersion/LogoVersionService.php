@@ -4,12 +4,12 @@ namespace App\Services\LogoVersion;
 
 use App\DTO\Branding\ClientFeedBackDTO;
 use App\DTO\Branding\LogoVersionDTO;
-use App\DTO\Request\CommentLogoDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\ClientFeedBack;
 use App\Entity\Branding\LogoVersion;
 use App\Repository\Branding\ClientFeedBackRepository;
 use App\Repository\Branding\LogoVersionRepository;
+use App\Request\Logo\CommentLogoRequest;
 use App\Services\AbstractService;
 use App\Services\Client\ClientServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +36,7 @@ final class LogoVersionService extends AbstractService implements LogoVersionSer
         return $this->clientFeedBackRepository->findByLogoId($id);
     }
 
-    public function commentLogo(LogoVersion $logo, CommentLogoDTO $comment): void
+    public function commentLogo(LogoVersion $logo, CommentLogoRequest $comment): void
     {
         $client = $this->clientService->getConnectedUserClient();
         $feedBack = (new ClientFeedBack())

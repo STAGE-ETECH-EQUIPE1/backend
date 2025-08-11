@@ -80,7 +80,7 @@ lint: vendor/autoload.php ## Analyze code
 	$(PHP) vendor/bin/php-cs-fixer fix src --dry-run --diff
 
 .PHONY: ci
-ci: vendor/autoload.php ## Test project like 'github action'
+ci: vendor/autoload.php ## Integration Test
 	@make lint
 	@make test
 

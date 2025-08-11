@@ -2,14 +2,15 @@
 
 namespace App\Controller\Branding;
 
-use App\DTO\Branding\DesignBriefDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Message\Branding\RegenerateLogoMessage;
+use App\Request\Branding\DesignBriefRequest;
 use App\Services\Branding\BrandingServiceInterface;
+use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,6 +21,7 @@ class SubmitBriefToBrandingController extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $messageBus,
         private readonly BrandingServiceInterface $brandingService,
+        private readonly AppValidatorInterface $validator,
     ) {
     }
 
@@ -31,10 +33,20 @@ class SubmitBriefToBrandingController extends AbstractController
     #[IsGranted('ROLE_CLIENT')]
     public function __invoke(
         BrandingProject $brandingProject,
-        #[MapRequestPayload]
-        DesignBriefDTO $designBriefDTO,
+        Request $request,
     ): JsonResponse {
-        $brief = $this->brandingService->submitDesignBriefByBrandingProjectId($brandingProject, $designBriefDTO);
+        $designBriefRequest = new DesignBriefRequest($request);
+
+        $errorMessages = $this->validator->validateRequest($designBriefRequest);
+
+        if (count($errorMessages) > 0) {
+            return $this->json([
+                'error' => $errorMessages,
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $brief = $this->brandingService->submitDesignBriefByBrandingProjectId($brandingProject, $designBriefRequest);
+
         try {
             $this->messageBus->dispatch(
                 new RegenerateLogoMessage(
@@ -53,7 +65,7 @@ class SubmitBriefToBrandingController extends AbstractController
         return $this->json([
             'message' => 'logo submitted successfully',
             'status' => Response::HTTP_OK,
-            'data' => $designBriefDTO,
+            'data' => $designBriefRequest,
         ], Response::HTTP_OK);
     }
 }

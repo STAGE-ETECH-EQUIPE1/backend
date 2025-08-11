@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\DTO;
+namespace App\Tests\Trait;
 
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

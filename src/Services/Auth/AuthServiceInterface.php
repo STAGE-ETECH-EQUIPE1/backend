@@ -2,7 +2,7 @@
 
 namespace App\Services\Auth;
 
-use App\DTO\Request\UpdatePasswordDTO;
+use App\Request\Auth\UpdatePasswordRequest;
 
 interface AuthServiceInterface
 {
@@ -19,5 +19,5 @@ interface AuthServiceInterface
     /**
      * Update password from token.
      */
-    public function updateUserPassword(string $token, UpdatePasswordDTO $updatePasswordDTO): void;
+    public function updateUserPassword(string $token, UpdatePasswordRequest $updatePasswordDTO): void;
 }

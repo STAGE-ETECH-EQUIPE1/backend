@@ -4,8 +4,8 @@ namespace App\Tests\Entity\Auth;
 
 use App\Entity\Auth\Client;
 use App\Factory\Auth\UserFactory;
-use App\Tests\DTO\ValidationTestTrait;
 use App\Tests\Entity\EntityTestCase;
+use App\Tests\Trait\ValidationTestTrait;
 use Zenstruck\Foundry\Test\Factories;
 
 class ClientTest extends EntityTestCase

@@ -2,12 +2,12 @@
 
 namespace App\Services\User;
 
-use App\DTO\Request\UserRegistrationDTO;
-use App\DTO\Response\JWTUser;
 use App\DTO\User\UserDTO;
 use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
 use App\Repository\Auth\UserRepository;
+use App\Request\Auth\UserRegistrationRequest;
+use App\Response\JWTUser;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -48,7 +48,7 @@ final class UserService implements UserServiceInterface
         throw new \RuntimeException('No connected user found.');
     }
 
-    public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User
+    public function convertUserRegistrationDtoToUser(UserRegistrationRequest $userDto): User
     {
         $user = new User();
         $user->setEmail($userDto->getEmail())

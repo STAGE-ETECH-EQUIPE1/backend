@@ -4,10 +4,10 @@ namespace App\Services\LogoVersion;
 
 use App\DTO\Branding\ClientFeedBackDTO;
 use App\DTO\Branding\LogoVersionDTO;
-use App\DTO\Request\CommentLogoDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\ClientFeedBack;
 use App\Entity\Branding\LogoVersion;
+use App\Request\Logo\CommentLogoRequest;
 
 interface LogoVersionServiceInterface
 {
@@ -28,7 +28,7 @@ interface LogoVersionServiceInterface
     /**
      * Create feedback from client request.
      */
-    public function commentLogo(LogoVersion $logo, CommentLogoDTO $comment): void;
+    public function commentLogo(LogoVersion $logo, CommentLogoRequest $comment): void;
 
     /**
      * Convert LogoVersion To DTO.
