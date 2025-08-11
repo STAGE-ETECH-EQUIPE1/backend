@@ -22,6 +22,8 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
 {
     private Filesystem $filesystem;
 
+    private const GENERATION_NUMBER = 5;
+
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly DesignBriefRepository $designBriefRepository,
@@ -67,9 +69,10 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         /** @var BrandingProject $brandingProject */
         $brandingProject = $designBrief->getBranding();
 
-        $response = $this->getResponseFromLogoGoogleAiStudioLogoGeneration($designBrief);
-
-        $this->storeLogoFromGeminiAiResponse($response, $brandingProject, $designBrief);
+        for ($i = 0; $i <= self::GENERATION_NUMBER; ++$i) {
+            $response = $this->getResponseFromLogoGoogleAiStudioLogoGeneration($designBrief);
+            $this->storeLogoFromGeminiAiResponse($response, $brandingProject, $designBrief);
+        }
 
         if ($response->getStatusCode() !== 200) {
             throw new \RuntimeException('Failed to generate logo: '.$response->getContent(false));
@@ -88,9 +91,10 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
             'id' => $message->briefId,
         ]);
 
-        $response = $this->getResponseFromLogoGoogleAiStudioLogoGeneration($designBrief);
-
-        $this->storeLogoFromGeminiAiResponse($response, $brandingProject, $designBrief);
+        for ($i = 0; $i <= self::GENERATION_NUMBER; ++$i) {
+            $response = $this->getResponseFromLogoGoogleAiStudioLogoGeneration($designBrief);
+            $this->storeLogoFromGeminiAiResponse($response, $brandingProject, $designBrief);
+        }
 
         if ($response->getStatusCode() !== 200) {
             throw new \RuntimeException('Failed to generate logo: '.$response->getContent(false));

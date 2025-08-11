@@ -5,8 +5,8 @@ namespace App\Tests\Entity\Branding;
 use App\Entity\Branding\BrandingProject;
 use App\Enum\BrandingStatus;
 use App\Factory\Auth\ClientFactory;
-use App\Tests\DTO\ValidationTestTrait;
 use App\Tests\Entity\EntityTestCase;
+use App\Tests\Trait\ValidationTestTrait;
 use Zenstruck\Foundry\Test\Factories;
 
 class BrandingProjectTest extends EntityTestCase

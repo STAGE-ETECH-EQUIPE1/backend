@@ -2,9 +2,9 @@
 
 namespace App\Services\Auth;
 
-use App\DTO\Request\UpdatePasswordDTO;
 use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
+use App\Request\Auth\UpdatePasswordRequest;
 use App\Security\EmailVerifier;
 use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -72,7 +72,7 @@ final readonly class AuthService implements AuthServiceInterface
         }
     }
 
-    public function updateUserPassword(string $token, UpdatePasswordDTO $updatePasswordDTO): void
+    public function updateUserPassword(string $token, UpdatePasswordRequest $updatePasswordDTO): void
     {
         /** @var User $user */
         $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);

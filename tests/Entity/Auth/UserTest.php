@@ -3,7 +3,7 @@
 namespace App\Tests\Entity\Auth;
 
 use App\Entity\Auth\User;
-use App\Tests\DTO\ValidationTestTrait;
+use App\Tests\Trait\ValidationTestTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
