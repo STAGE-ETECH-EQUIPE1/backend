@@ -5,7 +5,6 @@ namespace App\Tests\Request\Branding;
 use App\Request\Branding\DesignBriefRequest;
 use App\Tests\Request\RequestTestCase;
 
-
 /**
  * @extends RequestTestCase<DesignBriefRequest>
  */

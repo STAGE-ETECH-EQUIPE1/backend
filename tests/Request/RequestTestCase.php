@@ -21,7 +21,6 @@ abstract class RequestTestCase extends KernelTestCase
     protected string $requestClass;
 
     /**
-     * @param array|null $updatedContent
      * @return T
      */
     public function getRequest(?array $updatedContent = null): mixed
