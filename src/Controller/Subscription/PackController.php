@@ -24,12 +24,13 @@ class PackController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/create', name: 'create_pack', methods: ['POST'])]
     public function createPack(
-        #[MapRequestPayload]
-        PackDTO $packDTO,
+        #[MapRequestPayload] 
+        PackRequest $request,
         CreatePackServiceInterface $createPackService,
     ): JsonResponse {
         try {
-            $pack = $createPackService->createPackForm($packDTO);
+            $dto = PackMapper::fromRequest($request);
+            $pack = $createPackService->createPackForm($dto);
 
             return $this->json([
                 'message' => 'Pack créé',
