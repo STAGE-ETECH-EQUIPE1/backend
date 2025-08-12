@@ -16,8 +16,9 @@ class CreateServiceService implements CreateServiceServiceInterface
     public function createServiceForm(ServiceDTO $dto): Service
     {
         $service = new Service();
-        $service->setName($dto->name);
-        $service->setPrice($dto->price);
+        $service->setName($dto->getName());
+        $service->setPrice($dto->getPrice());
+        $service->setToken($dto->getToken());
 
         $this->em->persist($service);
         $this->em->flush();

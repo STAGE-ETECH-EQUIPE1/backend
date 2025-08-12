@@ -11,29 +11,50 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Utils\Validator\AppValidatorInterface;
+use Symfony\Component\HttpFoundation\Request; 
+use App\Request\Subscription\ServiceRequest;
+use App\Mapper\Subscription\ServiceMapper;
+use Symfony\Component\HttpFoundation\Response;
 
 class ServiceController extends AbstractController
 {
     private EditServiceService $editServiceService;
+    private AppValidatorInterface $validator;
 
-    public function __construct(EditServiceService $editServiceService)
-    {
+    public function __construct(
+        EditServiceService $editServiceService,
+        AppValidatorInterface $validator,
+    ) {
         $this->editServiceService = $editServiceService;
+        $this->validator = $validator;
     }
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/service/create', name: 'create_service', methods: ['POST'])]
     public function createService(
-        #[MapRequestPayload(validationGroups: ['create'])]
-        ServiceDTO $serviceDTO,
+        Request $request,
         CreateServiceServiceInterface $createServiceService,
     ): JsonResponse {
         try {
+
+            $requestDTO = new ServiceRequest($request);
+            $error = $this->validator->validateRequest($requestDTO);
+
+            if (count($error) > 0)
+            {
+                return $this->json([
+                    'error' => $error,
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            $serviceDTO = ServiceMapper::fromRequest($requestDTO);
             $service = $createServiceService->createServiceForm($serviceDTO);
 
             return $this->json([
                 'message' => 'Service créé',
                 'id' => $service->getId(),
+                'token' => $service->getToken(),
             ], 201);
         } catch (\Exception $e) {
             return $this->json([
@@ -56,8 +77,19 @@ class ServiceController extends AbstractController
     #[Route('/service/edit/{id}', name: 'edit_service', methods: ['PUT'])]
     public function editServices(
         int $id,
-        #[MapRequestPayload(validationGroups: ['update'])] ServiceDTO $dto,
+        Request $request,    
     ): JsonResponse {
+
+        $requestDTO = new ServiceRequest($request);
+        $error = $this->validator->validateRequest($requestDTO);
+        if (count($error) > 0)
+        {
+            return $this->json([
+                'error' => $error,
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $dto = ServiceMapper::fromRequest($requestDTO);
         $updated = $this->editServiceService->handle($id, $dto);
         if (!$updated) {
             return $this->json(['error' => 'Service not found'], 404);
@@ -69,6 +101,7 @@ class ServiceController extends AbstractController
                 'id' => $updated->getId(),
                 'name' => $updated->getName(),
                 'price' => $updated->getPrice(),
+                'token' => $updated->getToken(),
             ],
         ]);
     }

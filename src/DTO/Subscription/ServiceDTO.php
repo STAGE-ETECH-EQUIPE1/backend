@@ -7,15 +7,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ServiceDTO
 {
-    public string $name;
-    public string $price;
+    private string $name;
+    private string $price;
+    private int $token;
 
     public function __construct(
         string $name,
         string $price,
+        int $token,
     ) {
         $this->name = $name;
         $this->price = $price;
+        $this->token = $token;
     }
 
     public function getName(): string 
@@ -26,5 +29,10 @@ class ServiceDTO
     public function getPrice(): string 
     {
         return $this->price;
+    }
+
+    public function getToken(): string 
+    {
+        return $this->token;
     }
 }

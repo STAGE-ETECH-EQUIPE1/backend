@@ -18,10 +18,10 @@ class CreatePackService implements CreatePackServiceInterface
     public function createPackForm(PackDTO $dto): Pack
     {
         $pack = new Pack();
-        $pack->setName($dto->name);
-        $pack->setPrice($dto->price);
-        $pack->setStartedAt($dto->startedAt);
-        $pack->setExpiredAt($dto->expiredAt);
+        $pack->setName($dto->getName());
+        $pack->setPrice($dto->getPrice());
+        $pack->setStartedAt($dto->getStartedAt());
+        $pack->setExpiredAt($dto->getExpiredAt());
 
         foreach ($dto->services as $id) {
             $service = $this->serviceRepository->find($id);

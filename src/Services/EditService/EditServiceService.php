@@ -25,8 +25,14 @@ class EditServiceService implements EditServiceServiceInterface
             return null;
         }
 
-        $service->setName($dto->name);
-        $service->setPrice($dto->price);
+        if ($dto->getName() !== null)
+            $service->setName($dto->getName());
+
+        if ($dto->getPrice() !== null)
+            $service->setPrice($dto->getPrice());
+
+        if ($dto->getToken() !== 0)
+            $service->setToken($dto->getToken());
 
         $this->em->flush();
 

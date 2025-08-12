@@ -10,16 +10,16 @@ use ApiPlatform\Metadata\Put;
 #[ApiResource(
     operations: [
         new Post(
-            routeName: 'api_create_pack'
+            routeName: 'api_create_service'
         ),
         new Get(
-            routeName: 'api_show_pack'
+            routeName: 'api_show_service'
         ),
         new Put(
-            routeName: 'api_edit_pack'
+            routeName: 'api_edit_service'
         ),
     ]
 )]
-class PackResource
+class ServiceResource
 {
 }
