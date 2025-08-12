@@ -3,8 +3,8 @@
 namespace App\Controller\Branding;
 
 use App\DTO\PaginationDTO;
-use App\Entity\Branding\BrandingProject;
 use App\Services\LogoVersion\LogoVersionServiceInterface;
+use App\Utils\Paginator\PaginatorUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -23,15 +23,16 @@ class GetLogoFromBrandingController extends AbstractController
         methods: ['GET'],
     )]
     public function __invoke(
-        BrandingProject $brandingProject,
         #[MapQueryString]
         PaginationDTO $pagination,
+        int $id,
     ): JsonResponse {
+        [$results, $total] = $this->logoVersionService->getPaginatedLogoByBrandingId($id, $pagination);
+
         return $this->json([
             'message' => 'get All Logo from branding project',
-            'data' => $this->logoVersionService->convertAllToDTO(
-                $this->logoVersionService->getLogoByBrandingId($brandingProject)
-            ),
+            'data' => $this->logoVersionService->convertAllToDTO($results),
+            ...PaginatorUtils::buildPageResponse($pagination, $total),
         ]);
     }
 }

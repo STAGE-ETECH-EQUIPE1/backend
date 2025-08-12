@@ -4,6 +4,7 @@ namespace App\Services\LogoVersion;
 
 use App\DTO\Branding\ClientFeedBackDTO;
 use App\DTO\Branding\LogoVersionDTO;
+use App\DTO\PaginationDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\ClientFeedBack;
 use App\Entity\Branding\LogoVersion;
@@ -29,6 +30,21 @@ final class LogoVersionService extends AbstractService implements LogoVersionSer
         return $this->logoVersionRepository->findBy([
             'branding' => $brandingProject,
         ]);
+    }
+
+    /**
+     * Get Total and Paginated Logo Version by Branding ID.
+     *
+     * @return array<int|LogoVersion>
+     */
+    public function getPaginatedLogoByBrandingId(int $brandingId, PaginationDTO $pagination): array
+    {
+        $paginatedResult = $this->logoVersionRepository->paginateByBrandingId($brandingId, $pagination);
+
+        return [
+            $paginatedResult->getQuery()->getResult(),
+            $paginatedResult->count(),
+        ];
     }
 
     public function getLogoFeedBackByLogoId(int $id): array
