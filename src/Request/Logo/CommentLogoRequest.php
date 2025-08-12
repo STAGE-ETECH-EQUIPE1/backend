@@ -21,7 +21,7 @@ class CommentLogoRequest
     public function __construct(Request $request)
     {
         $content = $request->toArray();
-        $this->comment = $content['comment'];
+        $this->comment = $content['comment'] ?? '';
     }
 
     /**

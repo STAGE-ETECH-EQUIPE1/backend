@@ -44,7 +44,7 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 | Mise en place de la liste des logos à partir d'un projet de branding spécifique | 🔥       | ✅     |                                                           |
 | Création d'un prompt pour générer le logo                                       | 🔥       | ✅     | Un petit texte à donner l'IA pour créer un logo           |
 | Génération de logo à partir d'une IA (ex: GEMINI)                               | 🔥       | ✅     | Générer à partir des informations entrés par le client    |
-| Génération de plusieurs logos à partir d'une requête de l'utilisateur (ex: 4)   | 🔥       | 🚧     | Peut-être appeler l'api de génération `n fois`            |
+| Génération de plusieurs logos à partir d'une requête de l'utilisateur (ex: 4)   | 🔥       | ✅     | Peut-être appeler l'api de génération `n fois`            |
 | Mettre en place un système de feedback par logo                                 | 🔥       | ✅     | un petit système de commentaire pour chaque logo généré   |
 | Protéger les endpoints par rapport au client                                    | 🔥       | 🚧     | création de `voter` pour la sécurité                      |
 | Envoyer en temps réel les logos générés vers le frontend                        | 🔥       | 🚧     | Utilisation de `Mercure` pour l'envoi des liens des logos |

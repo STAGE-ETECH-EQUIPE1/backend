@@ -10,10 +10,14 @@ use App\Message\Branding\GenerateLogoMessage;
 use App\Message\Branding\RegenerateLogoMessage;
 use App\Repository\Branding\BrandingProjectRepository;
 use App\Repository\Branding\DesignBriefRepository;
+use App\Response\Logo\LogoPublishResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -23,6 +27,7 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
     private Filesystem $filesystem;
 
     private const GENERATION_NUMBER = 5;
+    private const LOGO_GENERATION_PUBLISH_URL = 'https://example.com/api/logo-generation';
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
@@ -35,6 +40,8 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         private readonly string $googleAiUrl,
         #[Autowire('%app.ai_logo_generated_path%')]
         private readonly ?string $aiGeneratedLogoPath,
+        private readonly HubInterface $hub,
+        private readonly SerializerInterface $serializer,
     ) {
         $this->filesystem = new Filesystem();
     }
@@ -194,5 +201,18 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         } catch (\Exception $e) {
             printf('Failed to generate logo: '.$e->getMessage());
         }
+    }
+
+    public function publishLogo(LogoVersion $logo): void
+    {
+        /** @var BrandingProject $brandingProject */
+        $brandingProject = $logo->getBranding();
+
+        $topic = self::LOGO_GENERATION_PUBLISH_URL."/{$brandingProject->getId()}";
+        $update = new Update(
+            $topic,
+            $this->serializer->serialize(new LogoPublishResponse($logo), 'json'),
+        );
+        $this->hub->publish($update);
     }
 }

@@ -15,7 +15,7 @@ class GoogleAuthenticationRequest
         Request $request,
     ) {
         $content = $request->toArray();
-        $this->accessToken = $content['access_token'];
+        $this->accessToken = $content['access_token'] ?? '';
     }
 
     public function getAccessToken(): string
