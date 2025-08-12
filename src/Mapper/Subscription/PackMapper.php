@@ -10,11 +10,11 @@ class PackMapper
     public static function fromRequest(PackRequest $request): PackDTO
     {
         return new PackDTO(
-            $request->name,
-            $request->startedAt,
-            $request->expiredAt,
-            $request->price,
-            $request->services
+            $request->getName(),
+            $request->getStartedAt(),
+            $request->getExpiredAt(),
+            $request->getPrice(),
+            $request->getServices()
         );
     }
 }

@@ -3,32 +3,68 @@
 namespace App\Request\Subscription;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\Request;
 
-class PackDTO
+class PackRequest
 {
     #[Assert\NotBlank]
     #[Assert\Type('string')]
-    public string $name;
+    private string $name;
 
     #[Assert\NotBlank]
     #[Assert\Type(\DateTimeInterface::class)]
-    public \DateTimeImmutable $startedAt;
+    private \DateTimeImmutable $startedAt;
 
     #[Assert\NotBlank]
     #[Assert\Type(\DateTimeInterface::class)]
-    public \DateTimeImmutable $expiredAt;
+    private \DateTimeImmutable $expiredAt;
 
     #[Assert\NotBlank]
     #[Assert\Regex(
         pattern: '/^\d{1,8}(\.\d{1,2})?$/',
         message: 'Le prix doit contenir au maximum 8 chiffres avant la virgule et 2 après.'
     )]
-    public string $price;
+    private string $price;
 
     #[Assert\NotBlank]
     #[Assert\All([
         new Assert\Type('integer'),
     ])]
     /** @var int[] */
-    public array $services;
+    private array $services;
+
+    public function __construct(Request $request)
+    {
+        $array = $request->toArray();
+        $this->name = $array['name'] ?? '';
+        $this->startedAt = isset($data['startedAt']) ? new \DateTimeImmutable($data['startedAt']) : new \DateTimeImmutable();
+        $this->expiredAt = isset($data['expiredAt']) ? new \DateTimeImmutable($data['expiredAt']) : new \DateTimeImmutable();
+        $this->price = $array['price'] ?? '';
+        $this->services = $array['services'] ?? '';
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPrice(): string
+    {
+        return $this->price;
+    }
+
+    public function getStartedAt(): \DateTimeImmutable
+    {
+        return $this->startedAt;
+    }
+
+    public function getExpiredAt(): \DateTimeImmutable
+    {
+        return $this->expiredAt;
+    }
+
+    public function getServices(): array
+    {
+        return $this->services;
+    }
 }

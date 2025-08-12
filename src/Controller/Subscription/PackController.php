@@ -3,6 +3,7 @@
 namespace App\Controller\Subscription;
 
 use App\DTO\Subscription\PackDTO;
+use App\Request\Subscription\PackRequest;
 use App\Services\CreatePack\CreatePackServiceInterface;
 use App\Services\EditPack\EditPackService;
 use App\Services\ListPack\ListPackService;
@@ -11,27 +12,46 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Utils\Validator\AppValidatorInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use App\Mapper\Subscription\PackMapper;
+
 
 class PackController extends AbstractController
 {
     private EditPackService $editPackService;
+    private AppValidatorInterface $validator;
+    private CreatePackServiceInterface $createPackService;
 
-    public function __construct(EditPackService $editPackService)
-    {
+    public function __construct(
+        EditPackService $editPackService,
+        CreatePackServiceInterface $createPackService,
+        AppValidatorInterface $validator,
+    ){
         $this->editPackService = $editPackService;
+        $this->createPackService = $createPackService;
+        $this->validator = $validator;
     }
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/create', name: 'create_pack', methods: ['POST'])]
     public function createPack(
-        #[MapRequestPayload] 
-        PackRequest $request,
-        CreatePackServiceInterface $createPackService,
+        Request $request,
     ): JsonResponse {
         try {
-            $dto = PackMapper::fromRequest($request);
-            $pack = $createPackService->createPackForm($dto);
 
+            $request = new PackRequest($request);
+            $error = $this->validator->validateRequest($request);
+            if (count($error) > 0)
+            {
+                return $this->json([
+                    'error' => $error,
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            $dto = PackMapper::fromRequest($request);
+            $pack = $this->createPackService->createPackForm($dto);
             return $this->json([
                 'message' => 'Pack créé',
                 'id' => $pack->getId(),
