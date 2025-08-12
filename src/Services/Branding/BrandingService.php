@@ -3,6 +3,7 @@
 namespace App\Services\Branding;
 
 use App\DTO\Branding\BrandingProjectDTO;
+use App\DTO\PaginationDTO;
 use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
 use App\Entity\Branding\BrandingProject;
@@ -35,6 +36,19 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
         return $this->brandingProjectRepository->findBy([
             'client' => $this->clientService->getConnectedUserClient(),
         ]);
+    }
+
+    public function getPaginatedBrandingProject(PaginationDTO $pagination): array
+    {
+        $paginatedResult = $this->brandingProjectRepository->paginateByClient(
+            $this->clientService->getConnectedUserClient(),
+            $pagination
+        );
+
+        return [
+            $paginatedResult->getQuery()->getResult(),
+            $paginatedResult->count(),
+        ];
     }
 
     public function createNewBrandingProject(DesignBriefRequest $designBriefDTO): DesignBrief

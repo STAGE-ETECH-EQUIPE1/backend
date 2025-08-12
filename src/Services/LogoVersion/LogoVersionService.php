@@ -32,11 +32,6 @@ final class LogoVersionService extends AbstractService implements LogoVersionSer
         ]);
     }
 
-    /**
-     * Get Total and Paginated Logo Version by Branding ID.
-     *
-     * @return array<int|LogoVersion>
-     */
     public function getPaginatedLogoByBrandingId(int $brandingId, PaginationDTO $pagination): array
     {
         $paginatedResult = $this->logoVersionRepository->paginateByBrandingId($brandingId, $pagination);

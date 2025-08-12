@@ -3,6 +3,7 @@
 namespace App\Services\Branding;
 
 use App\DTO\Branding\BrandingProjectDTO;
+use App\DTO\PaginationDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\DesignBrief;
 use App\Request\Branding\DesignBriefRequest;
@@ -15,6 +16,11 @@ interface BrandingServiceInterface
      * @return BrandingProject[]
      */
     public function getAllBrandingProject(): array;
+
+    /**
+     * Get Paginated Branding Project and Totals.
+     */
+    public function getPaginatedBrandingProject(PaginationDTO $pagination): array;
 
     /**
      * Create new branding project based on the provided message.

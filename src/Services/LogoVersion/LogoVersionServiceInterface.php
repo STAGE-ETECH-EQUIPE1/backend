@@ -20,7 +20,7 @@ interface LogoVersionServiceInterface
     public function getLogoByBrandingId(BrandingProject $brandingProject): array;
 
     /**
-     * Get Paginated Logo with total by Branding ID.
+     * Get Total and Paginated Logo Version by Branding ID.
      */
     public function getPaginatedLogoByBrandingId(int $brandingId, PaginationDTO $pagination): array;
 
