@@ -2,8 +2,6 @@
 
 namespace App\DTO\Subscription;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
 class SubscriptionDTO
 {
     private ?string $reference;
@@ -11,7 +9,7 @@ class SubscriptionDTO
     private ?\DateTimeImmutable $startedAt;
     private ?\DateTimeImmutable $endedAt;
     private ?int $paymentId;
-    
+
     /** @var int[] */
     private array $services;
 
@@ -22,7 +20,7 @@ class SubscriptionDTO
         ?DateTimeImmutable $endedAt,
         ?int $paymentId,
         array $services,
-    ){
+    ) {
         $this->reference = $reference;
         $this->status = $status;
         $this->startedAt = $startedAt;
@@ -45,16 +43,16 @@ class SubscriptionDTO
     {
         return $this->startedAt;
     }
-    
+
     public function getEndedAt(): ?\DateTimeImmutable
     {
         return $this->endedAt;
     }
-    
+
     public function getPaymentId(): ?int
     {
         return $this->paymentId;
-    }    
+    }
 
     /** @return int[] */
     public function getServices(): array

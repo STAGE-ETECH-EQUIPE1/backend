@@ -5,10 +5,9 @@ namespace App\DataFixtures\Subscription;
 use App\DataFixtures\FakerTrait;
 use App\Entity\Subscription\Service;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-final class ServiceFixtures extends Fixture 
+final class ServiceFixtures extends Fixture
 {
     use FakerTrait;
 

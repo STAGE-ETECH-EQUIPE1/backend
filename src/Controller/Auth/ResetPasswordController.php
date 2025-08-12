@@ -36,8 +36,8 @@ class ResetPasswordController extends AbstractController
                 'error' => $errorMessages,
             ], Response::HTTP_BAD_REQUEST);
         }
-try{
-        $this->authService->updateUserPassword($token, $updatePasswordRequest);
+        try {
+            $this->authService->updateUserPassword($token, $updatePasswordRequest);
 
             return $this->json([
                 'message' => 'Reset password email sent for the provided email.',

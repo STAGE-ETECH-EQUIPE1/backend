@@ -28,20 +28,23 @@ class EditPackService implements EditPackServiceInterface
             return null;
         }
 
-        if($dto->name !== null)
+        if ($dto->name !== null) {
             $pack->setName($dto->name);
+        }
 
-        if($dto->price !== null)
+        if ($dto->price !== null) {
             $pack->setPrice($dto->price);
+        }
 
-        if($dto->startedAt !== null)
+        if ($dto->startedAt !== null) {
             $pack->setStartedAt($dto->startedAt);
+        }
 
-        if($dto->expiredAt !== null)
+        if ($dto->expiredAt !== null) {
             $pack->setExpiredAt($dto->expiredAt);
+        }
 
-        if($dto->services !== null) 
-        {
+        if ($dto->services !== null) {
             $currentServices = $pack->getServices();
             $newServiceIds = $dto->services;
 

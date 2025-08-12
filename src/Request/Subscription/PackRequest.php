@@ -2,8 +2,8 @@
 
 namespace App\Request\Subscription;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PackRequest
 {

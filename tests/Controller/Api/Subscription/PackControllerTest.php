@@ -5,7 +5,6 @@ namespace App\Tests\Controller\Api\Subscription;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\Subscription\Service;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\This;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -14,7 +13,7 @@ class PackControllerTest extends ApiTestCase
     use Factories;
     use ResetDatabase;
 
-    private function createService(string $name = "testeService", string $price = "2.25"): Service 
+    private function createService(string $name = 'testeService', string $price = '2.25'): Service
     {
         $container = static::getContainer();
         $entityManager = $container->get(EntityManagerInterface::class);
@@ -60,8 +59,7 @@ class PackControllerTest extends ApiTestCase
         $data = json_decode($response->getContent(), true);
         $this->assertIsArray($data);
 
-        foreach ($data as $pack)
-        {
+        foreach ($data as $pack) {
             $this->assertIsArray($pack);
 
             $this->assertArrayHasKey('id', $pack);
@@ -104,7 +102,7 @@ class PackControllerTest extends ApiTestCase
             'expiredAt' => '2025-09-04',
             'services' => [$service->getId()],
         ]]);
-        
+
         $this->assertResponseIsSuccessful();
 
         $response = $client->getResponse();
@@ -113,7 +111,7 @@ class PackControllerTest extends ApiTestCase
         $this->assertArrayHasKey('id', $data);
         $id = $data['id'];
 
-        $service2 = $this->createService("rakoto", "258");
+        $service2 = $this->createService('rakoto', '258');
 
         $client->request('PUT', "/api/pack/edit/$id", ['json' => [
             'name' => 'NewPackTest',
@@ -129,12 +127,12 @@ class PackControllerTest extends ApiTestCase
         $this->assertJson($response->getContent());
 
         $pack = $response->toArray();
-        
+
         $this->assertEquals($id, $pack['pack']['id']);
         $this->assertEquals('NewPackTest', $pack['pack']['name']);
 
         $this->assertIsArray($pack['pack']['services']);
-        $serviceIds = array_map(fn($service) => $service['id'], $pack['pack']['services']);
+        $serviceIds = array_map(fn ($service) => $service['id'], $pack['pack']['services']);
         $this->assertContains($service2->getId(), $serviceIds);
     }
 }

@@ -17,7 +17,6 @@ class ServiceControllerTest extends ApiTestCase
         $client->request('POST', '/api/service/create', ['json' => [
             'name' => 'testName',
             'price' => '25.2',
-            
         ]]);
         $this->assertResponseStatusCodeSame(201);
     }
@@ -34,8 +33,7 @@ class ServiceControllerTest extends ApiTestCase
         $data = json_decode($response->getContent(), true);
         $this->assertIsArray($data);
 
-        foreach ($data as $item)
-        {
+        foreach ($data as $item) {
             $this->assertArrayHasKey('id', $item);
             $this->assertArrayHasKey('name', $item);
             $this->assertArrayHasKey('price', $item);
@@ -53,9 +51,8 @@ class ServiceControllerTest extends ApiTestCase
         $client->request('POST', '/api/service/create', ['json' => [
             'name' => 'testName',
             'price' => '25.2',
-            
         ]]);
-        
+
         $this->assertResponseIsSuccessful();
         $response = $client->getResponse();
         $this->assertJson($response->getContent());
@@ -73,7 +70,7 @@ class ServiceControllerTest extends ApiTestCase
         $this->assertJson($response->getContent());
 
         $services = $response->toArray();
-        
+
         $this->assertEquals($id, $services['service']['id']);
         $this->assertEquals('newName', $services['service']['name']);
         $this->assertEquals('258.25', $services['service']['price']);

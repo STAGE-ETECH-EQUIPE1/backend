@@ -2,9 +2,6 @@
 
 namespace App\DTO\Subscription;
 
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
-
 class ServiceDTO
 {
     private string $name;
@@ -21,17 +18,17 @@ class ServiceDTO
         $this->token = $token;
     }
 
-    public function getName(): string 
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getPrice(): string 
+    public function getPrice(): string
     {
         return $this->price;
     }
 
-    public function getToken(): string 
+    public function getToken(): string
     {
         return $this->token;
     }

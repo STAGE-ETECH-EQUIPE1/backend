@@ -4,7 +4,6 @@ namespace App\Tests\Repository\Auth;
 
 use App\Repository\Auth\UserRepository;
 use App\Tests\Factory\Auth\UserFactory as AuthUserFactory;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 

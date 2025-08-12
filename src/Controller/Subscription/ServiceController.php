@@ -2,20 +2,18 @@
 
 namespace App\Controller\Subscription;
 
-use App\DTO\Subscription\ServiceDTO;
+use App\Mapper\Subscription\ServiceMapper;
+use App\Request\Subscription\ServiceRequest;
 use App\Services\CreateService\CreateServiceServiceInterface;
 use App\Services\EditService\EditServiceService;
 use App\Services\ListService\ListServiceService;
+use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use App\Utils\Validator\AppValidatorInterface;
-use Symfony\Component\HttpFoundation\Request; 
-use App\Request\Subscription\ServiceRequest;
-use App\Mapper\Subscription\ServiceMapper;
-use Symfony\Component\HttpFoundation\Response;
 
 class ServiceController extends AbstractController
 {
@@ -37,12 +35,10 @@ class ServiceController extends AbstractController
         CreateServiceServiceInterface $createServiceService,
     ): JsonResponse {
         try {
-
             $requestDTO = new ServiceRequest($request);
             $error = $this->validator->validateRequest($requestDTO);
 
-            if (count($error) > 0)
-            {
+            if (count($error) > 0) {
                 return $this->json([
                     'error' => $error,
                 ], Response::HTTP_BAD_REQUEST);
@@ -69,7 +65,6 @@ class ServiceController extends AbstractController
     public function showServices(ListServiceService $listService): JsonResponse
     {
         $services = $listService->getAllServices();
-
         return $this->json($services);
     }
 
@@ -77,13 +72,11 @@ class ServiceController extends AbstractController
     #[Route('/service/edit/{id}', name: 'edit_service', methods: ['PUT'])]
     public function editServices(
         int $id,
-        Request $request,    
+        Request $request,
     ): JsonResponse {
-
         $requestDTO = new ServiceRequest($request);
         $error = $this->validator->validateRequest($requestDTO);
-        if (count($error) > 0)
-        {
+        if (count($error) > 0) {
             return $this->json([
                 'error' => $error,
             ], Response::HTTP_BAD_REQUEST);
@@ -95,7 +88,7 @@ class ServiceController extends AbstractController
             return $this->json(['error' => 'Service not found'], 404);
         }
 
-       return $this->json([
+        return $this->json([
             'message' => 'Update Success',
             'service' => [
                 'id' => $updated->getId(),

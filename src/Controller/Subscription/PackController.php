@@ -2,21 +2,18 @@
 
 namespace App\Controller\Subscription;
 
-use App\DTO\Subscription\PackDTO;
+use App\Mapper\Subscription\PackMapper;
 use App\Request\Subscription\PackRequest;
 use App\Services\CreatePack\CreatePackServiceInterface;
 use App\Services\EditPack\EditPackService;
 use App\Services\ListPack\ListPackService;
+use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use App\Utils\Validator\AppValidatorInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use App\Mapper\Subscription\PackMapper;
-
 
 class PackController extends AbstractController
 {
@@ -28,7 +25,7 @@ class PackController extends AbstractController
         EditPackService $editPackService,
         CreatePackServiceInterface $createPackService,
         AppValidatorInterface $validator,
-    ){
+    ) {
         $this->editPackService = $editPackService;
         $this->createPackService = $createPackService;
         $this->validator = $validator;
@@ -40,11 +37,9 @@ class PackController extends AbstractController
         Request $request,
     ): JsonResponse {
         try {
-
             $request = new PackRequest($request);
             $error = $this->validator->validateRequest($request);
-            if (count($error) > 0)
-            {
+            if (count($error) > 0) {
                 return $this->json([
                     'error' => $error,
                 ], Response::HTTP_BAD_REQUEST);
@@ -52,6 +47,7 @@ class PackController extends AbstractController
 
             $dto = PackMapper::fromRequest($request);
             $pack = $this->createPackService->createPackForm($dto);
+
             return $this->json([
                 'message' => 'Pack créé',
                 'id' => $pack->getId(),
