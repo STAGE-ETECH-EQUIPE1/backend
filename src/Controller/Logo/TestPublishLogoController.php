@@ -2,9 +2,11 @@
 
 namespace App\Controller\Logo;
 
+use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\LogoVersion;
+use App\Event\PublishLogoEvent;
 use App\Request\Logo\CommentLogoRequest;
-use App\Services\LogoGeneration\LogoGenerationServiceInterface;
+use App\Response\Logo\LogoPublishResponse;
 use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,12 +14,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class TestPublishLogoController extends AbstractController
 {
     public function __construct(
-        private readonly LogoGenerationServiceInterface $logoGenerationService,
         private readonly AppValidatorInterface $validator,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -42,10 +45,15 @@ class TestPublishLogoController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $this->logoGenerationService->publishLogo($logoVersion);
+        /** @var BrandingProject $branding */
+        $branding = $logoVersion->getBranding();
+
+        $this->eventDispatcher->dispatch(new PublishLogoEvent($logoVersion, (int) $branding->getId()));
 
         return $this->json([
             'message' => 'Logo published successfully',
+            'logo' => new LogoPublishResponse($logoVersion),
+            'branding-id' => $branding->getId(),
         ]);
     }
 }

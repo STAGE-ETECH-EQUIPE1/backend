@@ -2,10 +2,12 @@
 
 namespace App\Controller\Branding;
 
+use App\DTO\PaginationDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Services\LogoVersion\LogoVersionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 
 class GetLogoFromBrandingController extends AbstractController
@@ -22,6 +24,8 @@ class GetLogoFromBrandingController extends AbstractController
     )]
     public function __invoke(
         BrandingProject $brandingProject,
+        #[MapQueryString]
+        PaginationDTO $pagination,
     ): JsonResponse {
         return $this->json([
             'message' => 'get All Logo from branding project',

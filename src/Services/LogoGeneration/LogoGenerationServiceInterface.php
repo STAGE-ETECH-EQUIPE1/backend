@@ -2,7 +2,6 @@
 
 namespace App\Services\LogoGeneration;
 
-use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\LogoVersion;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Message\Branding\RegenerateLogoMessage;
@@ -22,5 +21,5 @@ interface LogoGenerationServiceInterface
     /**
      * Publish logo to the frontend using MERCURE Bundle.
      */
-    public function publishLogo(LogoVersion $logo): void;
+    public function publishLogo(LogoVersion $logo, int $brandingId): void;
 }

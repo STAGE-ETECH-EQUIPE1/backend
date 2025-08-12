@@ -6,6 +6,7 @@ use App\Entity\Auth\Client;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\DesignBrief;
 use App\Entity\Branding\LogoVersion;
+use App\Event\PublishLogoEvent;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Message\Branding\RegenerateLogoMessage;
 use App\Repository\Branding\BrandingProjectRepository;
@@ -18,6 +19,7 @@ use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -26,8 +28,8 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
 {
     private Filesystem $filesystem;
 
-    private const GENERATION_NUMBER = 5;
-    private const LOGO_GENERATION_PUBLISH_URL = 'https://example.com/api/logo-generation';
+    private const int GENERATION_NUMBER = 5;
+    private const string LOGO_GENERATION_PUBLISH_URL = 'https://example.com/api/logo-generation';
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
@@ -42,6 +44,7 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         private readonly ?string $aiGeneratedLogoPath,
         private readonly HubInterface $hub,
         private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
         $this->filesystem = new Filesystem();
     }
@@ -192,6 +195,8 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
                         ->setAssetUrl($imageUrl)
                         ->setBrief($designBrief)
                     ;
+
+                    $this->eventDispatcher->dispatch(new PublishLogoEvent($logo, (int) $brandingProject->getId()));
                 }
             }
 
@@ -203,12 +208,9 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         }
     }
 
-    public function publishLogo(LogoVersion $logo): void
+    public function publishLogo(LogoVersion $logo, int $brandingId): void
     {
-        /** @var BrandingProject $brandingProject */
-        $brandingProject = $logo->getBranding();
-
-        $topic = self::LOGO_GENERATION_PUBLISH_URL."/{$brandingProject->getId()}";
+        $topic = self::LOGO_GENERATION_PUBLISH_URL."/{$brandingId}";
         $update = new Update(
             $topic,
             $this->serializer->serialize(new LogoPublishResponse($logo), 'json'),
