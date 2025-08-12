@@ -32,8 +32,8 @@ class DesignBriefRequest
         $this->slogan = $content['slogan'] ?? '';
         $this->logoStyle = $content['logoStyle'] ?? '';
         $this->description = $content['description'] ?? '';
-        $this->colorPreferences = $content['colorPreferences'] ?? '';
-        $this->brandKeywords = $content['brandKeywords'] ?? '';
+        $this->colorPreferences = $content['colorPreferences'] ?? [];
+        $this->brandKeywords = $content['brandKeywords'] ?? [];
         $this->moodBoardUrl = $content['moodBoardUrl'] ?? '';
     }
 
