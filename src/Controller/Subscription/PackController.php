@@ -74,8 +74,15 @@ class PackController extends AbstractController
     #[Route('/pack/edit/{id}', name: 'edit_pack', methods: ['PUT'])]
     public function editPack(
         int $id,
-        #[MapRequestPayload] PackDTO $dto,
+        Request $request,
     ): JsonResponse {
+        $request = new PackRequest($request);
+
+        $errors = $this->validator->validateRequest($request);
+        if (count($errors) > 0) {
+            return $this->json(['errors' => $errors], Response::HTTP_BAD_REQUEST);
+        }
+        $dto = PackMapper::fromRequest($request);
         $updated = $this->editPackService->handle($id, $dto);
 
         if (!$updated) {

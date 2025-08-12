@@ -36,11 +36,11 @@ class PackRequest
     public function __construct(Request $request)
     {
         $array = $request->toArray();
-        $this->name = $array['name'] ?? '';
+        $this->name = $array['name'] ?? null;
         $this->startedAt = isset($data['startedAt']) ? new \DateTimeImmutable($data['startedAt']) : new \DateTimeImmutable();
         $this->expiredAt = isset($data['expiredAt']) ? new \DateTimeImmutable($data['expiredAt']) : new \DateTimeImmutable();
-        $this->price = $array['price'] ?? '';
-        $this->services = $array['services'] ?? '';
+        $this->price = $array['price'] ?? null;
+        $this->services = $array['services'] ?? null;
     }
 
     public function getName(): string

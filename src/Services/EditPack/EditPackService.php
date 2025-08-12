@@ -28,35 +28,44 @@ class EditPackService implements EditPackServiceInterface
             return null;
         }
 
-        $pack->setName($dto->name);
-        $pack->setPrice($dto->price);
-        $pack->setStartedAt($dto->startedAt);
-        $pack->setExpiredAt($dto->expiredAt);
+        if($dto->name !== null)
+            $pack->setName($dto->name);
 
-        $currentServices = $pack->getServices();
-        $newServiceIds = $dto->services;
+        if($dto->price !== null)
+            $pack->setPrice($dto->price);
 
-        foreach ($currentServices as $Services) {
-            if (!in_array($Services->getId(), $newServiceIds)) {
-                $pack->removeService($Services);
-            }
-        }
+        if($dto->startedAt !== null)
+            $pack->setStartedAt($dto->startedAt);
 
-        $currentServiceIds = [];
-        foreach ($currentServices as $Services) {
-            $currentServiceIds[] = $Services->getId();
-        }
+        if($dto->expiredAt !== null)
+            $pack->setExpiredAt($dto->expiredAt);
 
-        foreach ($newServiceIds as $serviceId) {
-            if (!in_array($serviceId, $currentServiceIds)) {
-                $service = $this->serviceRepository->find($serviceId);
-                if (!$service) {
-                    throw new \Exception("Service ID $serviceId not found");
+        if($dto->services !== null) 
+        {
+            $currentServices = $pack->getServices();
+            $newServiceIds = $dto->services;
+
+            foreach ($currentServices as $Services) {
+                if (!in_array($Services->getId(), $newServiceIds)) {
+                    $pack->removeService($Services);
                 }
-                $pack->addService($service);
+            }
+
+            $currentServiceIds = [];
+            foreach ($currentServices as $Services) {
+                $currentServiceIds[] = $Services->getId();
+            }
+
+            foreach ($newServiceIds as $serviceId) {
+                if (!in_array($serviceId, $currentServiceIds)) {
+                    $service = $this->serviceRepository->find($serviceId);
+                    if (!$service) {
+                        throw new \Exception("Service ID $serviceId not found");
+                    }
+                    $pack->addService($service);
+                }
             }
         }
-
         $this->em->flush();
 
         return $pack;
