@@ -2,6 +2,7 @@
 
 namespace App\Entity\Subscription;
 
+use App\Entity\Auth\Client;
 use App\Entity\Payment\Payment;
 use App\Enum\SubscriptionStatus;
 use App\Repository\Subscription\SubscriptionRepository;
@@ -43,9 +44,14 @@ class Subscription
     #[ORM\ManyToMany(targetEntity: Service::class)]
     private Collection $services;
 
+    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -145,6 +151,18 @@ class Subscription
     public function removeService(Service $service): static
     {
         $this->services->removeElement($service);
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }

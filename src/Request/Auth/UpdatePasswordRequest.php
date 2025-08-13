@@ -20,9 +20,9 @@ class UpdatePasswordRequest
     public function __construct(Request $request)
     {
         $content = $request->toArray();
-        $this->currentPassword = $content['currentPassword'];
-        $this->newPassword = $content['newPassword'];
-        $this->confirmPassword = $content['confirmPassword'];
+        $this->currentPassword = $content['currentPassword'] ?? '';
+        $this->newPassword = $content['newPassword'] ?? '';
+        $this->confirmPassword = $content['confirmPassword'] ?? '';
     }
 
     public function getConfirmPassword(): string

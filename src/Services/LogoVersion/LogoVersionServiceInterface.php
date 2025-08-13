@@ -4,6 +4,7 @@ namespace App\Services\LogoVersion;
 
 use App\DTO\Branding\ClientFeedBackDTO;
 use App\DTO\Branding\LogoVersionDTO;
+use App\DTO\PaginationDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\ClientFeedBack;
 use App\Entity\Branding\LogoVersion;
@@ -17,6 +18,11 @@ interface LogoVersionServiceInterface
      * @return LogoVersion[]
      */
     public function getLogoByBrandingId(BrandingProject $brandingProject): array;
+
+    /**
+     * Get Total and Paginated Logo Version by Branding ID.
+     */
+    public function getPaginatedLogoByBrandingId(int $brandingId, PaginationDTO $pagination): array;
 
     /**
      * Get all clients feedback from a specific logo.

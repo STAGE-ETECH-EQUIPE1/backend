@@ -14,7 +14,7 @@ class ResetPasswordRequest
     public function __construct(Request $request)
     {
         $content = $request->toArray();
-        $this->email = $content['email'];
+        $this->email = $content['email'] ?? '';
     }
 
     /**

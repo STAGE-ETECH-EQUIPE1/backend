@@ -30,12 +30,12 @@ class UserRegistrationRequest
     public function __construct(Request $request)
     {
         $content = $request->toArray();
-        $this->email = $content['email'];
-        $this->phone = $content['phone'];
-        $this->fullName = $content['fullName'];
-        $this->username = $content['username'];
-        $this->password = $content['password'];
-        $this->confirmPassword = $content['confirmPassword'];
+        $this->email = $content['email'] ?? '';
+        $this->phone = $content['phone'] ?? '';
+        $this->fullName = $content['fullName'] ?? '';
+        $this->username = $content['username'] ?? '';
+        $this->password = $content['password'] ?? '';
+        $this->confirmPassword = $content['confirmPassword'] ?? '';
     }
 
     public function getEmail(): string

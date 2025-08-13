@@ -2,8 +2,10 @@
 
 namespace App\Repository\Branding;
 
+use App\DTO\PaginationDTO;
 use App\Entity\Branding\LogoVersion;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,20 +18,22 @@ class LogoVersionRepository extends ServiceEntityRepository
         parent::__construct($registry, LogoVersion::class);
     }
 
-    //    /**
-    //     * @return LogoVersion[] Returns an array of LogoVersion objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('l.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Paginator<LogoVersion>
+     */
+    public function paginateByBrandingId(int $brandingId, PaginationDTO $pagination): Paginator
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->andWhere('l.branding = :brandingId')
+            ->setParameter('brandingId', $brandingId)
+            ->orderBy("l.{$pagination->getOrderColumn()}", $pagination->getOrderDir())
+        ;
+
+        return new Paginator(
+            $qb->setFirstResult($pagination->getOffset())
+                ->setMaxResults($pagination->size)
+        );
+    }
 
     //    public function findOneBySomeField($value): ?LogoVersion
     //    {

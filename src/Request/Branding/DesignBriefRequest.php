@@ -29,12 +29,12 @@ class DesignBriefRequest
     public function __construct(Request $request)
     {
         $content = $request->toArray();
-        $this->slogan = $content['slogan'];
-        $this->logoStyle = $content['logoStyle'];
-        $this->description = $content['description'];
-        $this->colorPreferences = $content['colorPreferences'];
-        $this->brandKeywords = $content['brandKeywords'];
-        $this->moodBoardUrl = $content['moodBoardUrl'];
+        $this->slogan = $content['slogan'] ?? '';
+        $this->logoStyle = $content['logoStyle'] ?? '';
+        $this->description = $content['description'] ?? '';
+        $this->colorPreferences = $content['colorPreferences'] ?? [];
+        $this->brandKeywords = $content['brandKeywords'] ?? [];
+        $this->moodBoardUrl = $content['moodBoardUrl'] ?? '';
     }
 
     /**

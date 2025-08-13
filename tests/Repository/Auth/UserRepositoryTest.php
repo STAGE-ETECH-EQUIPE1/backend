@@ -20,6 +20,8 @@ class UserRepositoryTest extends RepositoryTestCase
     {
         self::bootKernel();
         UserFactory::createMany(10);
-        $this->assertEquals(10, $this->repository->count([]));
+        /** @var UserRepository $userRepository */
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $this->assertEquals(10, $userRepository->count([]));
     }
 }
