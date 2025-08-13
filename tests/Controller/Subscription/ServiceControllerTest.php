@@ -1,34 +1,49 @@
 <?php
 
-namespace App\Tests\Controller\Api\Subscription;
+namespace App\Tests\Controller\Subscription;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use ApiPlatform\Symfony\Bundle\Test\Response;
+use App\Tests\Controller\ApiControllerTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class ServiceControllerTest extends ApiTestCase
+class ServiceControllerTest extends ApiControllerTestCase
 {
     use Factories;
     use ResetDatabase;
 
     public function testCreateService(): void
     {
-        $client = static::createClient();
-        $client->request('POST', '/api/service/create', ['json' => [
-            'name' => 'testName',
-            'price' => '25.2',
-        ]]);
+        $token = $this->authenticateAdmin()->toArray()['token'];
+
+        $this->apiClient()->request('POST', '/api/service/create', [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => "Bearer $token",
+            ], 'json' => [
+                'name' => 'testName',
+                'price' => '25.2',
+            ]]);
         $this->assertResponseStatusCodeSame(201);
     }
 
     public function testReadService(): void
     {
-        $client = static::createClient();
-        $client->request('GET', '/api/service/show');
+        $token = $this->authenticateAdmin()->toArray()['token'];
 
+        $client = $this->apiClient();
+        $client->request('GET', '/api/service/show', ['headers' => [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer $token",
+        ]]);
+
+        /** @var Response $response */
         $response = $client->getResponse();
 
         $this->assertResponseIsSuccessful();
+
         $this->assertJson($response->getContent());
         $data = json_decode($response->getContent(), true);
         $this->assertIsArray($data);
@@ -46,27 +61,43 @@ class ServiceControllerTest extends ApiTestCase
 
     public function testUpdateService(): void
     {
-        $client = static::createClient();
+        $token = $this->authenticateAdmin()->toArray()['token'];
 
-        $client->request('POST', '/api/service/create', ['json' => [
+        $client = $this->apiClient();
+
+        $client->request('POST', '/api/service/create', ['headers' => [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer $token",
+        ], 'json' => [
             'name' => 'testName',
             'price' => '25.2',
         ]]);
 
         $this->assertResponseIsSuccessful();
+
+        /** @var Response $response */
         $response = $client->getResponse();
+
         $this->assertJson($response->getContent());
         $data = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('id', $data);
         $id = $data['id'];
 
-        $client->request('PUT', "/api/service/edit/$id", ['json' => [
+        $client->request('PUT', "/api/service/edit/$id", ['headers' => [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer $token",
+        ], 'json' => [
             'name' => 'newName',
             'price' => '258.25',
         ]]);
 
         $this->assertResponseIsSuccessful();
+
+        /** @var Response $response */
         $response = $client->getResponse();
+
         $this->assertJson($response->getContent());
 
         $services = $response->toArray();

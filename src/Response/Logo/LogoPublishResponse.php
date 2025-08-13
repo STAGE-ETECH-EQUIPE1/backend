@@ -42,6 +42,4 @@ final class LogoPublishResponse
     {
         return $this->approvedAt;
     }
-
-
 }

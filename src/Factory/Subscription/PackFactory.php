@@ -2,13 +2,13 @@
 
 namespace App\Tests\Factory\Subscription;
 
-use App\Entity\Subscription\Service;
+use App\Entity\Subscription\Pack;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Service>
+ * @extends PersistentProxyObjectFactory<Pack>
  */
-final class ServiceFactory extends PersistentProxyObjectFactory
+final class PackFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
@@ -21,7 +21,7 @@ final class ServiceFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return Service::class;
+        return Pack::class;
     }
 
     /**
@@ -29,12 +29,14 @@ final class ServiceFactory extends PersistentProxyObjectFactory
      *
      * @todo add your default values here
      */
-    protected function defaults(): array|callable
+    protected function defaults(): array
     {
         return [
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'expiredAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'name' => self::faker()->text(200),
             'price' => self::faker()->randomFloat(),
+            'startedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
         ];
     }
 
@@ -44,7 +46,7 @@ final class ServiceFactory extends PersistentProxyObjectFactory
     protected function initialize(): static
     {
         return $this
-            // ->afterInstantiate(function(Service $service): void {})
+            // ->afterInstantiate(function(Pack $pack): void {})
         ;
     }
 }

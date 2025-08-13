@@ -2,8 +2,8 @@
 
 namespace App\Tests\Repository\Auth;
 
+use App\Factory\Auth\UserFactory;
 use App\Repository\Auth\UserRepository;
-use App\Tests\Factory\Auth\UserFactory as AuthUserFactory;
 use App\Tests\Repository\RepositoryTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
@@ -19,7 +19,7 @@ class UserRepositoryTest extends RepositoryTestCase
     public function testUserCount(): void
     {
         self::bootKernel();
-        AuthUserFactory::createMany(10);
+        UserFactory::createMany(10);
         /** @var UserRepository $userRepository */
         $userRepository = static::getContainer()->get(UserRepository::class);
         $this->assertEquals(10, $userRepository->count([]));

@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Tests\Controller\Api\Subscription;
+namespace App\Tests\Controller\Subscription;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use ApiPlatform\Symfony\Bundle\Test\Response;
 use App\Entity\Subscription\Service;
+use App\Tests\Controller\ApiControllerTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
-class PackControllerTest extends ApiTestCase
+class PackControllerTest extends ApiControllerTestCase
 {
     use Factories;
     use ResetDatabase;
@@ -16,6 +17,8 @@ class PackControllerTest extends ApiTestCase
     private function createService(string $name = 'testeService', string $price = '2.25'): Service
     {
         $container = static::getContainer();
+
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get(EntityManagerInterface::class);
 
         $service = new Service();
@@ -30,28 +33,52 @@ class PackControllerTest extends ApiTestCase
 
     public function testCreatePack(): void
     {
-        $client = static::createClient();
-        $container = static::getContainer();
-        $entityManager = $container->get(EntityManagerInterface::class);
+        $token = $this->authenticateAdmin()->toArray()['token'];
+
+        $client = $this->apiClient();
 
         $service = $this->createService();
 
-        $client->request('POST', '/api/pack/create', ['json' => [
-            'name' => 'PackTest',
-            'price' => '100.36',
-            'startedAt' => '2025-08-04',
-            'expiredAt' => '2025-09-04',
-            'services' => [$service->getId()],
-        ]]);
+        $client->request(
+            'POST',
+            '/api/pack/create',
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "Bearer $token",
+                ],
+                'json' => [
+                    'name' => 'PackTest',
+                    'price' => '100.36',
+                    'startedAt' => '2025-08-04',
+                    'expiredAt' => '2025-09-04',
+                    'services' => [$service->getId()],
+                ],
+            ]);
 
         $this->assertResponseStatusCodeSame(201);
     }
 
     public function testReadPack(): void
     {
-        $client = static::createClient();
-        $client->request('GET', '/api/pack/show');
+        $token = $this->authenticateAdmin()->toArray()['token'];
 
+        $client = static::createClient();
+
+        $client->request(
+            'GET',
+            '/api/pack/show',
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "Bearer $token",
+                ],
+            ]
+        );
+
+        /** @var Response $response */
         $response = $client->getResponse();
 
         $this->assertResponseIsSuccessful();
@@ -89,23 +116,35 @@ class PackControllerTest extends ApiTestCase
 
     public function testUpdatePack(): void
     {
-        $client = static::createClient();
-        $container = static::getContainer();
-        $entityManager = $container->get(EntityManagerInterface::class);
+        $token = $this->authenticateAdmin()->toArray()['token'];
+
+        $client = $this->apiClient();
 
         $service = $this->createService();
 
-        $client->request('POST', '/api/pack/create', ['json' => [
-            'name' => 'PackTest',
-            'price' => '100.36',
-            'startedAt' => '2025-08-04',
-            'expiredAt' => '2025-09-04',
-            'services' => [$service->getId()],
-        ]]);
+        $client->request(
+            'POST',
+            '/api/pack/create',
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "Bearer $token",
+                ],
+                'json' => [
+                    'name' => 'PackTest',
+                    'price' => '100.36',
+                    'startedAt' => '2025-08-04',
+                    'expiredAt' => '2025-09-04',
+                    'services' => [$service->getId()],
+                ],
+            ]);
 
         $this->assertResponseIsSuccessful();
 
+        /** @var Response $response */
         $response = $client->getResponse();
+
         $this->assertJson($response->getContent());
         $data = json_decode($response->getContent(), true);
         $this->assertArrayHasKey('id', $data);
@@ -113,7 +152,11 @@ class PackControllerTest extends ApiTestCase
 
         $service2 = $this->createService('rakoto', '258');
 
-        $client->request('PUT', "/api/pack/edit/$id", ['json' => [
+        $client->request('PUT', "/api/pack/edit/$id", ['headers' => [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => "Bearer $token",
+        ], 'json' => [
             'name' => 'NewPackTest',
             'price' => '100.36',
             'startedAt' => '2025-08-04',
@@ -123,7 +166,9 @@ class PackControllerTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
 
+        /** @var Response $response */
         $response = $client->getResponse();
+
         $this->assertJson($response->getContent());
 
         $pack = $response->toArray();

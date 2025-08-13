@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Factory\Auth;
+namespace App\Factory\Auth;
 
 use App\Entity\Auth\User;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
