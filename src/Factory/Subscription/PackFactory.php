@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Factory\Subscription;
+namespace App\Factory\Subscription;
 
 use App\Entity\Subscription\Pack;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
