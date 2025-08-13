@@ -65,6 +65,7 @@ class ServiceController extends AbstractController
     public function showServices(ListServiceService $listService): JsonResponse
     {
         $services = $listService->getAllServices();
+
         return $this->json($services);
     }
 

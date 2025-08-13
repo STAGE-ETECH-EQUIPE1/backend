@@ -12,18 +12,18 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class SubscriptionController extends AbstractController
 {
-    #[IsGranted('ROLE_USER')]
-    #[Route('/pack/subscription', name: 'subscription', methods: ['POST'])]
-    public function createSubscription(
-        #[MapRequestPayload]
-        SubscriptionDTO $subscriptionDTO,
-        SubscriptionServiceInterface $subscriptionServiceInterface,
-    ): JsonResponse {
-        $subscription = $subscriptionServiceInterface->createSubscription($subscriptionDTO);
+    // #[IsGranted('ROLE_USER')]
+    // #[Route('/pack/subscription', name: 'subscription', methods: ['POST'])]
+    // public function createSubscription(
+    //     #[MapRequestPayload]
+    //     SubscriptionDTO $subscriptionDTO,
+    //     SubscriptionServiceInterface $subscriptionServiceInterface,
+    // ): JsonResponse {
+    //     $subscription = $subscriptionServiceInterface->createSubscription($subscriptionDTO);
 
-        return $this->json([
-            'message' => 'Subscription Success',
-            'id' => $subscription->getId(),
-        ]);
-    }
+    //     return $this->json([
+    //         'message' => 'Subscription Success',
+    //         'id' => $subscription->getId(),
+    //     ]);
+    // }
 }

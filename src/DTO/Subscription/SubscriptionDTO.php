@@ -2,6 +2,8 @@
 
 namespace App\DTO\Subscription;
 
+use App\Enum\SubscriptionStatus;
+
 class SubscriptionDTO
 {
     private ?string $reference;
@@ -16,8 +18,8 @@ class SubscriptionDTO
     public function __construct(
         ?string $reference,
         ?SubscriptionStatus $status,
-        ?DateTimeImmutable $startedAt,
-        ?DateTimeImmutable $endedAt,
+        ?\DateTimeImmutable $startedAt,
+        ?\DateTimeImmutable $endedAt,
         ?int $paymentId,
         array $services,
     ) {
@@ -25,7 +27,7 @@ class SubscriptionDTO
         $this->status = $status;
         $this->startedAt = $startedAt;
         $this->endedAt = $endedAt;
-        $this->payment = $paymentId;
+        $this->paymentId = $paymentId;
         $this->services = $services;
     }
 

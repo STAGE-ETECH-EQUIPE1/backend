@@ -25,15 +25,15 @@ class EditServiceService implements EditServiceServiceInterface
             return null;
         }
 
-        if ($dto->getName() !== null) {
+        if ($dto->getName() !== $service->getName()) {
             $service->setName($dto->getName());
         }
 
-        if ($dto->getPrice() !== null) {
+        if ($dto->getPrice() !== $service->getPrice()) {
             $service->setPrice($dto->getPrice());
         }
 
-        if ($dto->getToken() !== 0) {
+        if ($dto->getToken() !== $service->getToken()) {
             $service->setToken($dto->getToken());
         }
 

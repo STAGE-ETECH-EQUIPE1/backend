@@ -37,8 +37,8 @@ class PackRequest
     {
         $array = $request->toArray();
         $this->name = $array['name'] ?? null;
-        $this->startedAt = isset($data['startedAt']) ? new \DateTimeImmutable($data['startedAt']) : new \DateTimeImmutable();
-        $this->expiredAt = isset($data['expiredAt']) ? new \DateTimeImmutable($data['expiredAt']) : new \DateTimeImmutable();
+        $this->startedAt = isset($array['startedAt']) ? new \DateTimeImmutable($array['startedAt']) : new \DateTimeImmutable();
+        $this->expiredAt = isset($array['expiredAt']) ? new \DateTimeImmutable($array['expiredAt']) : new \DateTimeImmutable();
         $this->price = $array['price'] ?? null;
         $this->services = $array['services'] ?? null;
     }

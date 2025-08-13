@@ -28,7 +28,7 @@ class ServiceDTO
         return $this->price;
     }
 
-    public function getToken(): string
+    public function getToken(): int
     {
         return $this->token;
     }

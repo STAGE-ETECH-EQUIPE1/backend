@@ -28,47 +28,45 @@ class EditPackService implements EditPackServiceInterface
             return null;
         }
 
-        if ($dto->name !== null) {
+        if ($dto->name !== $pack->getName()) {
             $pack->setName($dto->name);
         }
 
-        if ($dto->price !== null) {
+        if ($dto->price !== $pack->getPrice()) {
             $pack->setPrice($dto->price);
         }
 
-        if ($dto->startedAt !== null) {
+        if ($dto->startedAt !== $pack->getStartedAt()) {
             $pack->setStartedAt($dto->startedAt);
         }
 
-        if ($dto->expiredAt !== null) {
+        if ($dto->expiredAt !== $pack->getExpiredAt()) {
             $pack->setExpiredAt($dto->expiredAt);
         }
 
-        if ($dto->services !== null) {
-            $currentServices = $pack->getServices();
-            $newServiceIds = $dto->services;
+        $currentServices = $pack->getServices();
+        $newServiceIds = $dto->services;
 
-            foreach ($currentServices as $Services) {
-                if (!in_array($Services->getId(), $newServiceIds)) {
-                    $pack->removeService($Services);
-                }
+        foreach ($currentServices as $Services) {
+            if (!in_array($Services->getId(), $newServiceIds)) {
+                $pack->removeService($Services);
             }
+        }
 
-            $currentServiceIds = [];
-            foreach ($currentServices as $Services) {
-                $currentServiceIds[] = $Services->getId();
+        $currentServiceIds = array_map(fn ($s) => $s->getId(), $pack->getServices()->toArray());
+
+        if ($dto->services !== $currentServiceIds) {
+            foreach ($pack->getServices() as $service) {
+                $pack->removeService($service);
             }
-
-            foreach ($newServiceIds as $serviceId) {
-                if (!in_array($serviceId, $currentServiceIds)) {
-                    $service = $this->serviceRepository->find($serviceId);
-                    if (!$service) {
-                        throw new \Exception("Service ID $serviceId not found");
-                    }
+            foreach ($dto->services as $serviceId) {
+                $service = $this->serviceRepository->find($serviceId);
+                if ($service) {
                     $pack->addService($service);
                 }
             }
         }
+
         $this->em->flush();
 
         return $pack;

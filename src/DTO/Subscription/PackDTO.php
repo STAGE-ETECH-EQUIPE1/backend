@@ -46,7 +46,7 @@ class PackDTO
         return $this->price;
     }
 
-    /** @var int[] */
+    /** @return int[] */
     public function getServices(): array
     {
         return $this->services;
