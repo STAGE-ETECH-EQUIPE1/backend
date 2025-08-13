@@ -4,6 +4,7 @@ namespace App\Tests\Repository\Auth;
 
 use App\Repository\Auth\UserRepository;
 use App\Tests\Factory\Auth\UserFactory as AuthUserFactory;
+use App\Tests\Repository\RepositoryTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
