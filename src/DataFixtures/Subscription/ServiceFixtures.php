@@ -4,12 +4,10 @@ namespace App\DataFixtures\Subscription;
 
 use App\DataFixtures\FakerTrait;
 use App\Entity\Subscription\Service;
-use App\Entity\Subscription\TypeService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-final class ServiceFixtures extends Fixture implements DependentFixtureInterface
+final class ServiceFixtures extends Fixture
 {
     use FakerTrait;
 
@@ -32,21 +30,11 @@ final class ServiceFixtures extends Fixture implements DependentFixtureInterface
             $service = (new Service())
                 ->setName($data['name'])
                 ->setPrice($this->getPrice())
-                ->setCreatedAt($this->getDateTimeImmutable())
-                ->setTypeService(
-                    $this->getReference('type_service_'.$this->numberBetween(1, 5), TypeService::class)
-                );
+                ->setCreatedAt($this->getDateTimeImmutable());
             $manager->persist($service);
             $this->addReference('service_'.$data['code'], $service);
         }
 
         $manager->flush();
-    }
-
-    public function getDependencies(): array
-    {
-        return [
-            TypeServiceFixtures::class,
-        ];
     }
 }

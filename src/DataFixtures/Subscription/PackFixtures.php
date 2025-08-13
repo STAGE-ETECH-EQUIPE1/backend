@@ -60,7 +60,6 @@ class PackFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             ServiceFixtures::class,
-            TypeServiceFixtures::class,
         ];
     }
 }

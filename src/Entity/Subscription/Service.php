@@ -24,9 +24,8 @@ class Service
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?TypeService $typeService = null;
+    #[ORM\Column(nullable: true)]
+    private ?int $token = null;
 
     public function getId(): ?int
     {
@@ -69,14 +68,19 @@ class Service
         return $this;
     }
 
-    public function getTypeService(): ?TypeService
+    public function __construct()
     {
-        return $this->typeService;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function setTypeService(?TypeService $typeService): static
+    public function getToken(): ?int
     {
-        $this->typeService = $typeService;
+        return $this->token;
+    }
+
+    public function setToken(?int $token): static
+    {
+        $this->token = $token;
 
         return $this;
     }

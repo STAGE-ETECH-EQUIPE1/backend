@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Factory\Auth;
+namespace App\Tests\Factory\Subscription;
 
-use App\Entity\Auth\User;
+use App\Entity\Subscription\Service;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<User>
+ * @extends PersistentProxyObjectFactory<Service>
  */
-final class UserFactory extends PersistentProxyObjectFactory
+final class ServiceFactory extends PersistentProxyObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
+     *
+     * @todo inject services if required
      */
     public function __construct()
     {
@@ -19,21 +21,20 @@ final class UserFactory extends PersistentProxyObjectFactory
 
     public static function class(): string
     {
-        return User::class;
+        return Service::class;
     }
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
+     *
+     * @todo add your default values here
      */
-    protected function defaults(): array
+    protected function defaults(): array|callable
     {
         return [
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'email' => self::faker()->email(),
-            'isVerified' => self::faker()->boolean(),
-            'password' => 'Admin@123',
-            'phone' => self::faker()->phoneNumber(),
-            'roles' => ['ROLE_USER'],
+            'name' => self::faker()->text(200),
+            'price' => self::faker()->randomFloat(),
         ];
     }
 
@@ -43,7 +44,7 @@ final class UserFactory extends PersistentProxyObjectFactory
     protected function initialize(): static
     {
         return $this
-            // ->afterInstantiate(function(User $user): void {})
+            // ->afterInstantiate(function(Service $service): void {})
         ;
     }
 }
