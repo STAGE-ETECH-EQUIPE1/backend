@@ -6,6 +6,9 @@ use App\DTO\PaginationDTO;
 
 final class PaginatorUtils
 {
+    /**
+     * Build Pagination Response.
+     */
     public static function buildPageResponse(
         PaginationDTO $pagination,
         int $totalElements,
@@ -17,5 +20,17 @@ final class PaginatorUtils
             'totalElements' => $totalElements,
             'totalPages' => ceil($totalElements / $pagination->page),
         ];
+    }
+
+    /**
+     * Get array Value.
+     */
+    public static function getArrayValue(array $orderColumns, int $arrayIndex): string
+    {
+        if (array_key_exists($arrayIndex, $orderColumns)) {
+            return $orderColumns[$arrayIndex];
+        }
+
+        return 'id';
     }
 }
