@@ -12,14 +12,15 @@ final class PaginationDTO
     #[Assert\Positive()]
     public int $size = 10;
 
-    public ?string $orderColumn = null;
+    #[Assert\PositiveOrZero()]
+    public int $orderColumn = 0;
 
     #[Assert\Choice(choices: ['asc', 'desc', 'ASC', 'DESC'])]
     public ?string $orderDir = null;
 
-    public function getOrderColumn(): string
+    public function getOrderColumn(): int
     {
-        return $this->orderColumn ?? 'id';
+        return $this->orderColumn ?? 0;
     }
 
     public function getOrderDir(): string
