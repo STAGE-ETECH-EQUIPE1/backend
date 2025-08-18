@@ -2,8 +2,10 @@
 
 namespace App\Repository\Branding;
 
+use App\DTO\PaginationDTO;
 use App\Entity\Branding\ClientFeedBack;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,6 +32,25 @@ class ClientFeedBackRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * Paginate Logo feedbacks.
+     *
+     * @return Paginator<ClientFeedBack>
+     */
+    public function paginateByLogoId(int $logoId, PaginationDTO $pagination): Paginator
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->andWhere('f.logoVersion = :id')
+            ->setParameter('id', $logoId)
+            ->orderBy("f.{$pagination->getOrderColumn()}", $pagination->getOrderDir())
+        ;
+
+        return new Paginator(
+            $qb->setFirstResult($pagination->getOffset())
+                ->setMaxResults($pagination->size)
+        );
     }
 
     //    public function findOneBySomeField($value): ?ClientFeedBack

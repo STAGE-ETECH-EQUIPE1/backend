@@ -47,6 +47,16 @@ final class LogoVersionService extends AbstractService implements LogoVersionSer
         return $this->clientFeedBackRepository->findByLogoId($id);
     }
 
+    public function paginateLogoFeedBackByLogoId(int $logoId, PaginationDTO $pagination): array
+    {
+        $paginatedResults = $this->clientFeedBackRepository->paginateByLogoId($logoId, $pagination);
+
+        return [
+            $paginatedResults->getQuery()->getResult(),
+            $paginatedResults->count(),
+        ];
+    }
+
     public function commentLogo(LogoVersion $logo, CommentLogoRequest $comment): void
     {
         $client = $this->clientService->getConnectedUserClient();

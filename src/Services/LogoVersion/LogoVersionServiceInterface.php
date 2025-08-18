@@ -32,6 +32,11 @@ interface LogoVersionServiceInterface
     public function getLogoFeedBackByLogoId(int $id): array;
 
     /**
+     * Paginate Logo's feedbacks with PaginationDTO.
+     */
+    public function paginateLogoFeedBackByLogoId(int $logoId, PaginationDTO $pagination): array;
+
+    /**
      * Create feedback from client request.
      */
     public function commentLogo(LogoVersion $logo, CommentLogoRequest $comment): void;
