@@ -12,10 +12,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 
 WORKDIR /var/www/html
 
-
 FROM nginx:1.29.0-alpine
 
-RUN apk add --no-cache php-fpm supervisor
+RUN apk add --no-cache supervisor php83-fpm
+
+RUN mkdir -p /var/run/php
+
+COPY docker/render/php-fpm.conf /etc/php83/php-fpm.d/www.conf
 
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
 
