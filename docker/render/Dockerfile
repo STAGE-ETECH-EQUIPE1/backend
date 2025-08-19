@@ -16,7 +16,6 @@ FROM nginx:1.29.0-alpine
 
 RUN apk add --no-cache supervisor php83-fpm
 
-# Vérifier si le groupe existe déjà avant de le créer
 RUN if ! getent group www-data >/dev/null 2>&1; then \
         addgroup -g 1000 -S www-data; \
     fi && \
@@ -31,11 +30,30 @@ COPY docker/render/php-fpm.conf /etc/php83/php-fpm.d/www.conf
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+RUN echo "=== VÉRIFICATION CONFIGURATION PHP-FPM ===" && \
+    echo "Contenu de www.conf:" && \
+    grep -E "(listen|user|group|pm\.)" /etc/php83/php-fpm.d/www.conf && \
+    echo -e "\n=== VÉRIFICATION CONFIGURATION NGINX ===" && \
+    echo "Directive fastcgi_pass:" && \
+    grep "fastcgi_pass" /etc/nginx/conf.d/default.conf && \
+    echo -e "\n=== VÉRIFICATION RÉPERTOIRES ===" && \
+    echo "Permissions /var/run/php:" && \
+    ls -la /var/run/ | grep php && \
+    echo -e "\n=== VÉRIFICATION UTILISATEURS ===" && \
+    echo "Utilisateur www-data:" && \
+    id www-data && \
+    echo "Groupe www-data:" && \
+    getent group www-data
+
 COPY --from=php /var/www/html /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html && \
+    echo "=== VÉRIFICATION PERMISSIONS APPLICATION ===" && \
+    ls -la /var/www/html/
 
 ENV PORT=8080
 EXPOSE 8080
+
+RUN nginx -t
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
