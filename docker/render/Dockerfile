@@ -16,6 +16,17 @@ FROM nginx:1.29.0-alpine
 
 RUN apk add --no-cache supervisor php83-fpm
 
+# Vérifier si le groupe existe déjà avant de le créer
+RUN if ! getent group www-data >/dev/null 2>&1; then \
+        addgroup -g 1000 -S www-data; \
+    fi && \
+    if ! id -u www-data >/dev/null 2>&1; then \
+        adduser -u 1000 -S www-data -G www-data; \
+    fi && \
+    mkdir -p /var/run/php && \
+    chown -R www-data:www-data /var/run/php && \
+    chmod 775 /var/run/php
+
 COPY docker/render/php-fpm.conf /etc/php83/php-fpm.d/www.conf
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
