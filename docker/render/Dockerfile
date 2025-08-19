@@ -16,15 +16,19 @@ FROM nginx:1.29.0-alpine
 
 RUN apk add --no-cache supervisor php83-fpm
 
-RUN mkdir -p /var/run/php
+RUN addgroup -g 1000 -S www-data && \
+    adduser -u 1000 -S www-data -G www-data && \
+    mkdir -p /var/run/php && \
+    chown -R www-data:www-data /var/run/php && \
+    chmod 775 /var/run/php
 
 COPY docker/render/php-fpm.conf /etc/php83/php-fpm.d/www.conf
-
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
-
 COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY --from=php /var/www/html /var/www/html
+
+RUN chown -R www-data:www-data /var/www/html
 
 ENV PORT=8080
 EXPOSE 8080
