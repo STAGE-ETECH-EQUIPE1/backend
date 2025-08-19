@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.3-fpm-alpine AS php
 
 RUN apk --no-cache add curl git wget bash dpkg
 
@@ -15,11 +15,15 @@ WORKDIR /var/www/html
 
 FROM nginx:1.29.0-alpine
 
+RUN apk add --no-cache php-fpm supervisor
+
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
+
+COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY --from=php /var/www/html /var/www/html
 
 ENV PORT=8080
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
