@@ -10,6 +10,11 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Utils\Validator\AppValidatorInterface;
+use App\Request\Subscription\SubscriptionRequest;
+use Symfony\Component\HttpFoundation\Response;
+use App\Mapper\Subscription\SubscriptionMapper;
+
 
 class SubscriptionController extends AbstractController
 {
@@ -25,12 +30,12 @@ class SubscriptionController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/pack/subscription', name: 'subscription', methods: ['POST'])]
+    #[Route('/subscription/create', name: 'create_subscription', methods: ['POST'])]
     public function createSubscription(
         Request $request,
     ): JsonResponse {
         try {
-            $subscriptionRequest = new SubscriptionRequest();
+            $subscriptionRequest = new SubscriptionRequest($request);
             $error = $this->validator->validateRequest($subscriptionRequest);
             if (count($error) > 0)
             {

@@ -4,6 +4,7 @@ namespace App\Request\Subscription;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Enum\SubscriptionStatus;
 
 class SubscriptionRequest
 {
@@ -37,11 +38,13 @@ class SubscriptionRequest
     {
         $content = $request->toArray();
         $this->reference = $content['reference'] ?? null;
-        $this->status = $content['status'] ?? null;
+        $this->status = isset($content['status']) && SubscriptionStatus::tryFrom($content['status'])
+        ? SubscriptionStatus::from($content['status'])
+        : throw new \InvalidArgumentException("Invalid subscription status: {$content['status']}");
         $this->startedAt = isset($content['startedAt']) ? new \DateTimeImmutable($content['startedAt']) : new \DateTimeImmutable();
         $this->endedAt = isset($content['endedAt']) ? new \DateTimeImmutable($content['endedAt']) : new \DateTimeImmutable();
         $this->paymentId = isset($content['paymentId']) ? (int) $content['paymentId'] : 0;
-        $this->services = $content['services'] ?? null;
+        $this->services = $content['services'] ?? [];
 
     }
 

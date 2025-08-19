@@ -7,7 +7,7 @@ use App\Request\Subscription\SubscriptionRequest;
 
 class SubscriptionMapper
 {
-    public function fromRequest(SubscriptionRequest $request): SubscriptionDTO
+    public static function fromRequest(SubscriptionRequest $request): SubscriptionDTO
     {
         return new SubscriptionDTO(
             $request->getReference(),
