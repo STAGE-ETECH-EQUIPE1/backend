@@ -3,7 +3,7 @@ FROM php:8.3-fpm-alpine AS php
 # Extensions
 RUN apk --no-cache add curl git wget bash dpkg \
     && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
-    -o /usr/local/bin/install-php-extensions \
+       -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
@@ -20,11 +20,6 @@ COPY . .
 FROM nginx:1.29.0-alpine
 
 RUN apk add --no-cache supervisor bash
-
-# User setup
-RUN addgroup -g 1000 -S www-data \
-    && adduser -u 1000 -S www-data -G www-data \
-    && adduser nginx www-data
 
 RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx \
     && chown -R www-data:www-data /var/run/php \
