@@ -17,7 +17,7 @@ WORKDIR /var/www/html
 
 # Copier seulement les fichiers composer pour cacher le cache Docker
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+RUN composer install
 
 # Copier le reste du projet
 COPY . .
