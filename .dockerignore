@@ -1,6 +1,7 @@
 .git/
 .gitignore
 README.md
+vendor/
 docker-compose*
 .env
 *.log
