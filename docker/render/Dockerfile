@@ -1,16 +1,21 @@
-# ---------- Image unique : PHP-FPM + Composer + Nginx + Supervisor ----------
+# ---------- Stage 1 : build dependencies ----------
+FROM composer:2 AS vendor
+
+WORKDIR /app
+COPY composer.json composer.lock ./
+# skip cache clear, pas besoin du code source pour installer vendor
+RUN COMPOSER_ALLOW_SUPERUSER=1 SYMFONY_SKIP_CACHE=1 composer install --no-dev --prefer-dist --optimize-autoloader
+
+# ---------- Stage 2 : final image ----------
 FROM php:8.3-fpm-alpine
 
-# Installer dépendances système, PHP extensions, nginx et supervisor
+# Installer dépendances système
 RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
     && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
     -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
-
-# Installer Composer depuis l’image officielle
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Préparer les dossiers
 RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
@@ -19,19 +24,10 @@ RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
 
 WORKDIR /var/www/html
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html
+# Copier vendor depuis le stage build
+COPY --from=vendor /app/vendor ./vendor
 
-# Copier uniquement composer.* d’abord pour utiliser le cache Docker
-COPY composer.json composer.lock ./
-
-ENV APP_ENV=prod
-ENV COMPOSER_ALLOW_SUPERUSER=1
-
-# Installer les dépendances Symfony (en sautant uniquement cache:clear)
-RUN SYMFONY_SKIP_CACHE=1 composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
-
-# Copier le projet complet
+# Copier le reste du projet
 COPY . .
 
 # Copier les configs
@@ -48,6 +44,8 @@ RUN sed -i 's|access.log =.*|access.log = /proc/self/fd/1|' /usr/local/etc/php-f
 RUN test -f vendor/autoload_runtime.php || (echo "❌ autoload_runtime.php manquant" && exit 1)
 
 # Ports exposés
+ENV APP_ENV=prod
+ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PORT=8080
 EXPOSE 8080
 
