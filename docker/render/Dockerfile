@@ -22,13 +22,14 @@ WORKDIR /var/www/html
 # Copier uniquement composer.* d’abord pour utiliser le cache Docker
 COPY composer.json composer.lock ./
 
-# Variables d’env
 ENV APP_ENV=prod
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Copier le reste du projet
+# Fichier .env minimal pour composer install
+RUN echo "APP_ENV=prod" > .env
+
+# Copier le projet et installer les dépendances
 COPY . .
-# Installer les dépendances PHP
 RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
 
 # Permissions
