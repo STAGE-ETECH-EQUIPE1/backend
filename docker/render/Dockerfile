@@ -17,6 +17,7 @@ WORKDIR /var/www/html
 
 # Copier seulement les fichiers composer pour cacher le cache Docker
 COPY composer.json composer.lock ./
+ENV APP_ENV=prod
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Copier le reste du projet
