@@ -29,6 +29,7 @@ RUN chown -R www-data:www-data /var/www/html
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/render/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
+COPY docker/render/nginx.conf /etc/nginx/nginx.conf
 
 ENV PORT=8080
 EXPOSE 8080
