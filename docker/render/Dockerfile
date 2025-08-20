@@ -4,7 +4,7 @@ FROM php:8.3-fpm-alpine AS php
 # Extensions PHP nécessaires
 RUN apk --no-cache add curl git wget bash dpkg \
     && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
-       -o /usr/local/bin/install-php-extensions \
+    -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
@@ -25,9 +25,6 @@ COPY . .
 # Permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# ---------- Stage 2: Nginx + PHP-FPM ----------
-FROM php:8.3-fpm-alpine
-
 # Installer Nginx et supervisor
 RUN apk --no-cache add supervisor nginx bash
 
@@ -36,10 +33,10 @@ RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
     && chown -R www-data:www-data /var/run/php /var/www/html \
     && chown -R nginx:nginx /var/log/nginx /var/cache/nginx
 
-WORKDIR /var/www/html
-
 # Copier le projet et vendor depuis le stage PHP
 COPY --from=php /var/www/html /var/www/html
+
+RUN ls -l /var/www/html/vendor/autoload_runtime.php || echo "❌ Fichier manquant dans /var/www/html/vendor/"
 
 # Copier les configs
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
