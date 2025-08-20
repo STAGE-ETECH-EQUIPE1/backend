@@ -20,8 +20,8 @@ RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
 
 # Préparer les dossiers
-RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
-    && chown -R www-data:www-data /var/run/php /var/www/html \
+RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log/php83 \
+    && chown -R www-data:www-data /var/run/php /var/www/html /var/log/php83 \
     && chown -R nginx:nginx /var/log/nginx /var/cache/nginx
 
 WORKDIR /var/www/html
@@ -47,4 +47,5 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PORT=8080
 EXPOSE 8080
 
+# Commande de démarrage
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
