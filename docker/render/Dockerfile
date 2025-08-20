@@ -19,6 +19,8 @@ RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
 
 WORKDIR /var/www/html
 
+# Permissions
+RUN chown -R www-data:www-data /var/www/html
 # Copier uniquement composer.* d’abord pour utiliser le cache Docker
 COPY composer.json composer.lock ./
 
@@ -32,8 +34,6 @@ RUN echo "APP_ENV=prod" > .env
 COPY . .
 RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html
 
 # Copier les configs
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
