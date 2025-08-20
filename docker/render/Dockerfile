@@ -27,9 +27,6 @@ COPY composer.json composer.lock ./
 ENV APP_ENV=prod
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Fichier .env minimal pour composer install
-RUN echo "APP_ENV=prod" > .env
-
 # Copier le projet et installer les dépendances
 COPY . .
 RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
