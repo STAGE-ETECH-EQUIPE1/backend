@@ -14,6 +14,7 @@ class SubscriptionDTO
 
     /** @var int[] */
     private array $services;
+    private int $clientId;
 
     public function __construct(
         string $reference,
@@ -22,7 +23,7 @@ class SubscriptionDTO
         \DateTimeImmutable $endedAt,
         int $paymentId,
         array $services,
-        int $clientId
+        int $clientId,
     ) {
         $this->reference = $reference;
         $this->status = $status;
@@ -64,7 +65,7 @@ class SubscriptionDTO
         return $this->services;
     }
 
-    public function getClientId(): int 
+    public function getClientId(): int
     {
         return $this->clientId;
     }

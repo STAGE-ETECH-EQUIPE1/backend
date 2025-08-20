@@ -2,9 +2,9 @@
 
 namespace App\Request\Subscription;
 
+use App\Enum\SubscriptionStatus;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Enum\SubscriptionStatus;
 
 class SubscriptionRequest
 {
@@ -18,7 +18,7 @@ class SubscriptionRequest
     #[Assert\NotBlank]
     #[Assert\Type(\DateTimeImmutable::class)]
     private \DateTimeImmutable $startedAt;
-    
+
     #[Assert\NotBlank]
     #[Assert\Type(\DateTimeImmutable::class)]
     private \DateTimeImmutable $endedAt;
@@ -50,24 +50,23 @@ class SubscriptionRequest
         $this->paymentId = isset($content['paymentId']) ? (int) $content['paymentId'] : 0;
         $this->services = $content['services'] ?? [];
         $this->clientId = isset($content['clientId']) ? (int) $content['clientId'] : 0;
-
     }
 
     public function getReference(): string
     {
         return $this->reference;
     }
-    
+
     public function getStatus(): SubscriptionStatus
     {
         return $this->status;
     }
-    
+
     public function getStartedAt(): \DateTimeImmutable
     {
         return $this->startedAt;
     }
-    
+
     public function getEndedAt(): \DateTimeImmutable
     {
         return $this->endedAt;
