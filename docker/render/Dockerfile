@@ -9,8 +9,8 @@ RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
 
-# Installer Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+# Installer Composer depuis l’image officielle (méthode robuste)
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Préparer les dossiers
 RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
@@ -19,10 +19,14 @@ RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
 
 WORKDIR /var/www/html
 
-# Copier les fichiers composer pour cacher le cache Docker
+# Copier uniquement composer.* d’abord pour utiliser le cache Docker
 COPY composer.json composer.lock ./
+
+# Variables d’env
 ENV APP_ENV=prod
-RUN composer install --prefer-dist --no-interaction --optimize-autoloader
+
+# Installer les dépendances PHP (⚠️ ne pas désactiver les scripts)
+RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
 
 # Copier le reste du projet
 COPY . .
@@ -41,7 +45,7 @@ RUN sed -i 's|access.log =.*|access.log = /proc/self/fd/1|' /usr/local/etc/php-f
     && sed -i 's|error_log =.*|error_log = /proc/self/fd/2|' /usr/local/etc/php-fpm.d/www.conf
 
 # Vérifier vendor/autoload_runtime.php
-RUN ls -l /var/www/html/vendor/autoload_runtime.php || echo "❌ Fichier manquant dans /var/www/html/vendor/"
+RUN test -f vendor/autoload_runtime.php || (echo "❌ autoload_runtime.php manquant" && exit 1)
 
 # Ports exposés
 ENV PORT=8080
