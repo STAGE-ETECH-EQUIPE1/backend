@@ -1,60 +1,69 @@
-# ---------- Stage 1: PHP + Composer ----------
-FROM php:8.3-fpm-alpine AS php
+# ---------- Stage 1: Builder ----------
+FROM php:8.3-fpm-alpine AS builder
 
-# Extensions PHP nécessaires
-RUN apk --no-cache add curl git wget bash dpkg \
+# Installer les extensions PHP nécessaires pour Symfony
+RUN apk --no-cache add curl git unzip \
     && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
        -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
-    && install-php-extensions opcache iconv soap zip intl fileinfo \
-    && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
+    && install-php-extensions opcache intl pdo pdo_pgsql zip gd
 
-# Composer
+# Installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
-# Dossier de travail
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Copier seulement les fichiers composer pour cacher le cache Docker
-COPY composer.json composer.lock ./
-ENV APP_ENV=prod
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+# Copier les fichiers de dépendances
+COPY composer.json composer.lock symfony.lock ./
 
-# Copier le reste du projet
+# Installer les dépendances (sans les scripts pour éviter les problèmes)
+RUN composer install --no-dev --no-autoloader --no-interaction --no-scripts
+
+# Copier le reste de l'application
 COPY . .
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html
+# Exécuter les scripts Composer et optimiser l'autoloader
+RUN composer dump-autoload --optimize --no-dev --classmap-authoritative
 
-# ---------- Stage 2: Nginx + PHP-FPM ----------
+# ---------- Stage 2: Production ----------
 FROM php:8.3-fpm-alpine
 
-# Installer Nginx et supervisor
-RUN apk --no-cache add supervisor nginx bash
+# Installer les extensions PHP et les paquets nécessaires
+RUN apk --no-cache add nginx supervisor bash \
+    && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+       -o /usr/local/bin/install-php-extensions \
+    && chmod +x /usr/local/bin/install-php-extensions \
+    && install-php-extensions opcache intl pdo pdo_pgsql zip gd
 
-# Créer les dossiers nécessaires
+# Créer les répertoires nécessaires
 RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
     && chown -R www-data:www-data /var/run/php /var/www/html \
     && chown -R nginx:nginx /var/log/nginx /var/cache/nginx
 
 WORKDIR /var/www/html
 
-# Copier le projet et vendor depuis le stage PHP
-COPY --from=php /var/www/html /var/www/html
+# Copier l'application depuis le stage builder
+COPY --from=builder --chown=www-data:www-data /app .
 
-# Copier les configs
+# Vérifier que le répertoire vendor existe
+RUN echo "Contenu du répertoire vendor:" && ls -la vendor/ && \
+    echo "Vérification de l'autoloader:" && ls -la vendor/autoload.php
+
+# Copier les configurations
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/render/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/render/nginx.conf /etc/nginx/nginx.conf
 
-# Rediriger PHP-FPM logs vers stdout/stderr
-RUN sed -i 's|access.log =.*|access.log = /proc/self/fd/1|' /usr/local/etc/php-fpm.d/www.conf \
-    && sed -i 's|error_log =.*|error_log = /proc/self/fd/2|' /usr/local/etc/php-fpm.d/www.conf
+# Script d'entrée pour Symfony
+COPY docker/render/docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Ports exposés
-ENV PORT=8080
+# Variables d'environnement pour Symfony
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+
 EXPOSE 8080
 
-# Commande de démarrage
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
