@@ -16,7 +16,6 @@ FROM nginx:1.29.0-alpine
 
 RUN apk add --no-cache supervisor php83-fpm
 
-# Créer les utilisateurs et groupes nécessaires
 RUN if ! getent group www-data >/dev/null 2>&1; then \
         addgroup -g 1000 -S www-data; \
     fi && \
@@ -24,10 +23,8 @@ RUN if ! getent group www-data >/dev/null 2>&1; then \
         adduser -u 1000 -S www-data -G www-data; \
     fi
 
-# Ajouter l'utilisateur nginx au groupe www-data
 RUN adduser nginx www-data
 
-# Créer et configurer les répertoires avec les bonnes permissions
 RUN mkdir -p /var/run/php && \
     mkdir -p /var/log/nginx && \
     mkdir -p /var/cache/nginx && \
@@ -36,9 +33,7 @@ RUN mkdir -p /var/run/php && \
     chown -R nginx:nginx /var/log/nginx /var/cache/nginx && \
     chmod -R 775 /var/run/php /var/log/nginx /var/cache/nginx /var/log/php83
 
-# Configurer Nginx pour qu'il s'exécute en mode non-privilégié
-RUN sed -i '/user  nginx;/d' /etc/nginx/nginx.conf && \
-    echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN sed -i '/user  nginx;/d' /etc/nginx/nginx.conf
 
 COPY docker/render/php-fpm.conf /etc/php83/php-fpm.d/www.conf
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
