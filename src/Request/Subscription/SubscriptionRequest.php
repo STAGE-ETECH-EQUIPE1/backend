@@ -34,6 +34,10 @@ class SubscriptionRequest
     /** @var int[] */
     private array $services;
 
+    #[Assert\NotBlank]
+    #[Assert\Type('integer')]
+    private int $clientId;
+
     public function __construct(Request $request)
     {
         $content = $request->toArray();
@@ -45,6 +49,7 @@ class SubscriptionRequest
         $this->endedAt = isset($content['endedAt']) ? new \DateTimeImmutable($content['endedAt']) : new \DateTimeImmutable();
         $this->paymentId = isset($content['paymentId']) ? (int) $content['paymentId'] : 0;
         $this->services = $content['services'] ?? [];
+        $this->clientId = isset($content['clientId']) ? (int) $content['clientId'] : 0;
 
     }
 
@@ -76,5 +81,10 @@ class SubscriptionRequest
     public function getServices(): array
     {
         return $this->services;
+    }
+
+    public function getClientId(): int
+    {
+        return $this->clientId;
     }
 }

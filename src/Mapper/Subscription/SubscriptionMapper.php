@@ -15,7 +15,8 @@ class SubscriptionMapper
             $request->getStartedAt(),
             $request->getEndedAt(),
             $request->getPaymentId(),
-            $request->getServices()
+            $request->getServices(),
+            $request->getClientId()
         );
     }
 }

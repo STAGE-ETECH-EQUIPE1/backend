@@ -7,13 +7,17 @@ use App\DTO\Subscription\SubscriptionStatus;
 use App\Entity\Subscription\Subscription;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\Subscription\ServiceRepository;
+use App\Repository\Payment\PaymentRepository;
 use App\Repository\Subscription\SubscriptionRepository;
+use App\Repository\Auth\ClientRepository;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
     public function __construct(
         private EntityManagerInterface $em,
         private ServiceRepository $serviceRepository,
+        private PaymentRepository $paymentRepository,
+        private ClientRepository $clientRepository,
         private SubscriptionRepository $subscriptionRepository
     ) {}
 
@@ -32,8 +36,17 @@ class SubscriptionService implements SubscriptionServiceInterface
             $subscription->setEndedAt($subscriptionDTO->getEndedAt());
         }
         if ($subscriptionDTO->getPaymentId()) {
-            $subscription->setPaymentId($subscriptionDTO->getPaymentId() ?? 0);
+            $payment = $this->paymentRepository->find($subscriptionDTO->getPaymentId());
+            if ($payment)
+                $subscription->setPayment($payment);
         }
+        
+        $client = $this->clientRepository->find($subscriptionDTO->getClientId());
+        if (!$client) {
+            throw new \Exception("Client not found for id " . $subscriptionDTO->getClientId());
+        }
+        $subscription->setClient($client);
+
         foreach ($services as $service) {
             $subscription->addService($service);
         }
