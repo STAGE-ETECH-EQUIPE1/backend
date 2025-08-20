@@ -28,9 +28,8 @@ COPY composer.json composer.lock ./
 ENV APP_ENV=prod
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Installer les dépendances sans scripts (évite l’erreur cache:clear/.env)
-RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev --no-scripts \
- && composer symfony-runtime:install
+# Installer les dépendances Symfony (en sautant uniquement cache:clear)
+RUN SYMFONY_SKIP_CACHE=1 composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
 
 # Copier le projet complet
 COPY . .
