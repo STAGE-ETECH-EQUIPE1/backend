@@ -9,7 +9,7 @@ RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
 
-# Installer Composer depuis l’image officielle (méthode robuste)
+# Installer Composer depuis l’image officielle
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Préparer les dossiers
@@ -21,16 +21,21 @@ WORKDIR /var/www/html
 
 # Permissions
 RUN chown -R www-data:www-data /var/www/html
+
 # Copier uniquement composer.* d’abord pour utiliser le cache Docker
 COPY composer.json composer.lock ./
 
 ENV APP_ENV=prod
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Copier le projet et installer les dépendances
-COPY . .
-RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
+# Installer les dépendances sans scripts (évite l’erreur .env)
+RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev --no-scripts
 
+# Copier le projet complet
+COPY . .
+
+# Générer le cache des variables d’environnement (pas besoin de .env en prod)
+RUN composer dump-env prod
 
 # Copier les configs
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
