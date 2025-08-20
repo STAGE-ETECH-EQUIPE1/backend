@@ -3,8 +3,10 @@ FROM composer:2 AS vendor
 
 WORKDIR /app
 COPY composer.json composer.lock ./
-# skip cache clear, pas besoin du code source pour installer vendor
-RUN COMPOSER_ALLOW_SUPERUSER=1 SYMFONY_SKIP_CACHE=1 composer install --no-dev --prefer-dist --optimize-autoloader
+
+# Installer dépendances sans scripts (pas besoin de bin/console ici)
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
+    --no-dev --prefer-dist --optimize-autoloader --no-scripts
 
 # ---------- Stage 2 : final image ----------
 FROM php:8.3-fpm-alpine
@@ -36,18 +38,13 @@ COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/render/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/render/nginx.conf /etc/nginx/nginx.conf
 
-# Rediriger PHP-FPM logs vers stdout/stderr
-RUN sed -i 's|access.log =.*|access.log = /proc/self/fd/1|' /usr/local/etc/php-fpm.d/www.conf \
-    && sed -i 's|error_log =.*|error_log = /proc/self/fd/2|' /usr/local/etc/php-fpm.d/www.conf
-
 # Vérifier vendor/autoload_runtime.php
 RUN test -f vendor/autoload_runtime.php || (echo "❌ autoload_runtime.php manquant" && exit 1)
 
-# Ports exposés
+# Exposer le port
 ENV APP_ENV=prod
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PORT=8080
 EXPOSE 8080
 
-# Commande de démarrage
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
