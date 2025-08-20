@@ -16,6 +16,11 @@ RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html \
     && chown -R www-data:www-data /var/run/php /var/www/html \
     && chown -R nginx:nginx /var/log/nginx /var/cache/nginx
 
+# Crée le dossier et les fichiers de logs PHP-FPM
+RUN mkdir -p /var/log/php83 \
+    && touch /var/log/php83/access.log /var/log/php83/error.log \
+    && chown -R www-data:www-data /var/log/php83
+
 WORKDIR /var/www/html
 
 # Symfony
