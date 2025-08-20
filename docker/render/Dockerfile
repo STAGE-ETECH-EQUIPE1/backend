@@ -4,7 +4,7 @@ FROM php:8.3-fpm-alpine AS php
 # Extensions PHP nécessaires
 RUN apk --no-cache add curl git wget bash dpkg \
     && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
-    -o /usr/local/bin/install-php-extensions \
+       -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
