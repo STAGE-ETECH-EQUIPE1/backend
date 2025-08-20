@@ -26,11 +26,10 @@ COPY composer.json composer.lock ./
 ENV APP_ENV=prod
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Installer les dépendances PHP
-RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
-
 # Copier le reste du projet
 COPY . .
+# Installer les dépendances PHP
+RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
 
 # Permissions
 RUN chown -R www-data:www-data /var/www/html
