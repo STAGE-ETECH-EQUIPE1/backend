@@ -11,7 +11,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
 # ---------- Stage 2 : final image ----------
 FROM php:8.3-fpm-alpine
 
-# Installer dépendances système
+# Installer dépendances système et PHP extensions
 RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
     && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
     -o /usr/local/bin/install-php-extensions \
@@ -19,7 +19,7 @@ RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
 
-# Préparer les dossiers
+# Préparer les dossiers nécessaires
 RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log/php83 \
     && chown -R www-data:www-data /var/run/php /var/www/html /var/log/php83 \
     && chown -R nginx:nginx /var/log/nginx /var/cache/nginx
@@ -41,8 +41,9 @@ COPY docker/render/nginx.conf /etc/nginx/nginx.conf
 # Vérifier vendor/autoload_runtime.php
 RUN test -f vendor/autoload_runtime.php || (echo "❌ autoload_runtime.php manquant" && exit 1)
 
-# Exposer le port
+# Variables d'environnement pour prod
 ENV APP_ENV=prod
+ENV APP_DEBUG=0
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PORT=8080
 EXPOSE 8080
