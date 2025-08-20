@@ -4,7 +4,7 @@ FROM php:8.3-fpm-alpine
 # Installer dépendances système, PHP extensions, nginx et supervisor
 RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
     && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
-       -o /usr/local/bin/install-php-extensions \
+    -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
     && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
@@ -24,8 +24,9 @@ COPY composer.json composer.lock ./
 
 # Variables d’env
 ENV APP_ENV=prod
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Installer les dépendances PHP (⚠️ ne pas désactiver les scripts)
+# Installer les dépendances PHP
 RUN composer install --prefer-dist --no-interaction --optimize-autoloader --no-dev
 
 # Copier le reste du projet
