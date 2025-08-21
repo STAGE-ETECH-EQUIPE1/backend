@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+export DATABASE_URL="sqlite:///:memory:"
+
 echo "▶️ Installation des assets..."
 php bin/console assets:install --symlink --relative --env=prod || true
 php bin/console cache:clear --env=prod || true
