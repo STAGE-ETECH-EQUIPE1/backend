@@ -1,9 +1,7 @@
 .git/
 .gitignore
 README.md
-vendor/
 docker-compose*
-.env
 *.log
 node_modules/
 var/cache/*
