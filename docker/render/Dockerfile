@@ -38,10 +38,10 @@ COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/render/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/render/nginx.conf /etc/nginx/nginx.conf
 
-# Vérifier vendor/autoload_runtime.php
-RUN test -f vendor/autoload_runtime.php || (echo "❌ autoload_runtime.php manquant" && exit 1)
-RUN php bin/console assets:install --symlink --relative --env=prod \
-    && php bin/console cache:clear --env=prod
+# Vérifier autoload + installer assets + clear cache
+RUN test -f vendor/autoload_runtime.php \
+    && php bin/console assets:install --symlink --relative --env=prod \
+    && php bin/console cache:clear --env=prod --no-warmup
 
 # Variables d'environnement prod
 ENV APP_ENV=prod
