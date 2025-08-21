@@ -1,9 +1,8 @@
 #!/bin/sh
 set -e
 
-echo "▶️ Lancement des commandes Symfony..."
+echo "▶️ Installation des assets..."
 php bin/console assets:install --symlink --relative --env=prod || true
-php bin/console cache:clear --env=prod || true
 
-echo "▶️ Lancement de supervisord..."
+echo "▶️ Démarrage de supervisord..."
 exec "$@"
