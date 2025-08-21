@@ -40,8 +40,10 @@ COPY docker/render/nginx.conf /etc/nginx/nginx.conf
 
 # Vérifier vendor/autoload_runtime.php
 RUN test -f vendor/autoload_runtime.php
-RUN php bin/console assets:install --symlink --relative --env=prod
-RUN php bin/console cache:clear --env=prod
+COPY docker/render/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Variables d'environnement prod
 ENV APP_ENV=prod
