@@ -2,10 +2,11 @@
 
 namespace App\Services\Auth;
 
-use App\DTO\Request\GoogleAuthenticationDTO;
-use App\Entity\User;
+use App\Entity\Auth\User;
+use App\Request\Auth\GoogleAuthenticationRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use League\OAuth2\Client\Provider\GoogleUser;
 use League\OAuth2\Client\Token\AccessToken;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
@@ -18,13 +19,13 @@ class GoogleAuthenticationService
     ) {
     }
 
-    public function authenticate(GoogleAuthenticationDTO $dto): string
+    public function authenticate(GoogleAuthenticationRequest $dto): string
     {
         $client = $this->clientRegistry->getClient('google');
-        $accessToken = new AccessToken(['access_token' => $dto->accessToken]);
+        $accessToken = new AccessToken(['access_token' => $dto->getAccessToken()]);
         $googleUser = $client->fetchUserFromToken($accessToken);
 
-        /** @var \League\OAuth2\Client\Provider\GoogleUser $googleUser */
+        /** @var GoogleUser $googleUser */
         $email = $googleUser->getEmail();
 
         if (!is_string($email)) {
@@ -39,6 +40,7 @@ class GoogleAuthenticationService
             $user->setUsername('');
             $user->setPassword('');
             $user->setPhone('');
+            $user->setRoles(['ROLE_USER']);
 
             $this->em->persist($user);
             $this->em->flush();

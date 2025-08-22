@@ -6,3 +6,7 @@ api_platform:
         cache_headers:
             vary: ["Content-Type", "Authorization", "Origin"]
     use_symfony_listeners: true
+    enable_swagger_ui: true
+    enable_re_doc: true
+    enable_entrypoint: true
+    enable_docs: true

@@ -2,10 +2,15 @@
 
 namespace App\Services\Auth;
 
-use App\DTO\Request\UpdatePasswordDTO;
+use App\Request\Auth\UpdatePasswordRequest;
 
 interface AuthServiceInterface
 {
+    /**
+     * Send an email to verify the user's email address.
+     */
+    public function sendVerificationEmail(string $email): void;
+
     /**
      * Send email to reset password.
      */
@@ -14,5 +19,5 @@ interface AuthServiceInterface
     /**
      * Update password from token.
      */
-    public function updateUserPassword(string $token, UpdatePasswordDTO $updatePasswordDTO): void;
+    public function updateUserPassword(string $token, UpdatePasswordRequest $updatePasswordDTO): void;
 }

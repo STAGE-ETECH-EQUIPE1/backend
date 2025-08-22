@@ -2,9 +2,9 @@
 
 namespace App\Services\Client;
 
-use App\DTO\ClientDTO;
-use App\Entity\Client;
-use App\Entity\User;
+use App\DTO\User\ClientDTO;
+use App\Entity\Auth\Client;
+use App\Entity\Auth\User;
 
 interface ClientServiceInterface
 {

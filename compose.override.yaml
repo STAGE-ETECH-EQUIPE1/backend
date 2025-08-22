@@ -1,18 +1,24 @@
-
 services:
-###> doctrine/doctrine-bundle ###
   database:
     ports:
-      - "5432"
-###< doctrine/doctrine-bundle ###
+      - "5432:5432"
 
-###> symfony/mailer ###
+  nginx:
+    ports:
+      - "8000:80"
+
   mailer:
     image: axllent/mailpit
+    container_name: symfony_mailer
     ports:
-      - "1025"
-      - "8025"
+      - "1025:1025"
+      - "8025:8025"
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
-###< symfony/mailer ###
+    networks:
+      - symfony_app_network
+
+  mercure:
+    ports:
+      - "3000:80"

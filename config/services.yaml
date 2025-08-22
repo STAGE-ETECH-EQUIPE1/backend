@@ -5,6 +5,9 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.frontend_url: '%env(FRONTEND_URL)%'
+    app.gemini_api_key: '%env(GEMINI_API_KEY)%'
+    app.gemini_api_url: '%env(GEMINI_API_URL)%'
+    app.ai_logo_generated_path: '%env(AI_LOGO_GENERATED_PATH)%'
 
 services:
     # default configuration for services in *this* file
@@ -16,9 +19,6 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
-
-    App\Controller\Api\:
-        resource: '../src/Controller/Api/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

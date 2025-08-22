@@ -5,10 +5,16 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/public/mood-boards/
 /var/
 /vendor/
 /.idea/
+/.vscode/
 ###< symfony/framework-bundle ###
+
+###> branding/ai-token ###
+/public/generated-ai/
+###< branding/ai-token ###
 
 ###> phpstan/phpstan ###
 phpstan.neon
@@ -27,13 +33,3 @@ phpstan.neon
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
-
-###> php-cs-fixer/shim ###
-/.php-cs-fixer.php
-/.php-cs-fixer.cache
-###< php-cs-fixer/shim ###
-
-###> swagger/openapi ###
-/swagger/
-/public/swagger-ui/
-###< swagger/openapi ###

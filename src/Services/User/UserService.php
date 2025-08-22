@@ -2,12 +2,13 @@
 
 namespace App\Services\User;
 
-use App\DTO\Output\JWTUser;
-use App\DTO\Request\UserRegistrationDTO;
-use App\DTO\UserDTO;
-use App\Entity\User;
+use App\DTO\User\UserDTO;
+use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
-use App\Repository\UserRepository;
+use App\Repository\Auth\UserRepository;
+use App\Request\Auth\UserRegistrationRequest;
+use App\Response\JWTUser;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserService implements UserServiceInterface
@@ -15,6 +16,7 @@ final class UserService implements UserServiceInterface
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly UserRepository $userRepository,
+        private readonly Security $security,
     ) {
     }
 
@@ -27,18 +29,37 @@ final class UserService implements UserServiceInterface
         throw new UserNotFoundException();
     }
 
-    public function convertUserRegistrationDtoToUser(UserRegistrationDTO $userDto): User
+    public function getByEmail(string $email): User
+    {
+        $user = $this->userRepository->getByEmail($email);
+        if ($user) {
+            return $user;
+        }
+        throw new UserNotFoundException();
+    }
+
+    public function getConnectedUser(): User
+    {
+        /** @var User|null $currentUser */
+        $currentUser = $this->security->getUser();
+        if ($currentUser) {
+            return $this->getById((int) $currentUser->getId());
+        }
+        throw new \RuntimeException('No connected user found.');
+    }
+
+    public function convertUserRegistrationDtoToUser(UserRegistrationRequest $userDto): User
     {
         $user = new User();
-        $user->setEmail($userDto->email)
-            ->setUsername($userDto->username)
-            ->setFullName($userDto->fullName)
-            ->setPhone($userDto->phone)
+        $user->setEmail($userDto->getEmail())
+            ->setUsername($userDto->getUsername())
+            ->setFullName($userDto->getFullName())
+            ->setPhone($userDto->getPhone())
             ->setRoles(['ROLE_USER'])
             ->setCreatedAt(new \DateTimeImmutable())
             ->setPassword($this->passwordHasher->hashPassword(
                 $user,
-                $userDto->password
+                $userDto->getPassword()
             ));
 
         return $user;

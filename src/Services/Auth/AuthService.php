@@ -2,41 +2,59 @@
 
 namespace App\Services\Auth;
 
-use App\DTO\Request\UpdatePasswordDTO;
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Entity\Auth\User;
+use App\Exception\UserNotFoundException;
+use App\Request\Auth\UpdatePasswordRequest;
+use App\Security\EmailVerifier;
+use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-class AuthService implements AuthServiceInterface
+final readonly class AuthService implements AuthServiceInterface
 {
     public function __construct(
-        private readonly ResetPasswordHelperInterface $resetPasswordHelper,
-        private readonly UserRepository $userRepository,
-        private readonly EntityManagerInterface $entityManager,
-        private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly MailerInterface $mailer,
+        private ResetPasswordHelperInterface $resetPasswordHelper,
+        private UserServiceInterface $userService,
+        private EntityManagerInterface $entityManager,
+        private UserPasswordHasherInterface $passwordHasher,
+        private MailerInterface $mailer,
+        private EmailVerifier $emailVerifier,
         #[Autowire('%app.frontend_url%')]
-        private readonly string $frontendUrl,
+        private string $frontendUrl,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
+    }
+
+    public function sendVerificationEmail(string $email): void
+    {
+        $this->emailVerifier->sendEmailConfirmation(
+            'app_verify_email',
+            $this->userService->getByEmail($email),
+            (new TemplatedEmail())
+                ->from(new Address('noreply@gmail.com', 'ORBIXUP Mail Bot'))
+                ->to($email)
+                ->subject('Please Confirm your Email')
+                ->htmlTemplate('email/verification_email.html.twig')
+        );
     }
 
     public function sendResetPasswordEmail(string $email): void
     {
-        $user = $this->userRepository->getByEmail($email);
-
-        if ($user) {
+        try {
+            $user = $this->userService->getByEmail($email);
             try {
                 $resetToken = $this->resetPasswordHelper->generateResetToken($user);
             } catch (ResetPasswordExceptionInterface $e) {
                 throw new \Exception('Email could not be sent. Please try again later.');
             }
+
             $email = (new TemplatedEmail())
                 ->from(new Address('no-reply@domain.com', 'ORBIXUP Mail Bot'))
                 ->to((string) $user->getEmail())
@@ -44,14 +62,17 @@ class AuthService implements AuthServiceInterface
                 ->htmlTemplate('email/reset_password.html.twig')
                 ->context([
                     'resetToken' => $resetToken,
-                    'frontendUrl' => $this->frontendUrl,
+                    'resetLink' => rtrim($this->frontendUrl, '/').'/'.$this->urlGenerator->generate('api_reset_password', [
+                        'token' => $resetToken->getToken(),
+                    ], UrlGeneratorInterface::RELATIVE_PATH),
                 ])
             ;
             $this->mailer->send($email);
+        } catch (UserNotFoundException $e) {
         }
     }
 
-    public function updateUserPassword(string $token, UpdatePasswordDTO $updatePasswordDTO): void
+    public function updateUserPassword(string $token, UpdatePasswordRequest $updatePasswordDTO): void
     {
         /** @var User $user */
         $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);

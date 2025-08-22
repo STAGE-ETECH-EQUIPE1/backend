@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Auth\UserFixtures;
 use App\DataFixtures\Payment\PaymentMethodFixtures;
 use App\DataFixtures\Subscription\PackFixtures;
 use App\DataFixtures\Subscription\ServiceFixtures;
