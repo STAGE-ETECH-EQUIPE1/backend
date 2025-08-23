@@ -15,7 +15,7 @@ parameters:
     app.ai_logo_generated_path: '%env(AI_LOGO_GENERATED_PATH)%'
 
     # CyberSource
-    app.cybersource_api_endpoint: '%env(CYBERSOURCE_API_ENDPOINT)%'
+    app.cybersource_run_environment: '%env(CYBERSOURCE_RUN_ENVIRONMENT)%'
     app.cybersource_merchant_id: '%env(CYBERSOURCE_MERCHANT_ID)%'
     app.cybersource_api_key_id: '%env(CYBERSOURCE_API_KEY_ID)%'
     app.cybersource_secret_key: '%env(CYBERSOURCE_SECRET_KEY)%'

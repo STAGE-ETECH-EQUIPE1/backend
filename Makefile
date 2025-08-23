@@ -47,7 +47,7 @@ init: composer.lock composer.json ## Initialize project for development
 
 .PHONY: serve
 serve: vendor/autoload.php ## Run Development Server
-	$(SYMFONY) serve --no-tls
+	$(SYMFONY) serve
 
 .PHONY: dev
 dev: vendor/autoload.php ## Alias for starting docker container

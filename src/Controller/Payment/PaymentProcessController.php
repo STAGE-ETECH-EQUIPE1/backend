@@ -3,7 +3,6 @@
 namespace App\Controller\Payment;
 
 use App\Request\Payment\CyberSourcePaymentRequest;
-use App\Services\CyberSource\CyberSourceServiceInterface;
 use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +13,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class PaymentProcessController extends AbstractController
 {
     public function __construct(
-        private readonly CyberSourceServiceInterface $cyberSourceService,
         private readonly AppValidatorInterface $validator,
     ) {
     }
@@ -38,7 +36,6 @@ class PaymentProcessController extends AbstractController
 
         return $this->json([
             'message' => 'payment process using cybersource',
-            ...$this->cyberSourceService->processPayment($paymentRequest),
         ]);
     }
 }
