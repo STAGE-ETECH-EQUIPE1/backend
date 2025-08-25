@@ -28,7 +28,7 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
 {
     private Filesystem $filesystem;
 
-    private const int GENERATION_NUMBER = 5;
+    private const int GENERATION_NUMBER = 1;
     private const string LOGO_GENERATION_PUBLISH_URL = 'https://example.com/api/logo-generation';
 
     public function __construct(

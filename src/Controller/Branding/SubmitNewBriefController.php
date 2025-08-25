@@ -15,6 +15,8 @@ use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Exception\QuotaReachedException;
+use App\Services\RateLimiter\RateLimiterServiceInterface;
 
 class SubmitNewBriefController extends AbstractController
 {
@@ -22,6 +24,7 @@ class SubmitNewBriefController extends AbstractController
         private readonly MessageBusInterface $messageBus,
         private readonly BrandingServiceInterface $brandingService,
         private readonly AppValidatorInterface $validator,
+        private readonly RateLimiterServiceInterface $tokenCount,
     ) {
     }
 
@@ -42,6 +45,17 @@ class SubmitNewBriefController extends AbstractController
             return $this->json([
                 'error' => $errorMessages,
             ], Response::HTTP_BAD_REQUEST);
+        }
+        
+        try
+        {
+            $this->tokenCount->tokenCount();
+        }
+        catch (QuotaReachedException $e)
+        {
+            return $this->json([
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
         }
 
         $brief = $this->brandingService->createNewBrandingProject($designBriefRequest);

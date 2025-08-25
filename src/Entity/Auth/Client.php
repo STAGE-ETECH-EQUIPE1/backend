@@ -39,6 +39,9 @@ class Client
     #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'client')]
     private Collection $subscriptions;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $tokendSent = null;
+
     public function __construct()
     {
         $this->brandingProjects = new ArrayCollection();
@@ -142,6 +145,18 @@ class Client
                 $subscription->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTokendSent(): ?int
+    {
+        return $this->tokendSent;
+    }
+
+    public function setTokendSent(?int $tokendSent): static
+    {
+        $this->tokendSent = $tokendSent;
 
         return $this;
     }
