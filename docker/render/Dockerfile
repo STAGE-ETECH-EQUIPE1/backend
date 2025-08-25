@@ -32,6 +32,9 @@ COPY --from=vendor /app/vendor ./vendor
 # Copier le reste du projet
 COPY . .
 
+COPY config/mercure /var/www/html/mercure
+RUN chmod +x /var/www/html/mercure/runMercure
+
 # Copier les configs
 COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

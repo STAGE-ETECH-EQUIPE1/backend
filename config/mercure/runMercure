@@ -1,0 +1,9 @@
+#!/bin/bash
+
+MERCURE_PATH=~/.config/mercure
+
+cd $MERCURE_PATH
+
+MERCURE_PUBLISHER_JWT_KEY='!ChangeThisMercureHubJWTSecretKey!' \
+MERCURE_SUBSCRIBER_JWT_KEY='!ChangeThisMercureHubJWTSecretKey!' \
+$MERCURE_PATH/mercure run --config $MERCURE_PATH/dev.Caddyfile
