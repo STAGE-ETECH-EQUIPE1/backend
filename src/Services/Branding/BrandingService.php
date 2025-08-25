@@ -99,7 +99,7 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
         $client = $this->clientService->getConnectedUserClient();
         $token = $client->getTokendSent() + 1;
         $client->setTokendSent($token);
-        
+
         $this->entityManager->persist($brief);
         $this->entityManager->flush();
 

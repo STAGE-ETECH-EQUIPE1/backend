@@ -3,9 +3,11 @@
 namespace App\Controller\Branding;
 
 use App\Entity\Branding\BrandingProject;
+use App\Exception\QuotaReachedException;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Request\Branding\DesignBriefRequest;
 use App\Services\Branding\BrandingServiceInterface;
+use App\Services\RateLimiter\RateLimiterServiceInterface;
 use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,8 +17,6 @@ use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use App\Exception\QuotaReachedException;
-use App\Services\RateLimiter\RateLimiterServiceInterface;
 
 class SubmitNewBriefController extends AbstractController
 {
@@ -46,13 +46,10 @@ class SubmitNewBriefController extends AbstractController
                 'error' => $errorMessages,
             ], Response::HTTP_BAD_REQUEST);
         }
-        
-        try
-        {
+
+        try {
             $this->tokenCount->tokenCount();
-        }
-        catch (QuotaReachedException $e)
-        {
+        } catch (QuotaReachedException $e) {
             return $this->json([
                 'message' => $e->getMessage(),
             ], $e->getStatusCode());

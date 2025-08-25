@@ -2,7 +2,7 @@
 
 namespace App\Services\RateLimiter;
 
-interface RateLimiterServiceInterface 
+interface RateLimiterServiceInterface
 {
     public function tokenCount(): void;
 }

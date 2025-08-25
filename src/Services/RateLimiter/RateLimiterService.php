@@ -11,7 +11,7 @@ class RateLimiterService implements RateLimiterServiceInterface
 
     public function __construct(
         ClientServiceInterface $clientService,
-    ){
+    ) {
         $this->clientService = $clientService;
     }
 
@@ -20,14 +20,15 @@ class RateLimiterService implements RateLimiterServiceInterface
         $token = 0;
         $client = $this->clientService->getConnectedUserClient();
         $tokenSent = $client->getTokendSent();
-        
+
         foreach ($client->getSubscriptions() as $subscription) {
             foreach ($subscription->getServices() as $service) {
                 $token += $service->getToken();
             }
         }
 
-        if ($tokenSent > $token)
-            throw new QuotaReachedException("your logo creation limit has been reached");
+        if ($tokenSent > $token) {
+            throw new QuotaReachedException('your logo creation limit has been reached');
+        }
     }
 }
