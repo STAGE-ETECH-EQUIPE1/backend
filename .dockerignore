@@ -1,4 +1,11 @@
 .git/
-vendor/
-var/
+.gitignore
+README.md
 docker-compose*
+*.log
+node_modules/
+var/cache/*
+var/log/*
+!var/cache/.gitkeep
+!var/log/.gitkeep
+public/bundles/

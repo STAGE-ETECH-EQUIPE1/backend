@@ -2,6 +2,7 @@
 
 namespace App\Controller\Branding;
 
+use App\Entity\Branding\BrandingProject;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Request\Branding\DesignBriefRequest;
 use App\Services\Branding\BrandingServiceInterface;
@@ -44,6 +45,10 @@ class SubmitNewBriefController extends AbstractController
         }
 
         $brief = $this->brandingService->createNewBrandingProject($designBriefRequest);
+
+        /** @var BrandingProject $project */
+        $project = $brief->getBranding();
+
         try {
             $this->messageBus->dispatch(
                 new GenerateLogoMessage(
@@ -62,6 +67,7 @@ class SubmitNewBriefController extends AbstractController
             'message' => 'Design brief submitted successfully.',
             'status' => Response::HTTP_OK,
             'data' => $designBriefRequest,
+            'projectId' => $project->getId(),
         ], Response::HTTP_OK);
     }
 }
