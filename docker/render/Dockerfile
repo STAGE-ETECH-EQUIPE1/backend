@@ -23,7 +23,6 @@ RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
 RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log/php83 /var/www/html/public/generated-ai \
     && chown -R www-data:www-data /var/run/php /var/www/html /var/log/php83 /var/www/html/public/generated-ai \
     && chown -R nginx:nginx /var/log/nginx /var/cache/nginx \
-    && chown -R www-data:www-data /var/www/html/public/generated-ai \
     && chmod -R 755 /var/www/html/public/generated-ai
 
 WORKDIR /var/www/html
@@ -33,6 +32,9 @@ COPY --from=vendor /app/vendor ./vendor
 
 # Copier le reste du projet
 COPY . .
+
+RUN chown -R www-data:www-data /var/www/html/public/generated-ai \
+    && chmod -R 755 /var/www/html/public/generated-ai
 
 COPY config/mercure /var/www/html/mercure
 RUN chmod +x /var/www/html/mercure/runMercure
