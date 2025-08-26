@@ -55,7 +55,7 @@ install: composer.lock composer.json ## Install the project for production only
 init: composer.lock composer.json ## Initialize project for development
 	@$(call GREEN,"Install dependencies")
 	$(COMPOSER) install --no-interaction
-	$(CONSOLE) lexik:jwt:generate-keypair --no-interaction
+	$(CONSOLE) lexik:jwt:generate-keypair --overwrite --no-interaction
 	@make reset-database
 	@make fixtures
 
