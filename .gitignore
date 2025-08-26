@@ -13,7 +13,7 @@
 ###< symfony/framework-bundle ###
 
 ###> branding/ai-token ###
-/public/generated-ai/
+#/public/generated-ai/
 ###< branding/ai-token ###
 
 ###> phpstan/phpstan ###
