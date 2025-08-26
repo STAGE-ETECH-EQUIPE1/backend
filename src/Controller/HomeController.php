@@ -16,4 +16,11 @@ class HomeController extends AbstractController
             'message' => 'Hello From Backend',
         ], Response::HTTP_OK);
     }
+
+    public function home(): Response
+    {
+        return $this->render('home/index.html.twig', [
+            'message' => 'Welcome to the Home Page',
+        ]);
+    }
 }

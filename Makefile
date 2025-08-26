@@ -1,8 +1,21 @@
 IS_DOCKER := $(shell docker info > /dev/null 2>&1 && echo 1)
 
+#---------------------------------------------------------------
+# Docker Configuration
+#---------------------------------------------------------------
 PHP_SERVICE_NAME := php
 USER_ID := $(shell id -u)
 GROUP_ID := $(shell id -g)
+#---------------------------------------------------------------
+
+#---------------------------------------------------------------
+# Deployment Configuration
+#---------------------------------------------------------------
+SSH_KEY_FILE_PATH=~/.ssh/deployServer
+USER=hasintsoa
+DOMAIN_NAME=api.mydomain.local
+PROJECT_DEPLOYMENT_PATH=~/www/$(DOMAIN_NAME)
+#---------------------------------------------------------------
 
 PHP := @php
 SYMFONY := @symfony
@@ -32,10 +45,11 @@ RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
 ##-----------------------------------
 .PHONY: install
 install: composer.lock composer.json ## Install the project for production only
-	APP_ENV=prod APP_DEBUG=0 $(COMPOSER) install --no-dev --optimize-autoloader
-	@make migrate
-	@make clear
+	$(COMPOSER) install --no-dev --optimize-autoloader
+	$(CONSOLE) lexik:jwt:generate-keypair --no-interaction
+	$(CONSOLE) cache:clear
 	$(CONSOLE) cache:pool:clear cache.global_clearer
+	$(CONSOLE) messenger:stop-workers
 
 .PHONY: init
 init: composer.lock composer.json ## Initialize project for development
@@ -154,6 +168,26 @@ docker-logs: ## Show docker logs
 
 ##
 ##-----------------------------------
+## Deployment
+##-----------------------------------
+.PHONY: deploy
+deploy: .rsyncignore ## Deploy Project to server
+	@make ci
+	@rsync -avz --delete --exclude-from='.rsyncignore' -e 'ssh -i $(SSH_KEY_FILE_PATH)' ./ $(USER)@$(DOMAIN_NAME):$(PROJECT_DEPLOYMENT_PATH)/
+	@ssh -i $(SSH_KEY_FILE_PATH) $(USER)@$(DOMAIN_NAME) "cd $(PROJECT_DEPLOYMENT_PATH) && make env-update"
+	@ssh -i $(SSH_KEY_FILE_PATH) $(USER)@$(DOMAIN_NAME) "cd $(PROJECT_DEPLOYMENT_PATH) && make install && make deploy-database"
+
+.PHONY: env-update
+env-update: ## Update .env file from .env.prod (backup existing .env if any) in server
+	@test -f .env.prod && (test -f .env && rm .env && echo "old env removed") || true; cp .env.prod .env && echo ".env updated from .env.prod" || (echo "Error: .env.prod not found" && exit 1)
+
+.PHONY: deploy-database
+deploy-database: ## Deploy mysql database to server
+	$(CONSOLE) doctrine:schema:update --force
+	$(CONSOLE) doctrine:schema:validate
+
+##
+##-----------------------------------
 ## Others
 ##-----------------------------------
 .PHONY: format
@@ -174,3 +208,6 @@ vendor/autoload.php:
 
 composer.lock:
 	$(COMPOSER) install --no-interaction
+
+.rsyncignore:
+	@touch .rsyncignore
