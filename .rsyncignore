@@ -1,19 +1,32 @@
 ###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/.env.prod
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/public/mood-boards/
-/var/
-/vendor/
-/.idea/
-/.vscode/
+.env
+.env.dev
+.env.local
+.env.local.php
+.env.*.local
+public/bundles/
+public/mood-boards/
+var/
+vendor/
+.idea/
+.vscode/
 ###< symfony/framework-bundle ###
 
+###> deployment/project ###
+.github
+.phpunit.cache/
+.vscode/
+.git/
+.vendor/
+tests/
+var/
+docker/
+BACKLOG.md
+README.md
+###< deployment/project ###
+
 ###> branding/ai-token ###
-/public/generated-ai/
+public/generated-ai/
 ###< branding/ai-token ###
 
 ###> phpstan/phpstan ###
@@ -21,15 +34,15 @@ phpstan.neon
 ###< phpstan/phpstan ###
 
 ###> phpunit/phpunit ###
-/phpunit.xml
-/.phpunit.cache/
+phpunit.xml
+.phpunit.cache/
 ###< phpunit/phpunit ###
 
 ###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
+config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###
-/.php-cs-fixer.php
-/.php-cs-fixer.cache
+.php-cs-fixer.php
+.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
