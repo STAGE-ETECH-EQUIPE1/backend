@@ -25,6 +25,12 @@ RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log
     && chown -R nginx:nginx /var/log/nginx /var/cache/nginx \
     && chmod -R 755 /var/www/html/public/generated-ai
 
+COPY ../config/mercure /var/www/html/mercure
+RUN mkdir -p /var/www/html/mercure/.config \
+    && chown -R www-data:www-data /var/www/html/mercure \
+    && chmod +x /var/www/html/mercure/runMercure
+
+
 WORKDIR /var/www/html
 
 # Copier vendor depuis le stage build

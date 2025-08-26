@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: backend-symfony
+    runtime: docker
+    plan: free
+    dockerfilePath: ./docker/render/Dockerfile
+    autoDeploy: true
+    healthCheckPath: /healthz.php
+
+  - type: web
+    name: mercure-hub
+    runtime: docker
+    plan: free
+    dockerfilePath: ./docker/render/Dockerfile.mercure
+    autoDeploy: true

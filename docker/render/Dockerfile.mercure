@@ -1,0 +1,18 @@
+# docker/render/Dockerfile.mercure
+FROM dunglas/mercure:v0.15.9
+
+ENV SERVER_NAME=:80
+# Mets la même clé pour publisher/subscriber (on l’appellera MERCURE_JWT_SECRET côté Symfony)
+ENV MERCURE_PUBLISHER_JWT_KEY='!ChangeMe!'
+ENV MERCURE_SUBSCRIBER_JWT_KEY='!ChangeMe!'
+
+# Autorisations larges pour démarrer (tu pourras resserrer plus tard)
+ENV MERCURE_PUBLISH_ALLOWED_ORIGINS=*
+ENV MERCURE_SUBSCRIBE_ALLOWED_ORIGINS=*
+
+# Important pour tester facilement sans token côté client : "anonymous"
+# Dans Render, on mettra ces directives en multi-ligne.
+ENV MERCURE_EXTRA_DIRECTIVES="cors_origins *"
+
+EXPOSE 80
+CMD ["mercure"]

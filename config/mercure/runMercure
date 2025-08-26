@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MERCURE_PATH=~/.config/mercure
+MERCURE_PATH=$(pwd)
 
 cd $MERCURE_PATH
 
