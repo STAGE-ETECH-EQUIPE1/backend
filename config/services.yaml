@@ -17,8 +17,11 @@ parameters:
     # CyberSource
     app.cybersource_run_environment: '%env(CYBERSOURCE_RUN_ENVIRONMENT)%'
     app.cybersource_merchant_id: '%env(CYBERSOURCE_MERCHANT_ID)%'
-    app.cybersource_api_key_id: '%env(CYBERSOURCE_API_KEY_ID)%'
+    app.cybersource_profile_id: '%env(CYBERSOURCE_PROFILE_ID)%'
+    app.cybersource_acces_key: '%env(CYBERSOURCE_ACCESS_KEY)%'
     app.cybersource_secret_key: '%env(CYBERSOURCE_SECRET_KEY)%'
+    app.cybersource_return_url: '%env(CYBERSOURCE_RETURN_URL)%'
+    app.cybersource_checkout_url: '%env(CYBERSOURCE_CHECKOUT_URL)%'
 
 services:
     # default configuration for services in *this* file
