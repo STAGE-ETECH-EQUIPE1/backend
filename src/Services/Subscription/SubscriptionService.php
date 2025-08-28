@@ -3,39 +3,57 @@
 namespace App\Services\Subscription;
 
 use App\DTO\Subscription\SubscriptionDTO;
-use App\DTO\Subscription\SubscriptionStatus;
 use App\Entity\Subscription\Subscription;
-use App\Repository\ServiceRepository;
-use App\Repository\SubscriptionRepository;
+use App\Repository\Auth\ClientRepository;
+use App\Repository\Payment\PaymentRepository;
+use App\Repository\Subscription\ServiceRepository;
+use App\Repository\Subscription\SubscriptionRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
-    // public function __construct(
-    //     private ServiceRepository $serviceRepository,
-    //     private SubscriptionRepository $subscriptionRepository
-    // ) {}
+    public function __construct(
+        private EntityManagerInterface $em,
+        private ServiceRepository $serviceRepository,
+        private PaymentRepository $paymentRepository,
+        private ClientRepository $clientRepository,
+        private SubscriptionRepository $subscriptionRepository,
+    ) {
+    }
 
-    // public function createSubscription(SubscriptionDTO $subscriptionDTO): Subscription
-    // {
-    //     $services = $this->serviceRepository->findBy(['id' => $subscriptionDTO->getServices()]);
+    public function createSubscription(SubscriptionDTO $subscriptionDTO): Subscription
+    {
+        $client = $this->clientRepository->find($subscriptionDTO->getClientId());
+        if (!$client) {
+            throw new \Exception('Client not found');
+        }
 
-    //     $subscription = new Subscription();
-    //     $subscription->setReference($subscriptionDTO->getReference() ?? '');
-    //     $subscription->setStatus($subscriptionDTO->getStatus() ?? SubscriptionStatus::ACTIVE);
+        $subscription = $this->subscriptionRepository->findOneBy(['client' => $client]) ?? new Subscription();
 
-    //     if ($subscriptionDTO->getStartedAt()) {
-    //         $subscription->setStartedAt($subscriptionDTO->getStartedAt());
-    //     }
-    //     if ($subscriptionDTO->getEndedAt()) {
-    //         $subscription->setEndedAt($subscriptionDTO->getEndedAt());
-    //     }
+        $subscription->setReference($subscriptionDTO->getReference());
+        $subscription->setStatus($subscriptionDTO->getStatus());
+        $subscription->setStartedAt($subscriptionDTO->getStartedAt());
+        $subscription->setEndedAt($subscriptionDTO->getEndedAt());
+        if ($subscriptionDTO->getPaymentId()) {
+            $payment = $this->paymentRepository->find($subscriptionDTO->getPaymentId());
+            if ($payment) {
+                $subscription->setPayment($payment);
+            }
+        }
 
-    //     foreach ($services as $service) {
-    //         $subscription->addService($service);
-    //     }
+        $client = $this->clientRepository->find($subscriptionDTO->getClientId());
+        if (!$client) {
+            throw new \Exception('Client not found for id '.$subscriptionDTO->getClientId());
+        }
+        $subscription->setClient($client);
 
-    //     $this->subscriptionRepository->save($subscription, true);
+        $services = $this->serviceRepository->findBy(['id' => $subscriptionDTO->getServices()]);
+        foreach ($services as $service) {
+            $subscription->addService($service);
+        }
+        $this->em->persist($subscription);
+        $this->em->flush();
 
-    //     return $subscription;
-    // }
+        return $subscription;
+    }
 }
