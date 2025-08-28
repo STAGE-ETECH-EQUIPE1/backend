@@ -186,7 +186,7 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
                     //    $part['inlineData']['data']
                     // );
                     $imageData = $part['inlineData']['data'];
-                    $imageUrl = ($this->aiGeneratedLogoPath ?? 'public/generated-ai/logo/').((string) $brandingProject->getId()).'/'.uniqid().'.png';
+                    $imageUrl = ($this->aiGeneratedLogoPath ?? 'generated-ai/logo/').((string) $brandingProject->getId()).'/'.uniqid().'.png';
                     $this->filesystem->dumpFile(
                         $imageUrl,
                         base64_decode($imageData)

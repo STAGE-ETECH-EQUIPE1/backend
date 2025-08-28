@@ -1,8 +1,8 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
 /.env.*.local
+/.env.prod
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /public/mood-boards/
@@ -13,7 +13,7 @@
 ###< symfony/framework-bundle ###
 
 ###> branding/ai-token ###
-/public/generated-ai/
+#/public/generated-ai/
 ###< branding/ai-token ###
 
 ###> phpstan/phpstan ###
