@@ -4,7 +4,6 @@ FROM composer:2 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
 
-# Installer les dépendances sans scripts (pas besoin de bin/console ici)
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
     --no-dev --prefer-dist --optimize-autoloader --no-scripts
 
@@ -13,11 +12,10 @@ FROM php:8.3-fpm-alpine
 
 # Installer dépendances système et extensions PHP
 RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
-    && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
-    -o /usr/local/bin/install-php-extensions \
+    && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions \
     && install-php-extensions opcache iconv soap zip intl fileinfo \
-    && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
+    && install-php-extensions pdo pgsql pdo_pgsql gd apcu
 
 # Préparer les dossiers
 RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log/php83 \
@@ -26,10 +24,8 @@ RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log
 
 WORKDIR /var/www/html
 
-# Copier vendor depuis le stage build
 COPY --from=vendor /app/vendor ./vendor
 
-# Copier le reste du projet
 COPY . .
 
 COPY config/mercure /var/www/html/mercure

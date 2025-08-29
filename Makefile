@@ -46,7 +46,7 @@ RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
 .PHONY: install
 install: composer.lock composer.json ## Install the project for production only
 	$(COMPOSER) install --no-dev --optimize-autoloader
-	$(CONSOLE) lexik:jwt:generate-keypair --no-interaction
+	$(CONSOLE) lexik:jwt:generate-keypair --overwrite --no-interaction
 	$(CONSOLE) cache:clear
 	$(CONSOLE) cache:pool:clear cache.global_clearer
 	$(CONSOLE) messenger:stop-workers
@@ -178,7 +178,7 @@ deploy: .rsyncignore ## Deploy Project to server
 	@ssh -i $(SSH_KEY_FILE_PATH) $(USER)@$(DOMAIN_NAME) "cd $(PROJECT_DEPLOYMENT_PATH) && make install && make deploy-database"
 
 .PHONY: env-update
-env-update: ## Update .env file from .env.prod (backup existing .env if any) in server
+env-update:
 	@test -f .env.prod && (test -f .env && rm .env && echo "old env removed") || true; cp .env.prod .env && echo ".env updated from .env.prod" || (echo "Error: .env.prod not found" && exit 1)
 
 .PHONY: deploy-database
