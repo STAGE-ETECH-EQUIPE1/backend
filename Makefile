@@ -166,6 +166,15 @@ docker-logs: ## Show docker logs
 	@$(call GREEN,"Show docker logs")
 	$(COMPOSE) logs -f
 
+.PHONY: docker-render
+docker-render: ## Test Docker for Render
+	$(DOCKER) build -t my-symfony-image -f docker/render/Dockerfile .
+	$(DOCKER) run -d -p 8080:80 --name symfony-container my-symfony-image
+
+.PHONY: docker-render-bash
+docker-render-bash: ## Execute bash a command in the container
+	$(DOCKER) exec symfony-container bash
+
 ##
 ##-----------------------------------
 ## Deployment

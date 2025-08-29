@@ -9,3 +9,4 @@ var/log/*
 !var/cache/.gitkeep
 !var/log/.gitkeep
 public/bundles/
+config/jwt/*.pem
