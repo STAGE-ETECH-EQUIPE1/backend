@@ -18,15 +18,19 @@ RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
     && install-php-extensions pdo pgsql pdo_pgsql gd apcu
 
 # Préparer les dossiers
-RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log/php83 \
-    && chown -R www-data:www-data /var/run/php /var/www/html /var/log/php83 \
-    && chown -R nginx:nginx /var/log/nginx /var/cache/nginx
+RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log/php83 /var/www/html/public/generated-ai \
+    && chown -R www-data:www-data /var/run/php /var/www/html /var/log/php83 /var/www/html/public/generated-ai \
+    && chown -R nginx:nginx /var/log/nginx /var/cache/nginx \
+    && chmod -R 755 /var/www/html/public/generated-ai
 
 WORKDIR /var/www/html
 
 COPY --from=vendor /app/vendor ./vendor
 
 COPY . .
+
+RUN chown -R www-data:www-data /var/www/html/public/generated-ai \
+    && chmod -R 755 /var/www/html/public/generated-ai
 
 COPY config/mercure /var/www/html/mercure
 RUN chmod +x /var/www/html/mercure/runMercure
