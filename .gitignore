@@ -6,6 +6,7 @@
 /public/bundles/
 /public/mood-boards/
 /public/generated-ai/
+/config/jwt/*.pem
 /var/
 /vendor/
 /.idea/
