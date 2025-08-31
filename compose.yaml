@@ -59,11 +59,11 @@ services:
     restart: unless-stopped
     container_name: symfony_mercure
     ports:
-      - "3000:80"  # <-- ajouté
+      - "5000:80"  # <-- ajouté
     environment:
       SERVER_NAME: ":80"
-      MERCURE_PUBLISHER_JWT_KEY: "!ChangeThisMercureHubJWTSecretKey!"
-      MERCURE_SUBSCRIBER_JWT_KEY: "!ChangeThisMercureHubJWTSecretKey!"
+      MERCURE_PUBLISHER_JWT_KEY: "a-string-secret-at-least-256-bits-long"
+      MERCURE_SUBSCRIBER_JWT_KEY: "a-string-secret-at-least-256-bits-long"
       MERCURE_EXTRA_DIRECTIVES: |
         cors_origins http://127.0.0.1:8000
     command: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
