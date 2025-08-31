@@ -27,6 +27,12 @@ class UserRegistrationRequest
     #[Assert\EqualTo(propertyPath: 'password')]
     private ?string $confirmPassword = null;
 
+    #[Assert\NotBlank()]
+    private string $companyName = '';
+
+    #[Assert\NotBlank()]
+    private string $companyArea = '';
+
     public function __construct(Request $request)
     {
         $content = $request->toArray();
@@ -36,6 +42,8 @@ class UserRegistrationRequest
         $this->username = $content['username'] ?? '';
         $this->password = $content['password'] ?? '';
         $this->confirmPassword = $content['confirmPassword'] ?? '';
+        $this->companyName = $content['companyName'] ?? '';
+        $this->companyArea = $content['companyArea'] ?? '';
     }
 
     public function getEmail(): string
@@ -66,5 +74,15 @@ class UserRegistrationRequest
     public function getConfirmPassword(): ?string
     {
         return $this->confirmPassword;
+    }
+
+    public function getCompanyName(): string
+    {
+        return $this->companyName;
+    }
+
+    public function getCompanyArea(): string
+    {
+        return $this->companyArea;
     }
 }

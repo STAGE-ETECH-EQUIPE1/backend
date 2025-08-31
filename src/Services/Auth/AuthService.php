@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
 use App\Request\Auth\UpdatePasswordRequest;
@@ -36,7 +37,14 @@ final readonly class AuthService implements AuthServiceInterface
     public function registerUser(UserRegistrationRequest $request): User
     {
         $user = $this->userService->convertUserRegistrationDtoToUser($request);
-        $user->setIsVerified(false);
+        $user
+            ->setIsVerified(false)
+            ->setRoles(['ROLE_USER', 'ROLE_CLIENT'])
+        ;
+        $user->setClient((new Client())
+            ->setCompanyName($request->getCompanyName())
+            ->setCompanyArea($request->getCompanyArea())
+        );
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
