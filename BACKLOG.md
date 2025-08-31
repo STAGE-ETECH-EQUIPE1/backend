@@ -84,7 +84,7 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Bug                                        | Statut | Notes |
 | ------------------------------------------ | ------ | ----- |
-| choix d'API pour la génération de `n logo` | 🔥     | 🚧    |
+| choix d'API pour la génération de `n logo` | 🔥     | ✅    |
 
 ---
 

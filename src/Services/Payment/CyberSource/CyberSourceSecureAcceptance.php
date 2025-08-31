@@ -3,6 +3,9 @@
 namespace App\Services\Payment\CyberSource;
 
 use App\DTO\Payment\CyberSourcePaymentDataDTO;
+use App\Exception\ResourceNotFoundException;
+use App\Repository\Payment\PaymentRepository;
+use App\Response\Payment\PaymentResponse;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterface
@@ -22,7 +25,28 @@ class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterfac
         private readonly string $profileId,
         #[Autowire('%app.cybersource_checkout_url%')]
         private readonly string $checkoutUrl,
+        private readonly PaymentRepository $paymentRepository,
     ) {
+    }
+
+    public function preparePaymentData(CyberSourcePaymentDataDTO $paymentDTO): array
+    {
+        return [
+            $this->buildDataToForm($paymentDTO),
+            $this->checkoutUrl,
+        ];
+    }
+
+    public function getPaymentResumeResponsefromArrayQuery(array $query): PaymentResponse
+    {
+        $payment = $this->paymentRepository->findOneByTransactionIdAndReference(
+            $query['referenceDevis'] ?? '',
+            $query['reference'] ?? ''
+        );
+        if ($payment) {
+            return (new PaymentResponse())->fromPayment($payment);
+        }
+        throw new ResourceNotFoundException('Payment not found');
     }
 
     private function buildDataToForm(CyberSourcePaymentDataDTO $paymentDTO): array
@@ -66,14 +90,6 @@ class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterfac
         $data['signature'] = $this->signData($data);
 
         return $data;
-    }
-
-    public function preparePaymentData(CyberSourcePaymentDataDTO $paymentDTO): array
-    {
-        return [
-            $this->buildDataToForm($paymentDTO),
-            $this->checkoutUrl,
-        ];
     }
 
     /**
