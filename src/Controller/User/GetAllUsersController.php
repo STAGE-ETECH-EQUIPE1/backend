@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class GetAllUsers extends AbstractController
+class GetAllUsersController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/user/showAll', name: 'show_users', methods: ['GET'])]

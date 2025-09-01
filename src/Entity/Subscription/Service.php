@@ -2,6 +2,7 @@
 
 namespace App\Entity\Subscription;
 
+use App\Entity\SoftDeleteTrait;
 use App\Repository\Subscription\ServiceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`subscription_services`')]
 class Service
 {
+    use SoftDeleteTrait;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
