@@ -22,7 +22,7 @@ class SecureAcceptanceCheckoutController extends AbstractController
         methods: ['GET']
     )]
     public function __invoke(
-        int $id,
+        string $id,
     ): JsonResponse {
         try {
             [$data, $cybersourceUrl] = $this->cybersourceSecureAcceptance->preparePaymentData(

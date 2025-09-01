@@ -162,12 +162,15 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         $keywords = implode(',', $designBrief->getBrandKeywords());
         $slogan = $designBrief->getSlogan() ? "and with this slogan {$designBrief->getSlogan()}" : '';
 
-        return
-            <<<PROMPT
-            A {$logoStyle} logo for a {$client->getCompanyArea()} company on a solid color background. Include the text {$client->getCompanyName()} {$slogan}
-            there are any keywords about my company : {$keywords}
-            you can use this picture from inspiration
+        $prompt = <<<PROMPT
+            A {$logoStyle} logo for a {$client->getCompanyArea()} company.
+            Include this text {$client->getCompanyName()} {$slogan}.
+            They are the keywords : {$keywords}
         PROMPT;
+
+        $designBrief->getMoodBoardUrl() and $prompt .= ' you can use this picture from inspiration';
+
+        return $prompt;
     }
 
     private function storeLogoFromGeminiAiResponse(ResponseInterface $response, BrandingProject $brandingProject, DesignBrief $designBrief): void
