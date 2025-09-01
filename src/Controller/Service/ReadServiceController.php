@@ -15,7 +15,7 @@ class ReadServiceController
     {
         $services = $listService->getAllServices();
 
-        return $this->json([
+        return new JsonResponse([
             'message' => 'listShow',
         ]);
     }
