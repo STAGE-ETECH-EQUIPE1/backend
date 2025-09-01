@@ -27,8 +27,10 @@ class SubscriptionController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/subscription/create', name: 'create_subscription', methods: ['POST'])]
-    public function createSubscription(Request $request): JsonResponse
+    #[Route('/subscription/create', 
+        name: 'create_subscription', 
+        methods: ['POST'])]
+    public function __invoke(Request $request): JsonResponse
     {
         try {
             $subscriptionRequest = new SubscriptionRequest($request);
