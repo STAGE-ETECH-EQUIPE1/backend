@@ -23,6 +23,7 @@ class ListServiceService implements ListServiceServiceInterface
                 'id' => $service->getId(),
                 'name' => $service->getName(),
                 'price' => (string) $service->getPrice(),
+                'token' => (string) $service->getToken(),
             ];
         }
 

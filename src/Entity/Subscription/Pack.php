@@ -2,6 +2,7 @@
 
 namespace App\Entity\Subscription;
 
+use App\Entity\SoftDeleteTrait;
 use App\Repository\Subscription\PackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`service_packs`')]
 class Pack
 {
+    use SoftDeleteTrait;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
