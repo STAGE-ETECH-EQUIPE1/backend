@@ -7,8 +7,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class GoogleAuthenticationRequest
 {
-    #[Assert\NotBlank]
-    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Type('string', message: 'NOT_VALID_FIELD_VALIDATION')]
     private string $accessToken;
 
     public function __construct(
