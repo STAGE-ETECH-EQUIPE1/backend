@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Controller\Service;
+namespace App\Controller\Subscription;
 
-use App\Services\DeleteService\DeleteServiceServiceInterface;
+use App\Services\DeleteSubscription\DeleteSubscriptionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DeleteServiceController extends AbstractController
+class DeleteSubscriptionController extends AbstractController
 {
     public function __construct(
-        private DeleteServiceServiceInterface $serviceService,
+        private DeleteSubscriptionServiceInterface $subscriptionService,
     )
     {}
 
-    #[Route('/service/delete/{id}', name: 'delete_service', methods: ['DELETE'])]
+    #[Route('/subscription/delete/{id}', name: 'delete_subscription', methods: ['DELETE'])]
     public function __invoke(
         int $id,
     ): JsonResponse
     {
         try 
         {
-            return $this->serviceService->deleteServiceById($id);
+            return $this->subscriptionService->deleteSubscriptionById($id);
         }
         catch (\Exception $e)
         {

@@ -2,21 +2,24 @@
 
 namespace App\Controller\Service;
 
-use App\Services\ListService\ListServiceService;
+use App\Services\ListService\ListServiceServiceInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class ReadServiceController
+class ReadServiceController extends AbstractController
 {
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/service/show', name: 'show_service', methods: ['GET'])]
-    public function showServices(ListServiceService $listService): JsonResponse
-    {
-        $services = $listService->getAllServices();
+    public function __construct(
+        private ListServiceServiceInterface $listService,
+    ) {}
 
-        return new JsonResponse([
-            'message' => 'listShow',
-        ]);
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/service/show', name: 'show_services', methods: ['GET'])]
+    public function __invoke(): JsonResponse
+    {
+        $packsDto = $this->listService->getAllServices();
+
+        return $this->json($packsDto);
     }
 }
