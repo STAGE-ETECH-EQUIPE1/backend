@@ -57,7 +57,6 @@ class PackController extends AbstractController
         }
     }
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/show', name: 'show_pack', methods: ['GET'])]
     public function showPack(ListPackService $listPackService): JsonResponse
     {

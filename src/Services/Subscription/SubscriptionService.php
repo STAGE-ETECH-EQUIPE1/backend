@@ -6,6 +6,7 @@ use App\DTO\Subscription\SubscriptionDTO;
 use App\Entity\Subscription\Subscription;
 use App\Repository\Auth\ClientRepository;
 use App\Repository\Payment\PaymentRepository;
+use App\Repository\Subscription\PackRepository;
 use App\Repository\Subscription\ServiceRepository;
 use App\Repository\Subscription\SubscriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,6 +17,7 @@ class SubscriptionService implements SubscriptionServiceInterface
         private EntityManagerInterface $em,
         private ServiceRepository $serviceRepository,
         private PaymentRepository $paymentRepository,
+        private PackRepository $packRepository,
         private ClientRepository $clientRepository,
         private SubscriptionRepository $subscriptionRepository,
     ) {
@@ -30,6 +32,7 @@ class SubscriptionService implements SubscriptionServiceInterface
 
         $subscription = $this->subscriptionRepository->findOneBy(['client' => $client]) ?? new Subscription();
 
+        $subscription->setName($subscriptionDTO->getName());
         $subscription->setReference($subscriptionDTO->getReference());
         $subscription->setStatus($subscriptionDTO->getStatus());
         $subscription->setStartedAt($subscriptionDTO->getStartedAt());
@@ -39,6 +42,11 @@ class SubscriptionService implements SubscriptionServiceInterface
             if ($payment) {
                 $subscription->setPayment($payment);
             }
+        }
+
+        if ($subscriptionDTO->getPackId()) {
+            $pack = $this->packRepository->find($subscriptionDTO->getPackId());
+            $subscription->setPack($pack);
         }
 
         $client = $this->clientRepository->find($subscriptionDTO->getClientId());
