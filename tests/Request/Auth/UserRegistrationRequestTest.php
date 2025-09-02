@@ -17,6 +17,8 @@ class UserRegistrationRequestTest extends RequestTestCase
         'username' => 'admin.user',
         'password' => 'Admin@123',
         'confirmPassword' => 'Admin@123',
+        'companyName' => 'Test Company',
+        'companyArea' => 'IT',
     ];
 
     protected string $requestClass = UserRegistrationRequest::class;
@@ -36,7 +38,9 @@ class UserRegistrationRequestTest extends RequestTestCase
                 'username' => '',
                 'password' => '',
                 'confirmPassword' => '',
-            ]), 6
+                'companyName' => '',
+                'companyArea' => '',
+            ]), 8
         );
     }
 

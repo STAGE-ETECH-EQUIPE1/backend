@@ -3,6 +3,7 @@
 namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 
 #[ApiResource(
@@ -12,6 +13,9 @@ use ApiPlatform\Metadata\Post;
         ),
         new Post(
             routeName: 'api_payment_response'
+        ),
+        new Get(
+            routeName: 'api_payment_resume'
         ),
     ]
 )]

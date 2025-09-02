@@ -41,9 +41,41 @@ class Payment
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $fee = null;
 
-    #[ORM\ManyToOne(inversedBy: 'payments')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?PaymentMethod $paymentMethod = null;
+    #[ORM\Column(length: 20)]
+    private ?string $cardNumber = null;
+
+    #[ORM\Column(length: 200)]
+    private ?string $cardType = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $billEmail = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $transactionId = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $currency = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $decision = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $customerIpAddress = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $billToCompanyName = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $transactionType = null;
+
+    #[ORM\Column(length: 200)]
+    private ?string $paymentMethod = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $referenceNumber = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $message = null;
 
     public function getId(): ?int
     {
@@ -158,14 +190,146 @@ class Payment
         return $this;
     }
 
-    public function getPaymentMethod(): ?PaymentMethod
+    public function getCardNumber(): ?string
+    {
+        return $this->cardNumber;
+    }
+
+    public function setCardNumber(string $cardNumber): static
+    {
+        $this->cardNumber = $cardNumber;
+
+        return $this;
+    }
+
+    public function getCardType(): ?string
+    {
+        return $this->cardType;
+    }
+
+    public function setCardType(string $cardType): static
+    {
+        $this->cardType = $cardType;
+
+        return $this;
+    }
+
+    public function getBillEmail(): ?string
+    {
+        return $this->billEmail;
+    }
+
+    public function setBillEmail(?string $billEmail): static
+    {
+        $this->billEmail = $billEmail;
+
+        return $this;
+    }
+
+    public function getTransactionId(): ?string
+    {
+        return $this->transactionId;
+    }
+
+    public function setTransactionId(string $transactionId): static
+    {
+        $this->transactionId = $transactionId;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency): static
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function getDecision(): ?string
+    {
+        return $this->decision;
+    }
+
+    public function setDecision(string $decision): static
+    {
+        $this->decision = $decision;
+
+        return $this;
+    }
+
+    public function getCustomerIpAddress(): ?string
+    {
+        return $this->customerIpAddress;
+    }
+
+    public function setCustomerIpAddress(?string $customerIpAddress): static
+    {
+        $this->customerIpAddress = $customerIpAddress;
+
+        return $this;
+    }
+
+    public function getBillToCompanyName(): ?string
+    {
+        return $this->billToCompanyName;
+    }
+
+    public function setBillToCompanyName(?string $billToCompanyName): static
+    {
+        $this->billToCompanyName = $billToCompanyName;
+
+        return $this;
+    }
+
+    public function getTransactionType(): ?string
+    {
+        return $this->transactionType;
+    }
+
+    public function setTransactionType(string $transactionType): static
+    {
+        $this->transactionType = $transactionType;
+
+        return $this;
+    }
+
+    public function getPaymentMethod(): ?string
     {
         return $this->paymentMethod;
     }
 
-    public function setPaymentMethod(?PaymentMethod $paymentMethod): static
+    public function setPaymentMethod(string $paymentMethod): static
     {
         $this->paymentMethod = $paymentMethod;
+
+        return $this;
+    }
+
+    public function getReferenceNumber(): ?string
+    {
+        return $this->referenceNumber;
+    }
+
+    public function setReferenceNumber(string $referenceNumber): static
+    {
+        $this->referenceNumber = $referenceNumber;
+
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?string $message): static
+    {
+        $this->message = $message;
 
         return $this;
     }

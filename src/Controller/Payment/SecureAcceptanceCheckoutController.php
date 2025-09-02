@@ -42,6 +42,7 @@ class SecureAcceptanceCheckoutController extends AbstractController
                     billToZip: '123456',
                     billToPhone: '1234567890',
                     billToAddressPostalCode: '94105',
+                    currency: 'EUR',
                 ));
 
             return $this->json([
