@@ -55,7 +55,6 @@ final class UserService implements UserServiceInterface
             ->setUsername($userDto->getUsername())
             ->setFullName($userDto->getFullName())
             ->setPhone($userDto->getPhone())
-            ->setRoles(['ROLE_USER'])
             ->setCreatedAt(new \DateTimeImmutable())
             ->setPassword($this->passwordHasher->hashPassword(
                 $user,

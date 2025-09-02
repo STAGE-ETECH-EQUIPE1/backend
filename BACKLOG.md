@@ -66,7 +66,7 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Tâche                                                    | Priorité | Statut | Notes                                              |
 | -------------------------------------------------------- | -------- | ------ | -------------------------------------------------- |
-| Utilisation de `Cybersource` pour le système de paiement | 🔥       | 🕓     | Utiliser `cybersource` pour les paiements en ligne |
+| Utilisation de `Cybersource` pour le système de paiement | 🔥       | 🚧     | Utiliser `cybersource` pour les paiements en ligne |
 | Utilisation de `Api MVola` pour le système de paiement   | 🕓       | 🕓     | Utiliser `Api MVola` pour les paiements            |
 
 ## ⚙️ Épopée 6 : Administration
@@ -84,7 +84,7 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Bug                                        | Statut | Notes |
 | ------------------------------------------ | ------ | ----- |
-| choix d'API pour la génération de `n logo` | 🔥     | 🚧    |
+| choix d'API pour la génération de `n logo` | 🔥     | ✅    |
 
 ---
 

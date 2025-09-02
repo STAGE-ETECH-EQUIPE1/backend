@@ -7,19 +7,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ServiceRequest
 {
-    #[Assert\NotBlank]
-    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Type(type: 'string', message: 'NOT_VALID_FIELD_VALIDATION')]
     private string $name;
 
-    #[Assert\NotBlank]
+    #[Assert\NotNull(message: 'NOT_NULL_VALIDATION')]
     #[Assert\Regex(
         pattern: '/^\d{1,8}(\.\d{1,2})?$/',
-        message: 'Le prix doit contenir au maximum 8 chiffres avant la virgule et 2 après.',
+        message: 'NOT_VALID_FIELD_VALIDATION',
     )]
     private string $price;
 
-    #[Assert\NotBlank]
-    #[Assert\Type('integer')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Type(type: 'integer', message: 'NOT_VALID_FIELD_VALIDATION')]
     private int $token;
 
     public function __construct(Request $request)

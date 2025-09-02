@@ -1,60 +1,83 @@
-# ---------- Stage 1 : build dependencies ----------
-FROM composer:2 AS vendor
-
-WORKDIR /app
-COPY composer.json composer.lock ./
-
-# Installer les dépendances sans scripts (pas besoin de bin/console ici)
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
-    --no-dev --prefer-dist --optimize-autoloader --no-scripts
-
-# ---------- Stage 2 : final image ----------
+# --------------------------------------------------------------------
+# Dockerfile for Render
+# --------------------------------------------------------------------
 FROM php:8.3-fpm-alpine
 
-# Installer dépendances système et extensions PHP
-RUN apk --no-cache add curl git wget bash dpkg supervisor nginx \
-    && curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
-    -o /usr/local/bin/install-php-extensions \
-    && chmod +x /usr/local/bin/install-php-extensions \
-    && install-php-extensions opcache iconv soap zip intl fileinfo \
-    && install-php-extensions pdo redis pgsql pdo_pgsql gd apcu
+RUN apk --no-cache add curl wget bash dpkg supervisor vim nginx
 
-# Préparer les dossiers
-RUN mkdir -p /var/run/php /var/log/nginx /var/cache/nginx /var/www/html /var/log/php83 /var/www/html/public/generated-ai \
-    && chown -R www-data:www-data /var/run/php /var/www/html /var/log/php83 /var/www/html/public/generated-ai \
-    && chown -R nginx:nginx /var/log/nginx /var/cache/nginx \
-    && chmod -R 755 /var/www/html/public/generated-ai
+# --------------------------------------------------------------------
+# PHP Extensions
+# --------------------------------------------------------------------
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions
+RUN install-php-extensions opcache iconv soap zip intl fileinfo bcmath sockets tokenizer \
+    && install-php-extensions pdo pgsql pdo_pgsql gd apcu openssl xml mbstring
+COPY docker/render/php/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
+# --------------------------------------------------------------------
 
+# --------------------------------------------------------------------
+# Copy application files
+# --------------------------------------------------------------------
 WORKDIR /var/www/html
-
-# Copier vendor depuis le stage build
-COPY --from=vendor /app/vendor ./vendor
-
-# Copier le reste du projet
 COPY . .
+# --------------------------------------------------------------------
 
-RUN chown -R www-data:www-data /var/www/html/public/generated-ai \
-    && chmod -R 755 /var/www/html/public/generated-ai
+# --------------------------------------------------------------------
+# Create necessary directories
+# --------------------------------------------------------------------
+RUN mkdir -p /var/run /var/run/mercure /var/run/nginx \
+    && mkdir -p /var/log/nginx /var/log/supervisor /var/tmp/nginx \
+    && mkdir -p /etc/mercure \
+    && chown -R www-data:www-data /var/run/mercure /var/www /var/tmp/nginx /etc/mercure \
+    && chmod -R 755 /var/www \
+    && chown -R nginx:nginx /var/log/nginx /var/tmp/nginx /var/run/nginx
+# --------------------------------------------------------------------
 
-COPY config/mercure /var/www/html/mercure
-RUN chmod +x /var/www/html/mercure/runMercure
+# --------------------------------------------------------------------
+# Configuration files for Nginx Server
+# --------------------------------------------------------------------
+COPY docker/render/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY docker/render/nginx/default.conf /etc/nginx/conf.d/default.conf
+# --------------------------------------------------------------------
 
-# Copier les configs
-COPY docker/render/default.conf /etc/nginx/conf.d/default.conf
-COPY docker/render/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker/render/php-fpm.conf /usr/local/etc/php-fpm.d/www.conf
-COPY docker/render/nginx.conf /etc/nginx/nginx.conf
+# --------------------------------------------------------------------
+# Composer
+# --------------------------------------------------------------------
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+RUN APP_ENV=prod APP_DEBUG=0 composer install --no-dev --optimize-autoloader --no-interaction
+# --------------------------------------------------------------------
+
+# --------------------------------------------------------------------
+# Mercure
+# --------------------------------------------------------------------
+# Configuration file for mercure to run mercure
+COPY docker/render/mercure/dev.Caddyfile /etc/mercure/dev.Caddyfile
+COPY docker/render/mercure/Caddyfile /etc/mercure/Caddyfile
+RUN wget https://github.com/dunglas/mercure/releases/download/v0.20.2/mercure_Linux_x86_64.tar.gz \
+    && tar xvf mercure_Linux_x86_64.tar.gz \
+    && mv mercure /usr/local/bin/mercure \
+    && rm mercure_Linux_x86_64.tar.gz
+# --------------------------------------------------------------------
+
+# --------------------------------------------------------------------
+# Configuration files for Supervisor
+# --------------------------------------------------------------------
+COPY docker/render/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+COPY docker/render/supervisor/symfony_messenger.conf /etc/supervisor/conf.d/symfony_messenger.conf
+COPY docker/render/supervisor/mercure.conf /etc/supervisor/conf.d/mercure.conf
+COPY docker/render/supervisor/nginx_supervisor.conf /etc/supervisor/conf.d/nginx_supervisor.conf
+COPY docker/render/supervisor/php_supervisor.conf /etc/supervisor/conf.d/php_supervisor.conf
+# --------------------------------------------------------------------
+
+# --------------------------------------------------------------------
+# Entrypoint to initialize project dependencies
+# --------------------------------------------------------------------
 COPY docker/render/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
+# --------------------------------------------------------------------
 
-ENTRYPOINT ["/entrypoint.sh"]
+EXPOSE 80
 
-# Variables d'environnement prod
-ENV APP_ENV=prod
-ENV APP_DEBUG=0
-ENV COMPOSER_ALLOW_SUPERUSER=1
-ENV PORT=8080
-EXPOSE 8080
-
-# Démarrage via supervisord
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Run Supervisor
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]

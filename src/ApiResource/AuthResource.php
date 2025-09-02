@@ -23,6 +23,9 @@ use App\Request\Auth\UserRegistrationRequest;
         new Post(
             routeName: 'api_auth_google'
         ),
+        new Post(
+            routeName: 'api_verify_email'
+        ),
     ]
 )]
 class AuthResource

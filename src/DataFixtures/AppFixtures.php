@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\DataFixtures\Auth\UserFixtures;
-use App\DataFixtures\Payment\PaymentMethodFixtures;
 use App\DataFixtures\Subscription\PackFixtures;
 use App\DataFixtures\Subscription\ServiceFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -23,7 +22,6 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             UserFixtures::class,
             ServiceFixtures::class,
             PackFixtures::class,
-            PaymentMethodFixtures::class,
             // SubscriptionFixtures::class,
         ];
     }
