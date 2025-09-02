@@ -4,6 +4,7 @@ namespace App\Entity\Subscription;
 
 use App\Entity\Auth\Client;
 use App\Entity\Payment\Payment;
+use App\Entity\SoftDeleteTrait;
 use App\Enum\SubscriptionStatus;
 use App\Repository\Subscription\SubscriptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`subscriptions`')]
 class Subscription
 {
+    use SoftDeleteTrait;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

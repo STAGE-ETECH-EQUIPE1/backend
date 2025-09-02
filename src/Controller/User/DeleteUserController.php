@@ -9,7 +9,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteUserController extends AbstractController
 {
-    #[Route('user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
+    public function __construct(
+        private DeleteUserServiceInterface $userService,
+    ) {
+    }
+
+    #[Route('/user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
     public function __invoke(
         int $id,
         DeleteUserServiceInterface $userService,
