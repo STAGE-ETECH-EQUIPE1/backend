@@ -14,7 +14,6 @@ class ReadPackController extends AbstractController
         private ListPackServiceInterface $listPackService,
     ) {}
 
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/pack/show', name: 'show_pack', methods: ['GET'])]
     public function __invoke(): JsonResponse
     {
