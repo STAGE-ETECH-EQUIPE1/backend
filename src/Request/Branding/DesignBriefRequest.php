@@ -7,23 +7,41 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class DesignBriefRequest
 {
-    #[Assert\Length(min: 2, max: 200)]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Length(
+        min: 2,
+        max: 200,
+        minMessage: 'MIN_LENGTH_VALIDATION',
+        maxMessage: 'MAX_LENGTH_VALIDATION'
+    )]
     private string $slogan = '';
 
-    #[Assert\Length(min: 2, max: 200)]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Length(
+        min: 2,
+        max: 200,
+        minMessage: 'MIN_LENGTH_VALIDATION',
+        maxMessage: 'MAX_LENGTH_VALIDATION'
+    )]
     private string $logoStyle = '';
 
-    #[Assert\Length(min: 2, max: 250)]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Length(
+        min: 2,
+        max: 250,
+        minMessage: 'MIN_LENGTH_VALIDATION',
+        maxMessage: 'MAX_LENGTH_VALIDATION'
+    )]
     private string $description = '';
 
-    #[Assert\NotNull]
-    #[Assert\Count(min: 1)]
+    #[Assert\NotNull(message: 'NOT_NULL_VALIDATION')]
+    #[Assert\Count(min: 1, minMessage: 'MIN_COUNT_VALIDATION')]
     private array $colorPreferences = [];
 
-    #[Assert\Count(min: 1)]
+    #[Assert\Count(min: 1, minMessage: 'MIN_COUNT_VALIDATION')]
     private array $brandKeywords = [];
 
-    #[Assert\Url(requireTld: false)]
+    #[Assert\Url(requireTld: false, message: 'NOT_VALID_URL_VALIDATION')]
     private string $moodBoardUrl = '';
 
     public function __construct(Request $request)

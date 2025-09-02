@@ -9,3 +9,5 @@ var/log/*
 !var/cache/.gitkeep
 !var/log/.gitkeep
 public/bundles/
+docker
+config/jwt/*.pem

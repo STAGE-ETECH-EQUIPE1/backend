@@ -3,8 +3,6 @@
 namespace App\Controller\User;
 
 use App\Services\DeleteUser\DeleteUserServiceInterface;
-use App\Services\User\UserService;
-use LDAP\Result;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,14 +13,10 @@ class DeleteUserController extends AbstractController
     public function __invoke(
         int $id,
         DeleteUserServiceInterface $userService,
-    ): JsonResponse
-    {
-        try 
-        {
+    ): JsonResponse {
+        try {
             return $userService->deleteUserById($id);
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return $this->json([
                 'error' => 'Delete Error',
             ]);

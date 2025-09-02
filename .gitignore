@@ -3,9 +3,10 @@
 /.env.local.php
 /.env.*.local
 /.env.prod
-/config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /public/mood-boards/
+/public/generated-ai/
+/config/jwt/*.pem
 /var/
 /vendor/
 /.idea/

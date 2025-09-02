@@ -2,14 +2,16 @@
 
 namespace App\Services\Auth;
 
+use App\Entity\Auth\User;
 use App\Request\Auth\UpdatePasswordRequest;
+use App\Request\Auth\UserRegistrationRequest;
 
 interface AuthServiceInterface
 {
     /**
-     * Send an email to verify the user's email address.
+     * Register user.
      */
-    public function sendVerificationEmail(string $email): void;
+    public function registerUser(UserRegistrationRequest $request): User;
 
     /**
      * Send email to reset password.

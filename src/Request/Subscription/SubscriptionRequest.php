@@ -14,36 +14,38 @@ class SubscriptionRequest
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Type('string', message: 'NOT_VALID_FIELD_VALIDATION')]
     private string $reference;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     private SubscriptionStatus $status;
 
-    #[Assert\NotBlank]
-    #[Assert\Type(\DateTimeImmutable::class)]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Type(type: \DateTimeImmutable::class, message: 'NOT_VALID_DATE_VALIDATION')]
     private \DateTimeImmutable $startedAt;
 
-    #[Assert\NotBlank]
-    #[Assert\Type(\DateTimeImmutable::class)]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Type(type: \DateTimeImmutable::class, message: 'NOT_VALID_DATE_VALIDATION')]
     private \DateTimeImmutable $endedAt;
 
-    #[Assert\NotBlank]
-    #[Assert\Type('integer')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Type(type: 'integer', message: 'NOT_VALID_FIELD_VALIDATION')]
     private int $paymentId;
-
     #[Assert\NotBlank]
     #[Assert\Type('integer')]
     private int $packId;
 
     #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     #[Assert\All([
-        new Assert\Type('integer'),
+        new Assert\Type('integer', message: 'NOT_VALID_FIELD_VALIDATION'),
     ])]
     /** @var int[] */
     private array $services;
 
-    #[Assert\NotBlank]
-    #[Assert\Type('integer')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\Type(type: 'integer', message: 'NOT_VALID_FIELD_VALIDATION')]
     private int $clientId;
 
     public function __construct(Request $request)
