@@ -11,20 +11,16 @@ class DeletePackController extends AbstractController
 {
     public function __construct(
         private DeletePackServiceInterface $packService,
-    )
-    {}
+    ) {
+    }
 
     #[Route('/pack/delete/{id}', name: 'delete_pack', methods: ['DELETE'])]
     public function __invoke(
         int $id,
-    ): JsonResponse
-    {
-        try 
-        {
+    ): JsonResponse {
+        try {
             return $this->packService->deletePackById($id);
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return $this->json([
                 'error' => 'Delete Error',
             ]);

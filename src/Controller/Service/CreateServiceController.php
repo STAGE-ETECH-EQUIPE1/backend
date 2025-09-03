@@ -17,7 +17,8 @@ class CreateServiceController extends AbstractController
 {
     public function __construct(
         private AppValidatorInterface $validator,
-    ) {}
+    ) {
+    }
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/service/create', name: 'create_service', methods: ['POST'])]

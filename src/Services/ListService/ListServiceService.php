@@ -20,7 +20,7 @@ class ListServiceService implements ListServiceServiceInterface
 
         foreach ($services as $service) {
             if ($service->isDeleted()) {
-               continue;
+                continue;
             }
 
             $result[] = [

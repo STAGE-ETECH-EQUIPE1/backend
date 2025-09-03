@@ -11,7 +11,7 @@ class EditServiceControllerTest extends ApiControllerTestCase
 {
     use Factories;
     use ResetDatabase;
-    
+
     public function testUpdateService(): void
     {
         $token = $this->authenticateAdmin()->toArray()['token'];

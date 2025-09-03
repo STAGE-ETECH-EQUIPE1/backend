@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Subscription
 {
     use SoftDeleteTrait;
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

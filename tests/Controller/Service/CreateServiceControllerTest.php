@@ -2,7 +2,6 @@
 
 namespace App\Tests\Controller\Service;
 
-use ApiPlatform\Symfony\Bundle\Test\Response;
 use App\Tests\Controller\ApiControllerTestCase;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
@@ -27,5 +26,4 @@ class CreateServiceControllerTest extends ApiControllerTestCase
             ]]);
         $this->assertResponseStatusCodeSame(201);
     }
-
 }

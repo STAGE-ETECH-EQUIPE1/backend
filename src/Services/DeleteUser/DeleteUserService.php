@@ -11,13 +11,15 @@ class DeleteUserService implements DeleteUserServiceInterface
     public function __construct(
         private UserRepository $userRepository,
         private EntityManagerInterface $em,
-    ){}
+    ) {
+    }
 
     public function deleteUserById(int $id): JsonResponse
     {
         $user = $this->userRepository->find($id);
-        if (!$user)
+        if (!$user) {
             throw new \Exception();
+        }
 
         $date = new \DateTimeImmutable();
         $user->setDeleteAt($date);

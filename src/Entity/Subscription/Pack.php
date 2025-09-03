@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Pack
 {
     use SoftDeleteTrait;
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
