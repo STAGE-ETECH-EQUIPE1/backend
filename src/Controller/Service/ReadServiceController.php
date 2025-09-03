@@ -12,7 +12,8 @@ class ReadServiceController extends AbstractController
 {
     public function __construct(
         private ListServiceServiceInterface $listService,
-    ) {}
+    ) {
+    }
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/service/show', name: 'show_services', methods: ['GET'])]

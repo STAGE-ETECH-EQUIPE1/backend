@@ -11,20 +11,16 @@ class DeleteSubscriptionController extends AbstractController
 {
     public function __construct(
         private DeleteSubscriptionServiceInterface $subscriptionService,
-    )
-    {}
+    ) {
+    }
 
     #[Route('/subscription/delete/{id}', name: 'delete_subscription', methods: ['DELETE'])]
     public function __invoke(
         int $id,
-    ): JsonResponse
-    {
-        try 
-        {
+    ): JsonResponse {
+        try {
             return $this->subscriptionService->deleteSubscriptionById($id);
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return $this->json([
                 'error' => 'Delete Error',
             ]);

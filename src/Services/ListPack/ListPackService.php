@@ -19,9 +19,8 @@ class ListPackService implements ListPackServiceInterface
         $result = [];
 
         foreach ($packs as $pack) {
-
             if ($pack->isDeleted()) {
-               continue;
+                continue;
             }
             $services = [];
 

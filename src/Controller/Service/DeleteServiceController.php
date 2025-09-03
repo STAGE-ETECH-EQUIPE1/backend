@@ -11,20 +11,16 @@ class DeleteServiceController extends AbstractController
 {
     public function __construct(
         private DeleteServiceServiceInterface $serviceService,
-    )
-    {}
+    ) {
+    }
 
     #[Route('/service/delete/{id}', name: 'delete_service', methods: ['DELETE'])]
     public function __invoke(
         int $id,
-    ): JsonResponse
-    {
-        try 
-        {
+    ): JsonResponse {
+        try {
             return $this->serviceService->deleteServiceById($id);
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return $this->json([
                 'error' => 'Delete Error',
             ]);
