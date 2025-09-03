@@ -1,0 +1,7 @@
+framework:
+    rate_limiter:
+        logo_generation_limiter:
+            policy: 'fixed_window'
+            limit: 10
+            interval: '1 hour'
+            storage_service: 'cache.rate_limiter'

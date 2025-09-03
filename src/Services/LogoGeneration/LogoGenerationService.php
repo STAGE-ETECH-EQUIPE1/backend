@@ -6,14 +6,18 @@ use App\Entity\Auth\Client;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\DesignBrief;
 use App\Entity\Branding\LogoVersion;
+use App\Event\PublishLogoEvent;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Message\Branding\RegenerateLogoMessage;
 use App\Repository\Branding\BrandingProjectRepository;
 use App\Repository\Branding\DesignBriefRepository;
+use App\Response\Logo\LogoPublishResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -22,7 +26,8 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
 {
     private Filesystem $filesystem;
 
-    private const GENERATION_NUMBER = 5;
+    private const int GENERATION_NUMBER = 5;
+    private const string LOGO_GENERATION_PUBLISH_URL = 'https://example.com/api/logo-generation';
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
@@ -35,6 +40,8 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         private readonly string $googleAiUrl,
         #[Autowire('%app.ai_logo_generated_path%')]
         private readonly ?string $aiGeneratedLogoPath,
+        private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
         $this->filesystem = new Filesystem();
     }
@@ -152,12 +159,15 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         $keywords = implode(',', $designBrief->getBrandKeywords());
         $slogan = $designBrief->getSlogan() ? "and with this slogan {$designBrief->getSlogan()}" : '';
 
-        return
-            <<<PROMPT
-            A {$logoStyle} logo for a {$client->getCompanyArea()} company on a solid color background. Include the text {$client->getCompanyName()} {$slogan}
-            there are any keywords about my company : {$keywords}
-            you can use this picture from inspiration
+        $prompt = <<<PROMPT
+            A {$logoStyle} logo for a {$client->getCompanyArea()} company.
+            Include this text {$client->getCompanyName()} {$slogan}.
+            They are the keywords : {$keywords}
         PROMPT;
+
+        $designBrief->getMoodBoardUrl() and $prompt .= ' you can use this picture from inspiration';
+
+        return $prompt;
     }
 
     private function storeLogoFromGeminiAiResponse(ResponseInterface $response, BrandingProject $brandingProject, DesignBrief $designBrief): void
@@ -176,7 +186,7 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
                     //    $part['inlineData']['data']
                     // );
                     $imageData = $part['inlineData']['data'];
-                    $imageUrl = ($this->aiGeneratedLogoPath ?? 'public/generated-ai/logo/').((string) $brandingProject->getId()).'/'.uniqid().'.png';
+                    $imageUrl = ($this->aiGeneratedLogoPath ?? 'generated-ai/logo/').((string) $brandingProject->getId()).'/'.uniqid().'.png';
                     $this->filesystem->dumpFile(
                         $imageUrl,
                         base64_decode($imageData)
@@ -185,6 +195,8 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
                         ->setAssetUrl($imageUrl)
                         ->setBrief($designBrief)
                     ;
+
+                    $this->eventDispatcher->dispatch(new PublishLogoEvent($logo, (int) $brandingProject->getId()));
                 }
             }
 
@@ -193,6 +205,27 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
             $this->entityManager->flush();
         } catch (\Exception $e) {
             printf('Failed to generate logo: '.$e->getMessage());
+        }
+    }
+
+    public function publishLogo(LogoVersion $logo, int $brandingId): void
+    {
+        $response = $this->httpClient->request(
+            'POST',
+            self::LOGO_GENERATION_PUBLISH_URL,
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $this->serializer->serialize(
+                    new LogoPublishResponse($logo),
+                    'json'
+                ),
+            ]
+        );
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \RuntimeException('Failed to publish logo: '.$response->getContent(false));
         }
     }
 }

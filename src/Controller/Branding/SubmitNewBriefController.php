@@ -2,9 +2,12 @@
 
 namespace App\Controller\Branding;
 
+use App\Entity\Branding\BrandingProject;
+use App\Exception\QuotaReachedException;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Request\Branding\DesignBriefRequest;
 use App\Services\Branding\BrandingServiceInterface;
+use App\Services\RateLimiter\RateLimiterServiceInterface;
 use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,6 +24,7 @@ class SubmitNewBriefController extends AbstractController
         private readonly MessageBusInterface $messageBus,
         private readonly BrandingServiceInterface $brandingService,
         private readonly AppValidatorInterface $validator,
+        private readonly RateLimiterServiceInterface $tokenCount,
     ) {
     }
 
@@ -43,7 +47,19 @@ class SubmitNewBriefController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        try {
+            $this->tokenCount->tokenCount();
+        } catch (QuotaReachedException $e) {
+            return $this->json([
+                'message' => $e->getMessage(),
+            ], $e->getStatusCode());
+        }
+
         $brief = $this->brandingService->createNewBrandingProject($designBriefRequest);
+
+        /** @var BrandingProject $project */
+        $project = $brief->getBranding();
+
         try {
             $this->messageBus->dispatch(
                 new GenerateLogoMessage(
@@ -62,6 +78,7 @@ class SubmitNewBriefController extends AbstractController
             'message' => 'Design brief submitted successfully.',
             'status' => Response::HTTP_OK,
             'data' => $designBriefRequest,
+            'projectId' => $project->getId(),
         ], Response::HTTP_OK);
     }
 }

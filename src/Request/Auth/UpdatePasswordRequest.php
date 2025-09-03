@@ -7,22 +7,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class UpdatePasswordRequest
 {
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     private string $currentPassword;
 
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     private string $newPassword;
 
-    #[Assert\NotBlank()]
-    #[Assert\EqualTo(propertyPath: 'newPassword')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\EqualTo(propertyPath: 'newPassword', message: 'CONFIRM_NOT_EQUAL_VALIDATION')]
     private string $confirmPassword;
 
     public function __construct(Request $request)
     {
         $content = $request->toArray();
-        $this->currentPassword = $content['currentPassword'];
-        $this->newPassword = $content['newPassword'];
-        $this->confirmPassword = $content['confirmPassword'];
+        $this->currentPassword = $content['currentPassword'] ?? '';
+        $this->newPassword = $content['newPassword'] ?? '';
+        $this->confirmPassword = $content['confirmPassword'] ?? '';
     }
 
     public function getConfirmPassword(): string

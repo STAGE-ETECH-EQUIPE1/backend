@@ -3,6 +3,7 @@
 namespace App\Services\Branding;
 
 use App\DTO\Branding\BrandingProjectDTO;
+use App\DTO\PaginationDTO;
 use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
 use App\Entity\Branding\BrandingProject;
@@ -37,6 +38,19 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
         ]);
     }
 
+    public function getPaginatedBrandingProject(PaginationDTO $pagination): array
+    {
+        $paginatedResult = $this->brandingProjectRepository->paginateByClient(
+            $this->clientService->getConnectedUserClient(),
+            $pagination
+        );
+
+        return [
+            $paginatedResult->getQuery()->getResult(),
+            $paginatedResult->count(),
+        ];
+    }
+
     public function createNewBrandingProject(DesignBriefRequest $designBriefDTO): DesignBrief
     {
         $project = (new BrandingProject())
@@ -60,6 +74,10 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
             ->setBranding($project)
         ;
 
+        $client = $this->clientService->getConnectedUserClient();
+        $token = $client->getTokendSent() + 1;
+        $client->setTokendSent($token);
+
         $this->entityManager->persist($brief);
         $this->entityManager->flush();
 
@@ -77,6 +95,10 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
             ->setSlogan($designBriefDTO->getSlogan())
             ->setBranding($brandingProject)
         ;
+
+        $client = $this->clientService->getConnectedUserClient();
+        $token = $client->getTokendSent() + 1;
+        $client->setTokendSent($token);
 
         $this->entityManager->persist($brief);
         $this->entityManager->flush();

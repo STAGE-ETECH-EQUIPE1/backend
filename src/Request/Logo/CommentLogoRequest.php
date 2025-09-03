@@ -7,21 +7,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CommentLogoRequest
 {
-    #[Assert\NotBlank(
-        message: 'BLANK_INPUT_MESSAGE'
-    )]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     #[Assert\Length(
         min: 2,
         max: 250,
-        minMessage: 'MIN_LENGTH_ERROR_MESSAGE',
-        maxMessage: 'MAX_LENGTH_ERROR_MESSAGE'
+        minMessage: 'MIN_LENGTH_VALIDATION',
+        maxMessage: 'MAX_LENGTH_VALIDATION'
     )]
     private string $comment;
 
     public function __construct(Request $request)
     {
         $content = $request->toArray();
-        $this->comment = $content['comment'];
+        $this->comment = $content['comment'] ?? '';
     }
 
     /**

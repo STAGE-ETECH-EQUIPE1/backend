@@ -4,6 +4,7 @@ namespace App\Services\LogoVersion;
 
 use App\DTO\Branding\ClientFeedBackDTO;
 use App\DTO\Branding\LogoVersionDTO;
+use App\DTO\PaginationDTO;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\ClientFeedBack;
 use App\Entity\Branding\LogoVersion;
@@ -31,9 +32,29 @@ final class LogoVersionService extends AbstractService implements LogoVersionSer
         ]);
     }
 
+    public function getPaginatedLogoByBrandingId(int $brandingId, PaginationDTO $pagination): array
+    {
+        $paginatedResult = $this->logoVersionRepository->paginateByBrandingId($brandingId, $pagination);
+
+        return [
+            $paginatedResult->getQuery()->getResult(),
+            $paginatedResult->count(),
+        ];
+    }
+
     public function getLogoFeedBackByLogoId(int $id): array
     {
         return $this->clientFeedBackRepository->findByLogoId($id);
+    }
+
+    public function paginateLogoFeedBackByLogoId(int $logoId, PaginationDTO $pagination): array
+    {
+        $paginatedResults = $this->clientFeedBackRepository->paginateByLogoId($logoId, $pagination);
+
+        return [
+            $paginatedResults->getQuery()->getResult(),
+            $paginatedResults->count(),
+        ];
     }
 
     public function commentLogo(LogoVersion $logo, CommentLogoRequest $comment): void

@@ -40,6 +40,7 @@ class GoogleAuthenticationService
             $user->setUsername('');
             $user->setPassword('');
             $user->setPhone('');
+            $user->setRoles(['ROLE_USER']);
 
             $this->em->persist($user);
             $this->em->flush();

@@ -250,18 +250,6 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
-    "symfony/mercure-bundle": {
-        "version": "0.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "0.3",
-            "ref": "528285147494380298f8f991ee8c47abebaf79db"
-        },
-        "files": [
-            "config/packages/mercure.yaml"
-        ]
-    },
     "symfony/messenger": {
         "version": "7.3",
         "recipe": {
@@ -391,6 +379,9 @@
             "version": "1.0",
             "ref": "fe5a50faf580eb58f08ada2abe8afbd2d4941e05"
         }
+    },
+    "web-token/jwt-framework": {
+        "version": "3.4.8"
     },
     "zenstruck/foundry": {
         "version": "2.6",

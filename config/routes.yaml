@@ -15,3 +15,7 @@ connect_google_start:
 
 connect_google_check:
     path: /connect/google/check
+
+home_page:
+    path: /
+    controller: App\Controller\HomeController::home

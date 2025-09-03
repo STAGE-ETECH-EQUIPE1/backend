@@ -2,7 +2,9 @@
 
 namespace App\Entity\Subscription;
 
+use App\Entity\Auth\Client;
 use App\Entity\Payment\Payment;
+use App\Entity\SoftDeleteTrait;
 use App\Enum\SubscriptionStatus;
 use App\Repository\Subscription\SubscriptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`subscriptions`')]
 class Subscription
 {
+    use SoftDeleteTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -34,7 +38,7 @@ class Subscription
     private ?\DateTimeImmutable $endedAt = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Payment $payment = null;
 
     /**
@@ -43,9 +47,20 @@ class Subscription
     #[ORM\ManyToMany(targetEntity: Service::class)]
     private Collection $services;
 
+    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Client $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
+    private ?Pack $pack = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -145,6 +160,42 @@ class Subscription
     public function removeService(Service $service): static
     {
         $this->services->removeElement($service);
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): static
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getPack(): ?Pack
+    {
+        return $this->pack;
+    }
+
+    public function setPack(?Pack $pack): static
+    {
+        $this->pack = $pack;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
