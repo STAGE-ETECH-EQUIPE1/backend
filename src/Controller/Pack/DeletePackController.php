@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Controller\User;
+namespace App\Controller\Pack;
 
-use App\Services\DeleteUser\DeleteUserServiceInterface;
+use App\Services\DeletePack\DeletePackServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DeleteUserController extends AbstractController
+class DeletePackController extends AbstractController
 {
     public function __construct(
-        private DeleteUserServiceInterface $userService,
+        private DeletePackServiceInterface $packService,
     ) {
     }
 
-    #[Route('/user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
+    #[Route('/pack/delete/{id}', name: 'delete_pack', methods: ['DELETE'])]
     public function __invoke(
         int $id,
     ): JsonResponse {
         try {
-            return $this->userService->deleteUserById($id);
+            return $this->packService->deletePackById($id);
         } catch (\Exception $e) {
             return $this->json([
                 'error' => 'Delete Error',

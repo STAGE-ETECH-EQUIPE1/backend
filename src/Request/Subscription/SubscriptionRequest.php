@@ -14,8 +14,6 @@ class SubscriptionRequest
 
     #[Assert\NotBlank]
     #[Assert\Type('string')]
-    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
-    #[Assert\Type('string', message: 'NOT_VALID_FIELD_VALIDATION')]
     private string $reference;
 
     #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
@@ -37,7 +35,6 @@ class SubscriptionRequest
     private int $packId;
 
     #[Assert\NotBlank]
-    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     #[Assert\All([
         new Assert\Type('integer', message: 'NOT_VALID_FIELD_VALIDATION'),
     ])]

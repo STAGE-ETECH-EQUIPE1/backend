@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Controller\User;
+namespace App\Controller\Service;
 
-use App\Services\DeleteUser\DeleteUserServiceInterface;
+use App\Services\DeleteService\DeleteServiceServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DeleteUserController extends AbstractController
+class DeleteServiceController extends AbstractController
 {
     public function __construct(
-        private DeleteUserServiceInterface $userService,
+        private DeleteServiceServiceInterface $serviceService,
     ) {
     }
 
-    #[Route('/user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
+    #[Route('/service/delete/{id}', name: 'delete_service', methods: ['DELETE'])]
     public function __invoke(
         int $id,
     ): JsonResponse {
         try {
-            return $this->userService->deleteUserById($id);
+            return $this->serviceService->deleteServiceById($id);
         } catch (\Exception $e) {
             return $this->json([
                 'error' => 'Delete Error',

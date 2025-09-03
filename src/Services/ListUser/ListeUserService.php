@@ -20,6 +20,10 @@ class ListeUserService implements ListeUserServiceInterface
         $resultat = [];
 
         foreach ($users as $user) {
+            if ($user->isDeleted()) {
+                continue;
+            }
+
             if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
                 continue;
             }

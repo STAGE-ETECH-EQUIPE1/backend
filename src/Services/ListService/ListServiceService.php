@@ -19,6 +19,10 @@ class ListServiceService implements ListServiceServiceInterface
         $result = [];
 
         foreach ($services as $service) {
+            if ($service->isDeleted()) {
+                continue;
+            }
+
             $result[] = [
                 'id' => $service->getId(),
                 'name' => $service->getName(),
