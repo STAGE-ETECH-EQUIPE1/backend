@@ -4,6 +4,7 @@ namespace App\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 
@@ -12,8 +13,11 @@ use ApiPlatform\Metadata\Put;
         new Post(
             routeName: 'api_create_pack'
         ),
-        new Get(
+        new GetCollection(
             routeName: 'api_show_pack'
+        ),
+        new Get(
+            routeName: 'api_packs_get_id'
         ),
         new Put(
             routeName: 'api_edit_pack'
