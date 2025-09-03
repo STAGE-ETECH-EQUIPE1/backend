@@ -30,7 +30,6 @@ class SubscriptionRequest
     #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     #[Assert\Type(type: 'integer', message: 'NOT_VALID_FIELD_VALIDATION')]
     private int $paymentId;
-
     #[Assert\NotBlank]
     #[Assert\Type('integer')]
     private int $packId;

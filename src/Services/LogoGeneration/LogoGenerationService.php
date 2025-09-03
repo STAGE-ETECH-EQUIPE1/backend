@@ -15,8 +15,6 @@ use App\Response\Logo\LogoPublishResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -28,7 +26,7 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
 {
     private Filesystem $filesystem;
 
-    private const int GENERATION_NUMBER = 1;
+    private const int GENERATION_NUMBER = 5;
     private const string LOGO_GENERATION_PUBLISH_URL = 'https://example.com/api/logo-generation';
 
     public function __construct(
@@ -42,7 +40,6 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         private readonly string $googleAiUrl,
         #[Autowire('%app.ai_logo_generated_path%')]
         private readonly ?string $aiGeneratedLogoPath,
-        private readonly HubInterface $hub,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
     ) {
@@ -213,11 +210,22 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
 
     public function publishLogo(LogoVersion $logo, int $brandingId): void
     {
-        $topic = self::LOGO_GENERATION_PUBLISH_URL."/{$brandingId}";
-        $update = new Update(
-            $topic,
-            $this->serializer->serialize(new LogoPublishResponse($logo), 'json'),
+        $response = $this->httpClient->request(
+            'POST',
+            self::LOGO_GENERATION_PUBLISH_URL,
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $this->serializer->serialize(
+                    new LogoPublishResponse($logo),
+                    'json'
+                ),
+            ]
         );
-        $this->hub->publish($update);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \RuntimeException('Failed to publish logo: '.$response->getContent(false));
+        }
     }
 }

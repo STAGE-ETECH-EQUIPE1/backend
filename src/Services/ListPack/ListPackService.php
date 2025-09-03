@@ -29,6 +29,7 @@ class ListPackService implements ListPackServiceInterface
                 $services[] = [
                     'id' => $service->getId(),
                     'name' => $service->getName(),
+                    'price' => (string) $service->getPrice(),
                 ];
             }
 
