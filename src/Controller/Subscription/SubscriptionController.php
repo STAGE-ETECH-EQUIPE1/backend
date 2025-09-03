@@ -33,6 +33,7 @@ class SubscriptionController extends AbstractController
         try {
             $subscriptionRequest = new SubscriptionRequest($request);
             $error = $this->validator->validateRequest($subscriptionRequest);
+
             if (count($error) > 0) {
                 return $this->json([
                     'message' => $error,

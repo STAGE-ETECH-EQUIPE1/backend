@@ -2,17 +2,19 @@
 
 namespace App\Controller\Payment;
 
-use App\DTO\Payment\CyberSourcePaymentDataDTO;
 use App\Services\Payment\CyberSource\CybersourceSecureAcceptanceInterface;
+use App\Services\User\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class SecureAcceptanceCheckoutController extends AbstractController
 {
     public function __construct(
         private readonly CybersourceSecureAcceptanceInterface $cybersourceSecureAcceptance,
+        private readonly UserServiceInterface $userService,
     ) {
     }
 
@@ -21,29 +23,14 @@ class SecureAcceptanceCheckoutController extends AbstractController
         name: 'secure_acceptance_checkout',
         methods: ['GET']
     )]
+    #[IsGranted('ROLE_USER')]
     public function __invoke(
-        string $id,
+        int $id,
     ): JsonResponse {
         try {
             [$data, $cybersourceUrl] = $this->cybersourceSecureAcceptance->preparePaymentData(
-                new CyberSourcePaymentDataDTO(
-                    amount: '10000.00',
-                    transactionUuid: uniqid('txn_', true),
-                    transactionType: 'authorization',
-                    referenceNumber: uniqid("ORDER-$id-", true),
-                    billToForename: 'John',
-                    billToSurname: 'Doe',
-                    billToCompanyName: 'Company Name',
-                    billToEmail: 'john.doe@domain.fr',
-                    billToAddressLine1: '1 Market St',
-                    billToAddressState: 'CA',
-                    billToAddressCountry: 'US',
-                    billToAddressCity: 'San Francisco',
-                    billToZip: '123456',
-                    billToPhone: '1234567890',
-                    billToAddressPostalCode: '94105',
-                    currency: 'EUR',
-                ));
+                $this->cybersourceSecureAcceptance->buildDataForPaymentProcessWithPackId($id)
+            );
 
             return $this->json([
                 'success' => true,
