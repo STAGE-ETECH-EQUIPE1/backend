@@ -17,6 +17,7 @@ class ServiceResponse
         $this->id = (int) $service->getId();
         $this->name = (string) $service->getName();
         $this->price = (string) $service->getPrice();
+        $this->createdAt = $service->getCreatedAt() ?? new \DateTimeImmutable();
         $this->token = (int) $service->getToken();
     }
 

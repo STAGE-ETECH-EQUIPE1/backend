@@ -29,12 +29,12 @@ class GetCurrentClientController extends AbstractController
             return $this->json([
                 'message' => 'Informations about connected client user retrieved successfully.',
                 'data' => $this->clientService->convertUserClientToClientDTO($this->userService->getConnectedUser()),
-            ]);
+            ], Response::HTTP_OK);
         } catch (ClientNotAssociedException $e) {
             return $this->json([
                 'message' => 'no client is not associated with the user.',
                 'data' => $this->userService->convertToDto($this->userService->getConnectedUser()),
-            ], Response::HTTP_UNAUTHORIZED);
+            ], Response::HTTP_OK);
         }
     }
 }

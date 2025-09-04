@@ -4,7 +4,6 @@ namespace App\Controller\User;
 
 use App\Response\Subscription\SubscriptionResponse;
 use App\Services\Client\ClientServiceInterface;
-use App\Services\Subscription\SubscriptionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +14,6 @@ class GetSubscriptionOfCurrentClient extends AbstractController
 {
     public function __construct(
         private readonly ClientServiceInterface $clientService,
-        private readonly SubscriptionServiceInterface $subscriptionService,
     ) {
     }
 
