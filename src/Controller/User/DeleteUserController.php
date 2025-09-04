@@ -17,10 +17,9 @@ class DeleteUserController extends AbstractController
     #[Route('/user/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
     public function __invoke(
         int $id,
-        DeleteUserServiceInterface $userService,
     ): JsonResponse {
         try {
-            return $userService->deleteUserById($id);
+            return $this->userService->deleteUserById($id);
         } catch (\Exception $e) {
             return $this->json([
                 'error' => 'Delete Error',

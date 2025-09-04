@@ -23,6 +23,6 @@ trait SoftDeleteTrait
 
     public function isDeleted(): bool
     {
-        return $this->deleteAt != null;
+        return $this->deleteAt !== null;
     }
 }
