@@ -2,12 +2,12 @@
 
 namespace App\Controller\Payment;
 
-use App\DTO\Payment\CyberSourcePaymentDataDTO;
 use App\Services\Payment\CyberSource\CybersourceSecureAcceptanceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class SecureAcceptanceCheckoutController extends AbstractController
 {
@@ -21,29 +21,14 @@ class SecureAcceptanceCheckoutController extends AbstractController
         name: 'secure_acceptance_checkout',
         methods: ['GET']
     )]
+    #[IsGranted('ROLE_USER')]
     public function __invoke(
-        string $id,
+        int $id,
     ): JsonResponse {
         try {
             [$data, $cybersourceUrl] = $this->cybersourceSecureAcceptance->preparePaymentData(
-                new CyberSourcePaymentDataDTO(
-                    amount: '10000.00',
-                    transactionUuid: uniqid('txn_', true),
-                    transactionType: 'authorization',
-                    referenceNumber: uniqid("ORDER-$id-", true),
-                    billToForename: 'John',
-                    billToSurname: 'Doe',
-                    billToCompanyName: 'Company Name',
-                    billToEmail: 'john.doe@domain.fr',
-                    billToAddressLine1: '1 Market St',
-                    billToAddressState: 'CA',
-                    billToAddressCountry: 'US',
-                    billToAddressCity: 'San Francisco',
-                    billToZip: '123456',
-                    billToPhone: '1234567890',
-                    billToAddressPostalCode: '94105',
-                    currency: 'EUR',
-                ));
+                $this->cybersourceSecureAcceptance->buildDataForPaymentProcessWithPackId($id)
+            );
 
             return $this->json([
                 'success' => true,
@@ -55,8 +40,8 @@ class SecureAcceptanceCheckoutController extends AbstractController
         } catch (\Throwable $exception) {
             return $this->json([
                 'success' => false,
-                'error' => 'internal_error',
-                'message' => 'Une erreur inattendue s\'est produite',
+                'error' => 'INTERNAL_SERVER_ERROR',
+                'message' => $exception->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

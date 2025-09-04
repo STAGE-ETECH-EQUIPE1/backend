@@ -8,7 +8,7 @@ use App\Response\Payment\SecureAcceptanceResponseDTO;
 interface MainPaymentServiceInterface
 {
     /**
-     * Save payement that have been processed.
+     * Initialize payement that have been processed.
      */
-    public function savePaymentFromResponseDTO(SecureAcceptanceResponseDTO $response): Payment;
+    public function initializePaymentFromResponseDTO(SecureAcceptanceResponseDTO $response): Payment;
 }

@@ -20,6 +20,8 @@ class ClientDTO
 
     private string $companyName;
 
+    private string $companyArea;
+
     /**
      * Get the value of id.
      */
@@ -160,6 +162,24 @@ class ClientDTO
     public function setCompanyName(string $companyName): static
     {
         $this->companyName = $companyName;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of companyArea.
+     */
+    public function getCompanyArea(): string
+    {
+        return $this->companyArea;
+    }
+
+    /**
+     * Set the value of companyArea.
+     */
+    public function setCompanyArea(string $companyArea): static
+    {
+        $this->companyArea = $companyArea;
 
         return $this;
     }

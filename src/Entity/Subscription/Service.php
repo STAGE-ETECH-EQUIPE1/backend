@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Service
 {
     use SoftDeleteTrait;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
