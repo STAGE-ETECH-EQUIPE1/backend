@@ -3,10 +3,9 @@
 namespace App\Controller\Payment;
 
 use App\Response\Payment\SecureAcceptanceResponseDTO;
-use App\Services\Payment\MainPayment\MainPaymentServiceInterface;
+use App\Services\Subscription\SubscriptionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,7 +15,7 @@ class HandleResponseSecureAcceptanceCheckoutController extends AbstractControlle
     public function __construct(
         #[Autowire('%app.frontend_url%')]
         private readonly string $frontendUrl,
-        private readonly MainPaymentServiceInterface $mainPaymentService,
+        private readonly SubscriptionServiceInterface $subscriptionService,
     ) {
     }
 
@@ -27,12 +26,13 @@ class HandleResponseSecureAcceptanceCheckoutController extends AbstractControlle
     )]
     public function __invoke(
         Request $request,
-    ): JsonResponse|Response {
+    ): Response {
         $secureAcceptanceResponseDTO = (new SecureAcceptanceResponseDTO())
             ->fromArray($request->request->all());
 
+        $this->subscriptionService->updateSubscriptionAfterPayment($secureAcceptanceResponseDTO);
+
         try {
-            $this->mainPaymentService->savePaymentFromResponseDTO($secureAcceptanceResponseDTO);
             $responseData = [
                 'status' => Response::HTTP_OK,
                 'transactionId' => $secureAcceptanceResponseDTO->getTransactionId(),

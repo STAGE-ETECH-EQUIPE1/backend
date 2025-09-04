@@ -16,6 +16,16 @@ class PackRepository extends ServiceEntityRepository
         parent::__construct($registry, Pack::class);
     }
 
+    public function findOneById(int $id): ?Pack
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     //    /**
     //     * @return Pack[] Returns an array of Pack objects
     //     */
@@ -28,16 +38,6 @@ class PackRepository extends ServiceEntityRepository
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Pack
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
     //        ;
     //    }
 }

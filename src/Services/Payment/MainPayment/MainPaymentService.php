@@ -4,18 +4,16 @@ namespace App\Services\Payment\MainPayment;
 
 use App\Entity\Payment\Payment;
 use App\Response\Payment\SecureAcceptanceResponseDTO;
-use Doctrine\ORM\EntityManagerInterface;
 
 class MainPaymentService implements MainPaymentServiceInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
-    public function savePaymentFromResponseDTO(SecureAcceptanceResponseDTO $response): Payment
+    public function initializePaymentFromResponseDTO(SecureAcceptanceResponseDTO $response): Payment
     {
-        $payment = (new Payment())
+        return (new Payment())
             ->setIsRefunded(false)
             ->setPostalCode($response->getReqBillToAddressPostalCode())
             ->setCountryCode($response->getReqBillToAddressCountry())
@@ -38,9 +36,5 @@ class MainPaymentService implements MainPaymentServiceInterface
             ->setCardType($response->getReqCardType())
             ->setMessage($response->getMessage())
         ;
-        $this->entityManager->persist($payment);
-        $this->entityManager->flush();
-
-        return $payment;
     }
 }

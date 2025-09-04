@@ -5,7 +5,9 @@ namespace App\Services\Client;
 use App\DTO\User\ClientDTO;
 use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
+use App\Entity\Subscription\Subscription;
 use App\Exception\ClientNotAssociedException;
+use App\Repository\Subscription\SubscriptionRepository;
 use App\Services\AbstractService;
 use App\Services\User\UserServiceInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -15,6 +17,7 @@ final class ClientService extends AbstractService implements ClientServiceInterf
     public function __construct(
         private readonly Security $security,
         private readonly UserServiceInterface $userService,
+        private readonly SubscriptionRepository $subscriptionRepository,
     ) {
     }
 
@@ -52,6 +55,14 @@ final class ClientService extends AbstractService implements ClientServiceInterf
             ->setPhone((string) $clientUser->getPhone())
             ->setCreatedAt($clientUser->getCreatedAt() ?? new \DateTimeImmutable())
             ->setCompanyName((string) $client->getCompanyName())
+            ->setCompanyArea((string) $client->getCompanyArea())
         ;
+    }
+
+    public function getSubscriptionForConnectedClient(): ?Subscription
+    {
+        return $this->subscriptionRepository->findActiveSubscriptionWithClient(
+            $this->getConnectedUserClient()
+        );
     }
 }

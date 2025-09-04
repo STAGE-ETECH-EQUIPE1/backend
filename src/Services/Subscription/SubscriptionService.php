@@ -2,24 +2,34 @@
 
 namespace App\Services\Subscription;
 
+use App\DTO\Payment\CyberSourcePaymentDataDTO;
 use App\DTO\Subscription\SubscriptionDTO;
+use App\Entity\Auth\Client;
+use App\Entity\Subscription\Pack;
 use App\Entity\Subscription\Subscription;
+use App\Enum\SubscriptionStatus;
+use App\Exception\ResourceNotFoundException;
 use App\Repository\Auth\ClientRepository;
 use App\Repository\Payment\PaymentRepository;
 use App\Repository\Subscription\PackRepository;
 use App\Repository\Subscription\ServiceRepository;
 use App\Repository\Subscription\SubscriptionRepository;
+use App\Response\Payment\SecureAcceptanceResponseDTO;
+use App\Services\Payment\MainPayment\MainPaymentServiceInterface;
+use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
     public function __construct(
-        private EntityManagerInterface $em,
-        private ServiceRepository $serviceRepository,
-        private PaymentRepository $paymentRepository,
-        private PackRepository $packRepository,
-        private ClientRepository $clientRepository,
-        private SubscriptionRepository $subscriptionRepository,
+        private readonly EntityManagerInterface $em,
+        private readonly ServiceRepository $serviceRepository,
+        private readonly PaymentRepository $paymentRepository,
+        private readonly PackRepository $packRepository,
+        private readonly ClientRepository $clientRepository,
+        private readonly SubscriptionRepository $subscriptionRepository,
+        private readonly UserServiceInterface $userService,
+        private readonly MainPaymentServiceInterface $mainPaymentService,
     ) {
     }
 
@@ -63,5 +73,58 @@ class SubscriptionService implements SubscriptionServiceInterface
         $this->em->flush();
 
         return $subscription;
+    }
+
+    public function initializeSubscriptionFromPack(Pack $pack, CyberSourcePaymentDataDTO $cyberSourcePaymentDataDTO): Subscription
+    {
+        /** @var Client $client */
+        $client = $this->userService->getConnectedUser()->getClient();
+        $subscription = (new Subscription())
+            ->setReference((string) $cyberSourcePaymentDataDTO->getReferenceNumber())
+            ->setName((string) $pack->getName())
+            ->setStatus(SubscriptionStatus::PENDING)
+            ->setStartedAt($pack->getStartedAt() ?? new \DateTimeImmutable())
+            ->setEndedAt($pack->getExpiredAt() ?? new \DateTimeImmutable())
+            ->setClient($client)
+            ->setPack($pack)
+        ;
+
+        $this->em->persist($subscription);
+        $this->em->flush();
+
+        return $subscription;
+    }
+
+    public function updateSubscriptionAfterPayment(SecureAcceptanceResponseDTO $response): Subscription
+    {
+        $payment = $this->mainPaymentService->initializePaymentFromResponseDTO($response);
+
+        /** @var ?Subscription $subscription */
+        $subscription = $this->subscriptionRepository->findOneBy([
+            'reference' => $response->getReqReferenceNumber(),
+        ]);
+
+        if ($subscription) {
+            $subscription->setPayment($payment);
+
+            switch ($response->getDecision()) {
+                case 'ERROR':
+                    $subscription->setStatus(SubscriptionStatus::INACTIVE);
+                    break;
+                case 'ACCEPT':
+                    $subscription->setStatus(SubscriptionStatus::ACTIVE);
+                    break;
+                default:
+                    $subscription->setStatus(SubscriptionStatus::EXPIRED);
+                    break;
+            }
+
+            $this->em->persist($subscription);
+            $this->em->flush();
+
+            return $subscription;
+        }
+
+        throw new ResourceNotFoundException('SUBSCRIPTION_NOT_FOUND');
     }
 }

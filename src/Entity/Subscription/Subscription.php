@@ -37,7 +37,7 @@ class Subscription
     #[ORM\Column]
     private ?\DateTimeImmutable $endedAt = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Payment $payment = null;
 
