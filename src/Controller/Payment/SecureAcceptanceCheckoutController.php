@@ -3,7 +3,6 @@
 namespace App\Controller\Payment;
 
 use App\Services\Payment\CyberSource\CybersourceSecureAcceptanceInterface;
-use App\Services\User\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +13,6 @@ class SecureAcceptanceCheckoutController extends AbstractController
 {
     public function __construct(
         private readonly CybersourceSecureAcceptanceInterface $cybersourceSecureAcceptance,
-        private readonly UserServiceInterface $userService,
     ) {
     }
 
@@ -42,8 +40,8 @@ class SecureAcceptanceCheckoutController extends AbstractController
         } catch (\Throwable $exception) {
             return $this->json([
                 'success' => false,
-                'error' => 'internal_error',
-                'message' => 'Une erreur inattendue s\'est produite',
+                'error' => 'INTERNAL_SERVER_ERROR',
+                'message' => $exception->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

@@ -80,8 +80,8 @@ class SubscriptionService implements SubscriptionServiceInterface
         /** @var Client $client */
         $client = $this->userService->getConnectedUser()->getClient();
         $subscription = (new Subscription())
-            ->setReference($cyberSourcePaymentDataDTO->getReferenceNumber())
-            ->setName($pack->getName())
+            ->setReference((string) $cyberSourcePaymentDataDTO->getReferenceNumber())
+            ->setName((string) $pack->getName())
             ->setStatus(SubscriptionStatus::PENDING)
             ->setStartedAt($pack->getStartedAt() ?? new \DateTimeImmutable())
             ->setEndedAt($pack->getExpiredAt() ?? new \DateTimeImmutable())

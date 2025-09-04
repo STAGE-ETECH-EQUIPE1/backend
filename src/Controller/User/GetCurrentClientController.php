@@ -7,6 +7,7 @@ use App\Services\Client\ClientServiceInterface;
 use App\Services\User\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class GetCurrentClientController extends AbstractController
@@ -33,7 +34,7 @@ class GetCurrentClientController extends AbstractController
             return $this->json([
                 'message' => 'no client is not associated with the user.',
                 'data' => $this->userService->convertToDto($this->userService->getConnectedUser()),
-            ]);
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

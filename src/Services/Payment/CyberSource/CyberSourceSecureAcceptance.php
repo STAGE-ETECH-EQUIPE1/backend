@@ -65,7 +65,7 @@ class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterfac
 
         if ($pack) {
             $cybersourcePaymentDTO = new CyberSourcePaymentDataDTO(
-                amount: $pack->getPrice(),
+                amount: (string) $pack->getPrice(),
                 transactionUuid: uniqid('txn_', true),
                 transactionType: 'authorization',
                 referenceNumber: uniqid("ORDER-$id-", true),

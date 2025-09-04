@@ -21,6 +21,7 @@ class ClientFixtures extends Fixture implements DependentFixtureInterface
 
         $adminClient = (new Client())
             ->setCompanyName($this->getFaker()->company())
+                ->setCompanyArea($companyAreas[array_rand($companyAreas)])
             ->setUserInfo(
                 $this->getReference('admin.client', User::class)
             )
