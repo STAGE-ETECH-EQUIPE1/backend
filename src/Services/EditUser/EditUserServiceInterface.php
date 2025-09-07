@@ -7,5 +7,5 @@ use App\Entity\Auth\User;
 
 interface EditUserServiceInterface
 {
-    public function handle(int $id, UserDTO $dto): ?User;
+    public function handle(UserDTO $dto): ?User;
 }

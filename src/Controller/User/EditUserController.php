@@ -27,9 +27,8 @@ class EditUserController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/user/edit/{id}', name: 'edit_user', methods: ['PUT'])]
+    #[Route('/user/edit', name: 'edit_user', methods: ['PUT'])]
     public function __invoke(
-        int $id,
         Request $request,
     ): JsonResponse {
         $request = new UserRequest($request);
@@ -39,7 +38,7 @@ class EditUserController extends AbstractController
             return $this->json(['errors' => $errors], Response::HTTP_BAD_REQUEST);
         }
         $dto = UserMapper::fromRequest($request);
-        $updated = $this->editUserService->handle($id, $dto);
+        $updated = $this->editUserService->handle($dto);
 
         if (!$updated) {
             return $this->json(['error' => 'User not found'], 404);

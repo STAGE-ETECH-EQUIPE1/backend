@@ -12,8 +12,8 @@ class UserRequest
     private string $email;
 
     #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
-    #[Assert\Type('integer', message: 'NOT_VALID_FIELD_VALIDATION')]
-    private int $phone;
+    #[Assert\Type('string', message: 'NOT_VALID_FIELD_VALIDATION')]
+    private string $phone;
 
     #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     #[Assert\Type('string', message: 'NOT_VALID_FIELD_VALIDATION')]
@@ -32,7 +32,7 @@ class UserRequest
         return $this->email;
     }
 
-    public function getPhone(): int
+    public function getPhone(): string
     {
         return $this->phone;
     }

@@ -15,22 +15,15 @@ class EditUserService implements EditUserServiceInterface
     ) {
     }
 
-    public function handle(int $id, UserDTO $dto): ?User
+    public function handle(UserDTO $dto): ?User
     {
         $user = $this->userService->getConnectedUser();
 
-        if ($dto->getEmail() !== $user->getEmail() && $dto->getEmail() != null) {
-            $user->setEmail($dto->getEmail());
-        }
+        $user->setUsername($dto->getEmail());
+        $user->setPhone($dto->getPhone());
+        $user->setFullName($dto->getFullName());
 
-        if ($dto->getPhone() !== $user->getPhone() && $dto->getPhone() != 0) {
-            $user->setPhone($dto->getPhone());
-        }
-
-        if ($dto->getFullName() !== $user->getFullName()) {
-            $user->setFullName($dto->getFullName());
-        }
-
+        $this->em->persist($user);
         $this->em->flush();
 
         return $user;
