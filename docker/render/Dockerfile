@@ -39,7 +39,7 @@ COPY . .
 
 COPY docker/render/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/render/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY docker/render/supervisor/php-fpm.conf /etc/php-fpm.d/www.conf
+COPY docker/render/php/php-fpm.conf /etc/php/php-fpm.d/www.conf
 COPY docker/render/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
 COPY docker/render/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
