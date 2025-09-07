@@ -43,7 +43,6 @@ final class DesignBriefFactory extends PersistentProxyObjectFactory
                 self::faker()->sentence(1),
                 self::faker()->sentence(1),
             ],
-            'slogan' => self::faker()->sentence(2),
             'logoStyle' => $logoStyle[array_rand($logoStyle)],
             'moodBoardUrl' => self::faker()->imageUrl(),
         ];

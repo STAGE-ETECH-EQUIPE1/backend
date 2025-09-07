@@ -32,9 +32,6 @@ class DesignBrief
     #[ORM\Column(length: 200)]
     private ?string $logoStyle = null;
 
-    #[ORM\Column(length: 200, nullable: true)]
-    private ?string $slogan = null;
-
     #[ORM\Column(type: Types::ARRAY)]
     private array $brandKeywords = [];
 
@@ -110,18 +107,6 @@ class DesignBrief
     public function setLogoStyle(string $logoStyle): static
     {
         $this->logoStyle = $logoStyle;
-
-        return $this;
-    }
-
-    public function getSlogan(): ?string
-    {
-        return $this->slogan;
-    }
-
-    public function setSlogan(?string $slogan): static
-    {
-        $this->slogan = $slogan;
 
         return $this;
     }

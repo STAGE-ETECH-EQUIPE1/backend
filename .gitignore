@@ -4,8 +4,6 @@
 /.env.*.local
 /.env.prod
 /public/bundles/
-/public/mood-boards/
-/public/generated-ai/
 /config/jwt/*.pem
 /var/
 /vendor/
@@ -14,7 +12,8 @@
 ###< symfony/framework-bundle ###
 
 ###> branding/ai-token ###
-#/public/generated-ai/
+/public/mood-boards/
+/public/generated-ai/
 ###< branding/ai-token ###
 
 ###> phpstan/phpstan ###
