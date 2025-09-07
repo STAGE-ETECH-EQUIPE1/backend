@@ -15,7 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BrandingProjectRepository extends ServiceEntityRepository
 {
-    private const array ORDER_COLUMNS = [
+    private const ORDER_COLUMNS = [
         'id', 'description', 'createdAt', 'updatedAt', 'deadLine',
     ];
 

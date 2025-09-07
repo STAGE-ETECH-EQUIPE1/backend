@@ -37,6 +37,12 @@ COPY --from=vendor /app/vendor ./vendor
 # Copier le reste du projet
 COPY . .
 
+RUN mkdir -p /var/www/html/public/generated-ai/logo \
+    && chown -R www-data:www-data /var/www/html/public/generated-ai \
+    && chmod -R 775 /var/www/html/public/generated-ai
+
+RUN id www-data
+
 COPY docker/render/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/render/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY docker/render/php/php-fpm.conf /etc/php/php-fpm.d/www.conf

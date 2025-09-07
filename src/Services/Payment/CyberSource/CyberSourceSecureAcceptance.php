@@ -14,9 +14,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterface
 {
-    private const string SIGNED_FIELDS_PAYMENT = 'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency,payment_method,merchant_defined_data1,merchant_id,customer_ip_address';
+    private const SIGNED_FIELDS_PAYMENT = 'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency,payment_method,merchant_defined_data1,merchant_id,customer_ip_address';
 
-    private const string UNSIGNED_FIELDS_PAYMENT = 'bill_to_forename,bill_to_surname,bill_to_company_name,bill_to_email,bill_to_address_line1,bill_to_address_postal_code,bill_to_address_country,bill_to_phone,bill_to_zip,bill_to_address_city';
+    private const UNSIGNED_FIELDS_PAYMENT = 'bill_to_forename,bill_to_surname,bill_to_company_name,bill_to_email,bill_to_address_line1,bill_to_address_postal_code,bill_to_address_country,bill_to_phone,bill_to_zip,bill_to_address_city';
 
     public function __construct(
         #[Autowire('%app.cybersource_merchant_id%')]
