@@ -24,7 +24,15 @@ class ClientFixtures extends Fixture implements DependentFixtureInterface
 
         $adminClient = (new Client())
             ->setCompanyName($this->getFaker()->company())
-                ->setCompanyArea($companyAreas[array_rand($companyAreas)])
+            ->setCompanyArea($companyAreas[array_rand($companyAreas)])
+            ->setSlogan($this->getFaker()->sentence(2))
+            ->setTonVoice($this->getFaker()->sentence(2))
+            ->setPublicTarget($publicTargets[array_rand($publicTargets)] ?? 'tourist')
+            ->setQualities([
+                $this->getFaker()->word(),
+                $this->getFaker()->word(),
+                $this->getFaker()->word(),
+            ])
             ->setUserInfo(
                 $this->getReference('admin.client', User::class)
             )
@@ -37,7 +45,7 @@ class ClientFixtures extends Fixture implements DependentFixtureInterface
                 ->setCompanyArea($companyAreas[array_rand($companyAreas)])
                 ->setSlogan($this->getFaker()->sentence(2))
                 ->setTonVoice($this->getFaker()->sentence(2))
-                ->setPublicTarget($publicTargets[array_rand($publicTargets)])
+                ->setPublicTarget($publicTargets[array_rand($publicTargets)] ?? 'tourist')
                 ->setQualities([
                     $this->getFaker()->word(),
                     $this->getFaker()->word(),

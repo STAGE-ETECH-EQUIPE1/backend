@@ -7,7 +7,7 @@ class TypographieGenerationResponse
     private string $fontType;
 
     /**
-     * @var FontItemResponse
+     * @var FontItemResponse[]
      */
     private array $fontList;
 
@@ -22,7 +22,7 @@ class TypographieGenerationResponse
     /**
      * Get the value of fontList.
      */
-    public function getFontList(): FontItemResponse
+    public function getFontList(): array
     {
         return $this->fontList;
     }

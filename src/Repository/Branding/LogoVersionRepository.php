@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LogoVersionRepository extends ServiceEntityRepository
 {
-    private const array ORDER_COLUMNS = [
+    private const ORDER_COLUMNS = [
         'id', 'assetUrl', 'createdAt', 'approvedAt', 'iterationNumber', 'branding', 'brief',
     ];
 

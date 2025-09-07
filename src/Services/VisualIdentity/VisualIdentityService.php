@@ -68,32 +68,35 @@ class VisualIdentityService implements VisualIdentityServiceInterface
         $paletteBlocks = preg_split('/\n\s*\n/', $textResponse);
 
         $allPalettes = [];
-        foreach ($paletteBlocks as $block) {
-            $block = trim($block);
-            if (!str_starts_with($block, 'Palette')) {
-                continue;
-            }
-            $lines = explode("\n", $block);
-            $firstLine = array_shift($lines);
-            if (!preg_match('/Palette \d+: (.*)/', $firstLine, $nameMatches)) {
-                continue;
-            }
-            $paletteName = trim($nameMatches[1]);
-            $colorsArray = [];
-            foreach ($lines as $line) {
-                if (preg_match('/(.*?): #([a-fA-F0-9]{6}) \((.*?)\)/', $line, $colorMatches)) {
-                    $colorsArray[] = [
-                        'name' => trim($colorMatches[3]),
-                        'position' => trim($colorMatches[1]),
-                        'hex' => '#'.$colorMatches[2],
+
+        if (is_array($paletteBlocks)) {
+            foreach ($paletteBlocks as $block) {
+                $block = trim($block);
+                if (!str_starts_with($block, 'Palette')) {
+                    continue;
+                }
+                $lines = explode("\n", $block);
+                $firstLine = array_shift($lines);
+                if (!preg_match('/Palette \d+: (.*)/', $firstLine, $nameMatches)) {
+                    continue;
+                }
+                $paletteName = trim($nameMatches[1]);
+                $colorsArray = [];
+                foreach ($lines as $line) {
+                    if (preg_match('/(.*?): #([a-fA-F0-9]{6}) \((.*?)\)/', $line, $colorMatches)) {
+                        $colorsArray[] = [
+                            'name' => trim($colorMatches[3]),
+                            'position' => trim($colorMatches[1]),
+                            'hex' => '#'.$colorMatches[2],
+                        ];
+                    }
+                }
+                if (!empty($colorsArray)) {
+                    $allPalettes[] = [
+                        'name' => $paletteName,
+                        'colors' => $colorsArray,
                     ];
                 }
-            }
-            if (!empty($colorsArray)) {
-                $allPalettes[] = [
-                    'name' => $paletteName,
-                    'colors' => $colorsArray,
-                ];
             }
         }
 
@@ -102,40 +105,42 @@ class VisualIdentityService implements VisualIdentityServiceInterface
 
     private function parseResponseTextFromAiToTypographieResponse(string $textResponse): array
     {
-        $text = preg_replace('/^.*?:\n\n/', '', $textResponse, 1);
+        $text = (string) preg_replace('/^.*?:\n\n/', '', $textResponse, 1);
         $sections = preg_split('/(?=\n\n[A-Za-z\-\/]+ Fonts)/', $text);
 
         $allData = [];
-        foreach ($sections as $section) {
-            $sectionLines = explode("\n", trim($section));
-            $fontType = trim(array_shift($sectionLines));
-            $fontsData = [];
-            $currentFont = null;
-            foreach ($sectionLines as $line) {
-                $trimmedLine = trim($line);
-                if (empty($trimmedLine)) {
-                    continue;
+        if (is_array($sections)) {
+            foreach ($sections as $section) {
+                $sectionLines = explode("\n", trim($section));
+                $fontType = trim(array_shift($sectionLines));
+                $fontsData = [];
+                $currentFont = null;
+                foreach ($sectionLines as $line) {
+                    $trimmedLine = trim($line);
+                    if (empty($trimmedLine)) {
+                        continue;
+                    }
+
+                    if (str_starts_with($trimmedLine, 'Relevance:')) {
+                        $currentFont['Relevance'] = substr($trimmedLine, strlen('Relevance: '));
+                    } elseif (str_starts_with($trimmedLine, 'Impact:')) {
+                        $currentFont['Impact'] = substr($trimmedLine, strlen('Impact: '));
+                        $fontsData[] = $currentFont;
+                        $currentFont = null;
+                    } else {
+                        $currentFont = [
+                            'name' => $trimmedLine,
+                            'Relevance' => '',
+                            'Impact' => '',
+                        ];
+                    }
                 }
 
-                if (str_starts_with($trimmedLine, 'Relevance:')) {
-                    $currentFont['Relevance'] = substr($trimmedLine, strlen('Relevance: '));
-                } elseif (str_starts_with($trimmedLine, 'Impact:')) {
-                    $currentFont['Impact'] = substr($trimmedLine, strlen('Impact: '));
-                    $fontsData[] = $currentFont;
-                    $currentFont = null;
-                } else {
-                    $currentFont = [
-                        'name' => $trimmedLine,
-                        'Relevance' => '',
-                        'Impact' => '',
-                    ];
-                }
+                $allData[] = [
+                    'font-type' => $fontType,
+                    'fonts' => $fontsData,
+                ];
             }
-
-            $allData[] = [
-                'font-type' => $fontType,
-                'fonts' => $fontsData,
-            ];
         }
 
         return $allData;
