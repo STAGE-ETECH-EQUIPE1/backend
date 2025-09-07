@@ -1,4 +1,11 @@
 <?php
+// DEBUG: Test si PHP/Nginx répondent bien
+if (getenv('APP_ENV') === 'prod') {
+    echo ">>> INDEX.PHP REACHED <<<\n";
+    echo "APP_ENV=" . getenv('APP_ENV') . "\n";
+    echo "APP_DEBUG=" . getenv('APP_DEBUG') . "\n";
+    exit;
+}
 
 use App\Kernel;
 
