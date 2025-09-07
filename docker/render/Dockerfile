@@ -1,6 +1,3 @@
-# --------------------------------------------------------------------
-# Dockerfile for Render (PHP-FPM + Symfony Messenger)
-# --------------------------------------------------------------------
 # ---------- Stage 1 : build dependencies ----------
 FROM composer:2 AS vendor
 
