@@ -60,6 +60,12 @@ class Client
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $mainLanguage = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $colorPreferences = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $typographie = null;
+
     public function __construct()
     {
         $this->brandingProjects = new ArrayCollection();
@@ -247,6 +253,30 @@ class Client
     public function setMainLanguage(?string $mainLanguage): static
     {
         $this->mainLanguage = $mainLanguage;
+
+        return $this;
+    }
+
+    public function getColorPreferences(): ?array
+    {
+        return $this->colorPreferences;
+    }
+
+    public function setColorPreferences(?array $colorPreferences): static
+    {
+        $this->colorPreferences = $colorPreferences;
+
+        return $this;
+    }
+
+    public function getTypographie(): ?string
+    {
+        return $this->typographie;
+    }
+
+    public function setTypographie(?string $typographie): static
+    {
+        $this->typographie = $typographie;
 
         return $this;
     }

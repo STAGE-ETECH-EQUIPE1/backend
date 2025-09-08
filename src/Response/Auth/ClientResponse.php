@@ -25,6 +25,11 @@ class ClientResponse
 
     private string $mainService;
 
+    private string $typographie;
+
+    /** @var string[] */
+    private array $colorPalette;
+
     public function __construct(Client $client)
     {
         $this->id = (int) $client->getId();
@@ -36,6 +41,8 @@ class ClientResponse
         $this->publicTarget = (string) $client->getPublicTarget();
         $this->mainLanguage = (string) $client->getMainLanguage();
         $this->mainService = (string) $client->getMainService();
+        $this->typographie = (string) $client->getTypographie();
+        $this->colorPalette = $client->getColorPreferences() ?? [];
     }
 
     /**
@@ -110,5 +117,21 @@ class ClientResponse
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * Get the value of typographie.
+     */
+    public function getTypographie(): string
+    {
+        return $this->typographie;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getColorPalette(): array
+    {
+        return $this->colorPalette;
     }
 }

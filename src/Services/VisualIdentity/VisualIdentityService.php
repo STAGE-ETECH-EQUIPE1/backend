@@ -2,10 +2,13 @@
 
 namespace App\Services\VisualIdentity;
 
+use App\Entity\Auth\Client;
 use App\Exception\GenerateResponseException;
 use App\Request\Branding\ColorPaletteGenerationRequest;
 use App\Request\Branding\TypographieGenerationRequest;
+use App\Request\Branding\VisualIdentityRequest;
 use App\Services\Client\ClientServiceInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -15,6 +18,7 @@ class VisualIdentityService implements VisualIdentityServiceInterface
     public function __construct(
         private readonly ClientServiceInterface $clientService,
         private readonly HttpClientInterface $httpClient,
+        private readonly EntityManagerInterface $entityManager,
         #[Autowire('%app.gemini_api_key%')]
         private readonly string $googleAiToken,
         #[Autowire('%app.gemini_api_url%')]
@@ -50,6 +54,30 @@ class VisualIdentityService implements VisualIdentityServiceInterface
         } catch (\Throwable $th) {
             throw new GenerateResponseException($th);
         }
+    }
+
+    public function submitColorPalette(VisualIdentityRequest $request): Client
+    {
+        $client = $this->clientService->getConnectedUserClient();
+        $data = json_decode($request->getData());
+        $client->setColorPreferences($data);
+
+        $this->entityManager->persist($client);
+        $this->entityManager->flush();
+
+        return $client;
+    }
+
+    public function submitTypographie(VisualIdentityRequest $request): Client
+    {
+        $client = $this->clientService->getConnectedUserClient();
+
+        $client->setTypographie($request->getData());
+
+        $this->entityManager->persist($client);
+        $this->entityManager->flush();
+
+        return $client;
     }
 
     private function getResponseTextFromGeminiAi(ResponseInterface $response): string
