@@ -12,6 +12,12 @@ use ApiPlatform\Metadata\Post;
         new Get(
             routeName: 'api_branding_project_logos'
         ),
+        new Get(
+            routeName: 'api_branding_submit_color_palettes'
+        ),
+        new Get(
+            routeName: 'api_branding_submit_typographies'
+        ),
         new GetCollection(
             routeName: 'api_branding_user_projects'
         ),
@@ -20,6 +26,15 @@ use ApiPlatform\Metadata\Post;
         ),
         new Post(
             routeName: 'api_branding_project_submit'
+        ),
+        new Post(
+            routeName: 'api_brandings_color_palettes'
+        ),
+        new Post(
+            routeName: 'api_brandings_typographies'
+        ),
+        new Post(
+            routeName: 'api_brandings_file_to_provide'
         ),
     ]
 )]

@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ClientFeedBackRepository extends ServiceEntityRepository
 {
-    private const array ORDER_COLUMNS = [
+    private const ORDER_COLUMNS = [
         'id', 'comment', 'createdAt', 'client',
     ];
 

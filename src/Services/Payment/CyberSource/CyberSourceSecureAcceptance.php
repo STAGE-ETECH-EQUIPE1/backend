@@ -3,16 +3,20 @@
 namespace App\Services\Payment\CyberSource;
 
 use App\DTO\Payment\CyberSourcePaymentDataDTO;
+use App\Entity\Auth\Client;
 use App\Exception\ResourceNotFoundException;
 use App\Repository\Payment\PaymentRepository;
+use App\Repository\Subscription\PackRepository;
 use App\Response\Payment\PaymentResponse;
+use App\Services\Subscription\SubscriptionServiceInterface;
+use App\Services\User\UserServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterface
 {
-    private const string SIGNED_FIELDS_PAYMENT = 'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency,payment_method,merchant_defined_data1,merchant_id,customer_ip_address';
+    private const SIGNED_FIELDS_PAYMENT = 'access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency,payment_method,merchant_defined_data1,merchant_id,customer_ip_address';
 
-    private const string UNSIGNED_FIELDS_PAYMENT = 'bill_to_forename,bill_to_surname,bill_to_company_name,bill_to_email,bill_to_address_line1,bill_to_address_state,bill_to_address_postal_code,bill_to_address_country,bill_to_phone,bill_to_zip,bill_to_address_city';
+    private const UNSIGNED_FIELDS_PAYMENT = 'bill_to_forename,bill_to_surname,bill_to_company_name,bill_to_email,bill_to_address_line1,bill_to_address_postal_code,bill_to_address_country,bill_to_phone,bill_to_zip,bill_to_address_city';
 
     public function __construct(
         #[Autowire('%app.cybersource_merchant_id%')]
@@ -26,6 +30,9 @@ class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterfac
         #[Autowire('%app.cybersource_checkout_url%')]
         private readonly string $checkoutUrl,
         private readonly PaymentRepository $paymentRepository,
+        private readonly PackRepository $packRepository,
+        private readonly UserServiceInterface $userService,
+        private readonly SubscriptionServiceInterface $subscriptionService,
     ) {
     }
 
@@ -46,7 +53,40 @@ class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterfac
         if ($payment) {
             return (new PaymentResponse())->fromPayment($payment);
         }
-        throw new ResourceNotFoundException('Payment not found');
+        throw new ResourceNotFoundException('PAYMENT_NOT_FOUND_EXCEPTION');
+    }
+
+    public function buildDataForPaymentProcessWithPackId(int $id): CyberSourcePaymentDataDTO
+    {
+        $user = $this->userService->getConnectedUser();
+        /** @var Client $client */
+        $client = $user->getClient();
+        $pack = $this->packRepository->findOneById($id);
+
+        if ($pack) {
+            $cybersourcePaymentDTO = new CyberSourcePaymentDataDTO(
+                amount: (string) $pack->getPrice(),
+                transactionUuid: uniqid('txn_', true),
+                transactionType: 'authorization',
+                referenceNumber: uniqid("ORDER-$id-", true),
+                billToForename: $user->getFullName() ?? '',
+                billToSurname: '',
+                billToCompanyName: $client->getCompanyName(),
+                billToEmail: $user->getEmail(),
+                billToAddressLine1: '',
+                billToAddressCountry: '',
+                billToAddressCity: '',
+                billToZip: '',
+                billToPhone: $user->getPhone(),
+                billToAddressPostalCode: '',
+                currency: 'EUR',
+            );
+            $this->subscriptionService->initializeSubscriptionFromPack($pack, $cybersourcePaymentDTO);
+
+            return $cybersourcePaymentDTO;
+        }
+
+        throw new ResourceNotFoundException('PACK_NOT_FOUND_EXCEPTION');
     }
 
     private function buildDataToForm(CyberSourcePaymentDataDTO $paymentDTO): array
@@ -78,7 +118,6 @@ class CyberSourceSecureAcceptance implements CybersourceSecureAcceptanceInterfac
             'bill_to_company_name' => $paymentDTO->billToCompanyName ?? '',
             'bill_to_email' => $paymentDTO->billToEmail ?? '',
             'bill_to_address_line1' => $paymentDTO->billToAddressLine1 ?? '',
-            'bill_to_address_state' => $paymentDTO->billToAddressState ?? '',
             'bill_to_address_city' => $paymentDTO->billToAddressCity ?? '',
             'bill_to_address_postal_code' => $paymentDTO->billToAddressPostalCode ?? '',
             'bill_to_address_country' => $paymentDTO->billToAddressCountry,

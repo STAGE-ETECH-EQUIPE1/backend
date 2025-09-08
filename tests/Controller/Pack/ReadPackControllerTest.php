@@ -3,9 +3,7 @@
 namespace App\Tests\Controller\Subscription;
 
 use ApiPlatform\Symfony\Bundle\Test\Response;
-use App\Entity\Subscription\Service;
 use App\Tests\Controller\ApiControllerTestCase;
-use Doctrine\ORM\EntityManagerInterface;
 use Zenstruck\Foundry\Test\Factories;
 use Zenstruck\Foundry\Test\ResetDatabase;
 
@@ -13,23 +11,6 @@ class ReadPackControllerTest extends ApiControllerTestCase
 {
     use Factories;
     use ResetDatabase;
-
-    private function createService(string $name = 'testeService', string $price = '2.25'): Service
-    {
-        $container = static::getContainer();
-
-        /** @var EntityManagerInterface $entityManager */
-        $entityManager = $container->get(EntityManagerInterface::class);
-
-        $service = new Service();
-        $service->setName($name);
-        $service->setPrice($price);
-
-        $entityManager->persist($service);
-        $entityManager->flush();
-
-        return $service;
-    }
 
     public function testReadPack(): void
     {

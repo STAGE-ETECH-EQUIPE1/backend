@@ -42,6 +42,30 @@ class Client
     #[ORM\Column(nullable: true)]
     private ?int $tokendSent = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $slogan = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $tonVoice = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $qualities = null;
+
+    #[ORM\Column(length: 200)]
+    private ?string $publicTarget = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $mainService = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $mainLanguage = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $colorPreferences = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $typographie = null;
+
     public function __construct()
     {
         $this->brandingProjects = new ArrayCollection();
@@ -157,6 +181,102 @@ class Client
     public function setTokendSent(?int $tokendSent): static
     {
         $this->tokendSent = $tokendSent;
+
+        return $this;
+    }
+
+    public function getSlogan(): ?string
+    {
+        return $this->slogan;
+    }
+
+    public function setSlogan(?string $slogan): static
+    {
+        $this->slogan = $slogan;
+
+        return $this;
+    }
+
+    public function getTonVoice(): ?string
+    {
+        return $this->tonVoice;
+    }
+
+    public function setTonVoice(?string $tonVoice): static
+    {
+        $this->tonVoice = $tonVoice;
+
+        return $this;
+    }
+
+    public function getQualities(): ?array
+    {
+        return $this->qualities;
+    }
+
+    public function setQualities(?array $qualities): static
+    {
+        $this->qualities = $qualities;
+
+        return $this;
+    }
+
+    public function getPublicTarget(): ?string
+    {
+        return $this->publicTarget;
+    }
+
+    public function setPublicTarget(?string $publicTarget): static
+    {
+        $this->publicTarget = $publicTarget;
+
+        return $this;
+    }
+
+    public function getMainService(): ?string
+    {
+        return $this->mainService;
+    }
+
+    public function setMainService(?string $mainService): static
+    {
+        $this->mainService = $mainService;
+
+        return $this;
+    }
+
+    public function getMainLanguage(): ?string
+    {
+        return $this->mainLanguage;
+    }
+
+    public function setMainLanguage(?string $mainLanguage): static
+    {
+        $this->mainLanguage = $mainLanguage;
+
+        return $this;
+    }
+
+    public function getColorPreferences(): ?array
+    {
+        return $this->colorPreferences;
+    }
+
+    public function setColorPreferences(?array $colorPreferences): static
+    {
+        $this->colorPreferences = $colorPreferences;
+
+        return $this;
+    }
+
+    public function getTypographie(): ?string
+    {
+        return $this->typographie;
+    }
+
+    public function setTypographie(?string $typographie): static
+    {
+        $this->typographie = $typographie;
 
         return $this;
     }

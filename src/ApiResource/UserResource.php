@@ -13,6 +13,9 @@ use ApiPlatform\Metadata\Get;
         new Get(
             routeName: 'api_current_user'
         ),
+        new Get(
+            routeName: 'api_client_get_subscription'
+        ),
     ]
 )]
 class UserResource
