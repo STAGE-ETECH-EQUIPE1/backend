@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Request\CompanyName;
+namespace App\Request\BrandingVerbal;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -35,11 +35,11 @@ class CompanyNameRequest
     {
         $content = $request->toArray();
 
-        $this->include_keywords   = $content['include_keywords'] ?? null;
-        $this->exclude_keywords   = $content['exclude_keywords'] ?? null;
-        $this->length             = $content['length'] ?? null;
-        $this->style              = $content['style'] ?? null;
-        $this->langue             = $content['langue'] ?? null;
+        $this->include_keywords = $content['include_keywords'] ?? null;
+        $this->exclude_keywords = $content['exclude_keywords'] ?? null;
+        $this->length = $content['length'] ?? null;
+        $this->style = $content['style'] ?? null;
+        $this->langue = $content['langue'] ?? null;
         $this->check_social_media = $content['check_social_media'] ?? null;
     }
 

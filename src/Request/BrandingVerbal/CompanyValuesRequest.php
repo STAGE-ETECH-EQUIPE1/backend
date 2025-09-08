@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Request\CompanyValues;
+namespace App\Request\BrandingVerbal;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,12 +31,12 @@ class CompanyValuesRequest
     {
         $content = $request->toArray();
 
-        $this->mission        = $content['mission'] ?? null;
-        $this->vision         = $content['vision'] ?? null;
-        $this->values         = $content['values'] ?? null;
-        $this->positioning    = $content['positioning'] ?? null;
+        $this->mission = $content['mission'] ?? null;
+        $this->vision = $content['vision'] ?? null;
+        $this->values = $content['values'] ?? null;
+        $this->positioning = $content['positioning'] ?? null;
         $this->avoid_examples = $content['avoid_examples'] ?? null;
-        $this->market_scope   = $content['market_scope'] ?? null;
+        $this->market_scope = $content['market_scope'] ?? null;
     }
 
     public function getMission(): ?string

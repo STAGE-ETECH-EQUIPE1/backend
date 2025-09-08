@@ -3,8 +3,7 @@
 namespace App\Services\CompanySlogan;
 
 use App\Exception\GeminiApiException;
-use App\Request\CompanySlogan\CompanySloganRequest;
-use App\Services\CompanySlogan\CompanySloganGeneratorServiceInterface;
+use App\Request\BrandingVerbal\CompanySloganRequest;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
@@ -19,7 +18,8 @@ class CompanySloganGeneratorService implements CompanySloganGeneratorServiceInte
         private readonly string $googleAiToken,
         #[Autowire('%app.gemini_api_url%')]
         private readonly string $googleAiUrl,
-    ) {}
+    ) {
+    }
 
     public function generateCompanySlogans(CompanySloganRequest $request): array
     {
@@ -58,41 +58,41 @@ class CompanySloganGeneratorService implements CompanySloganGeneratorServiceInte
                     'status_code' => $statusCode,
                     'response_body' => $response->getContent(false),
                 ]);
-                throw new GeminiApiException('Gemini API returned an unexpected status code: ' . $statusCode);
+                throw new GeminiApiException('Gemini API returned an unexpected status code: '.$statusCode);
             }
 
             $rawResponse = $response->getContent();
-            return $this->parseGeminiResponse($rawResponse);
 
+            return $this->parseGeminiResponse($rawResponse);
         } catch (ExceptionInterface $e) {
             $this->logger->error('Failed to connect to Gemini API.', ['exception' => $e]);
-            throw new GeminiApiException('Communication with Gemini API failed: ' . $e->getMessage(), 0, $e);
+            throw new GeminiApiException('Communication with Gemini API failed: '.$e->getMessage(), 0, $e);
         }
     }
 
     private function buildGeminiPrompt(CompanySloganRequest $request): string
     {
-        $prompt = "Génère 5 slogans percutants et professionnels.";
+        $prompt = 'Génère 5 slogans percutants et professionnels.';
 
         if ($request->getLangue()) {
-            $prompt .= " Les slogans doivent être en " . $request->getLangue() . ".";
+            $prompt .= ' Les slogans doivent être en '.$request->getLangue().'.';
         }
         if ($request->getTone()) {
-            $prompt .= " Le ton doit être " . $request->getTone() . ".";
+            $prompt .= ' Le ton doit être '.$request->getTone().'.';
         }
         if ($request->getLength()) {
-            $prompt .= " La longueur doit être " . $request->getLength() . ".";
+            $prompt .= ' La longueur doit être '.$request->getLength().'.';
         }
         if ($request->getIncludeKeywords()) {
-            $prompt .= " Ils doivent inclure ces mots-clés : " . implode(', ', $request->getIncludeKeywords()) . ".";
+            $prompt .= ' Ils doivent inclure ces mots-clés : '.implode(', ', $request->getIncludeKeywords()).'.';
         }
         if ($request->getExcludeKeywords()) {
-            $prompt .= " Évite les mots-clés suivants : " . implode(', ', $request->getExcludeKeywords()) . ".";
+            $prompt .= ' Évite les mots-clés suivants : '.implode(', ', $request->getExcludeKeywords()).'.';
         }
         if ($request->getFocus()) {
-            $prompt .= " Concentre-toi sur l'aspect suivant : " . $request->getFocus() . ".";
+            $prompt .= " Concentre-toi sur l'aspect suivant : ".$request->getFocus().'.';
         }
-        
+
         $prompt .= " Fournis la réponse sous forme de tableau JSON d'objets, chaque objet ayant une seule clé 'slogan'.";
 
         return $prompt;
@@ -104,9 +104,9 @@ class CompanySloganGeneratorService implements CompanySloganGeneratorServiceInte
         $responseData = json_decode($rawResponse, true);
 
         if (
-            isset($responseData['candidates']) &&
-            is_array($responseData['candidates']) &&
-            !empty($responseData['candidates'])
+            isset($responseData['candidates'])
+            && is_array($responseData['candidates'])
+            && !empty($responseData['candidates'])
         ) {
             $textPart = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? null;
             if ($textPart !== null) {
@@ -121,6 +121,7 @@ class CompanySloganGeneratorService implements CompanySloganGeneratorServiceInte
                 }
             }
         }
+
         return $generatedSlogans;
     }
 }

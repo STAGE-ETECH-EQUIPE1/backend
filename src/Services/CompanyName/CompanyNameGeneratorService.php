@@ -2,13 +2,12 @@
 
 namespace App\Services\CompanyName;
 
-use App\Request\CompanyName\CompanyNameRequest;
 use App\Exception\GeminiApiException;
+use App\Request\BrandingVerbal\CompanyNameRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -26,7 +25,7 @@ class CompanyNameGeneratorService implements CompanyNameGeneratorServiceInterfac
         private readonly ?string $aiGeneratedLogoPath,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -67,15 +66,15 @@ class CompanyNameGeneratorService implements CompanyNameGeneratorServiceInterfac
                     'status_code' => $statusCode,
                     'response_body' => $response->getContent(false),
                 ]);
-                throw new GeminiApiException('Gemini API returned an unexpected status code: ' . $statusCode);
+                throw new GeminiApiException('Gemini API returned an unexpected status code: '.$statusCode);
             }
 
             $rawResponse = $response->getContent();
-            return $this->parseGeminiResponse($rawResponse);
 
+            return $this->parseGeminiResponse($rawResponse);
         } catch (ExceptionInterface $e) {
             $this->logger->error('Failed to connect to Gemini API.', ['exception' => $e]);
-            throw new GeminiApiException('Communication with Gemini API failed: ' . $e->getMessage(), 0, $e);
+            throw new GeminiApiException('Communication with Gemini API failed: '.$e->getMessage(), 0, $e);
         }
     }
 
@@ -84,23 +83,23 @@ class CompanyNameGeneratorService implements CompanyNameGeneratorServiceInterfac
         $prompt = "Génère une liste de noms d'entreprise créatifs, professionnels et pertinents.";
 
         if ($request->getIncludeKeywords()) {
-            $prompt .= " Les noms doivent inclure les mots-clés suivants : " . implode(', ', $request->getIncludeKeywords()) . ".";
+            $prompt .= ' Les noms doivent inclure les mots-clés suivants : '.implode(', ', $request->getIncludeKeywords()).'.';
         }
 
         if ($request->getExcludeKeywords()) {
-            $prompt .= " Évite les noms contenant ces mots-clés : " . implode(', ', $request->getExcludeKeywords()) . ".";
+            $prompt .= ' Évite les noms contenant ces mots-clés : '.implode(', ', $request->getExcludeKeywords()).'.';
         }
 
         if ($request->getLength()) {
-            $prompt .= " La longueur préférée des noms est : " . $request->getLength() . ".";
+            $prompt .= ' La longueur préférée des noms est : '.$request->getLength().'.';
         }
 
         if ($request->getStyle()) {
-            $prompt .= " Le style souhaité pour les noms est : " . $request->getStyle() . ".";
+            $prompt .= ' Le style souhaité pour les noms est : '.$request->getStyle().'.';
         }
 
         if ($request->getLangue()) {
-            $prompt .= " La langue des noms doit être : " . $request->getLangue() . ".";
+            $prompt .= ' La langue des noms doit être : '.$request->getLangue().'.';
         }
 
         if ($request->isCheckSocialMedia()) {
@@ -118,9 +117,9 @@ class CompanyNameGeneratorService implements CompanyNameGeneratorServiceInterfac
         $responseData = json_decode($rawResponse, true);
 
         if (
-            isset($responseData['candidates']) &&
-            is_array($responseData['candidates']) &&
-            !empty($responseData['candidates'])
+            isset($responseData['candidates'])
+            && is_array($responseData['candidates'])
+            && !empty($responseData['candidates'])
         ) {
             $textPart = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? null;
             if ($textPart !== null) {

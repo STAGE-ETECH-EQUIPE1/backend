@@ -2,7 +2,7 @@
 
 namespace App\Services\CompanyToneOfVoice;
 
-use App\Request\CompanyToneOfVoice\CompanyToneOfVoiceRequest;
+use App\Request\BrandingVerbal\CompanyToneOfVoiceRequest;
 
 interface CompanyToneOfVoiceGeneratorServiceInterface
 {

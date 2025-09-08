@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller\CompanyToneOfVoice;
+namespace App\Controller\BrandingVerbal;
 
 use App\Exception\GeminiApiException;
-use App\Request\CompanyToneOfVoice\CompanyToneOfVoiceRequest;
-use App\Services\CompanyToneOfVoice\CompanyToneOfVoiceGeneratorServiceInterface;
+use App\Request\BrandingVerbal\CompanyNameRequest;
+use App\Services\CompanyName\CompanyNameGeneratorServiceInterface;
 use App\Utils\Validator\AppValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,21 +13,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class CompanyToneOfVoice extends AbstractController
+class CompanyNameController extends AbstractController
 {
     public function __construct(
         private AppValidator $validator,
-        private CompanyToneOfVoiceGeneratorServiceInterface $companyToneOfVoiceService,    
-    )
-    {}
-    
+        private CompanyNameGeneratorServiceInterface $companyNameService,
+    ) {
+    }
+
     #[IsGranted('ROLE_CLIENT')]
-    #[Route('/generate/companyToneOfVoice', name: 'generation_companyToneOfVoice', methods: ['POST'])]
+    #[Route('/generate/companyName', name: 'generation_companyName', methods: ['POST'])]
     public function __invoke(
-        Request $request
-    ): JsonResponse
-    {
-        $Inforequest = new CompanyToneOfVoiceRequest($request);
+        Request $request,
+    ): JsonResponse {
+        $Inforequest = new CompanyNameRequest($request);
 
         $errorMessages = $this->validator->validateRequest($Inforequest);
 
@@ -37,16 +36,14 @@ class CompanyToneOfVoice extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        try
-        {
-            $generatedToneOfVoice = $this->companyToneOfVoiceService->generateToneOfVoice($Inforequest);
+        try {
+            $generatedNames = $this->companyNameService->generateCompanyNames($Inforequest);
+
             return $this->json([
                 'success' => true,
-                'Tone of Voice' => $generatedToneOfVoice
+                'Names' => $generatedNames,
             ], Response::HTTP_OK);
-        }
-        catch (GeminiApiException $e)
-        {
+        } catch (GeminiApiException $e) {
             return $this->json([
                 'success' => false,
                 'message' => $e->getMessage(),

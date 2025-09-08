@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Controller\CompanyValues;
+namespace App\Controller\BrandingVerbal;
 
 use App\Exception\GeminiApiException;
-use App\Request\CompanyName\CompanyNameRequest;
-use App\Request\CompanyValues\CompanyValuesRequest;
-use App\Services\CompanyValues\CompanyValuesGeneratorServiceInterface;
+use App\Request\BrandingVerbal\CompanySloganRequest;
+use App\Services\CompanySlogan\CompanySloganGeneratorServiceInterface;
 use App\Utils\Validator\AppValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,40 +13,36 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class CompanyValuesController extends AbstractController
+class CompanySloganController extends AbstractController
 {
     public function __construct(
         private AppValidator $validator,
-        private CompanyValuesGeneratorServiceInterface $companyValuesService,
-    )
-    {}
-    
+        private CompanySloganGeneratorServiceInterface $companySloganService,
+    ) {
+    }
+
     #[IsGranted('ROLE_CLIENT')]
-    #[Route('/generate/companyValues', name: 'generation_companyValues', methods: ['POST'])]
+    #[Route('/generate/companySlogan', name: 'generation_companySlogan', methods: ['POST'])]
     public function __invoke(
-        Request $request
-    ): JsonResponse
-    {
-        $Inforequest = new CompanyValuesRequest($request);
+        Request $request,
+    ): JsonResponse {
+        $Inforequest = new CompanySloganRequest($request);
 
         $errorMessages = $this->validator->validateRequest($Inforequest);
-
         if (count($errorMessages) > 0) {
             return $this->json([
                 'error' => $errorMessages,
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        try
-        {
-            $generatedCompanyValues = $this->companyValuesService->generateCompanyValues($Inforequest);
+        try {
+            $generatedSlogan = $this->companySloganService->generateCompanySlogans($Inforequest);
+
             return $this->json([
                 'success' => true,
-                'Values' => $generatedCompanyValues
+                'Slogans' => $generatedSlogan,
             ], Response::HTTP_OK);
-        }
-        catch (GeminiApiException $e)
-        {
+        } catch (GeminiApiException $e) {
             return $this->json([
                 'success' => false,
                 'message' => $e->getMessage(),

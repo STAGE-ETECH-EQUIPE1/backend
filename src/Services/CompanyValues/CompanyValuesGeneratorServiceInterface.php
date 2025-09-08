@@ -2,7 +2,7 @@
 
 namespace App\Services\CompanyValues;
 
-use App\Request\CompanyValues\CompanyValuesRequest;
+use App\Request\BrandingVerbal\CompanyValuesRequest;
 
 interface CompanyValuesGeneratorServiceInterface
 {

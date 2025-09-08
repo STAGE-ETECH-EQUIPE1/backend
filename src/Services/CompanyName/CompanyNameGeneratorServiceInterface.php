@@ -2,7 +2,7 @@
 
 namespace App\Services\CompanyName;
 
-use App\Request\CompanyName\CompanyNameRequest;
+use App\Request\BrandingVerbal\CompanyNameRequest;
 
 interface CompanyNameGeneratorServiceInterface
 {

@@ -2,7 +2,7 @@
 
 namespace App\Services\CompanySlogan;
 
-use App\Request\CompanySlogan\CompanySloganRequest;
+use App\Request\BrandingVerbal\CompanySloganRequest;
 
 interface CompanySloganGeneratorServiceInterface
 {

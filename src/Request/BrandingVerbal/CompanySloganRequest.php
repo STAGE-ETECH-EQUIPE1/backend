@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Request\CompanySlogan;
+namespace App\Request\BrandingVerbal;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,12 +31,12 @@ class CompanySloganRequest
     {
         $content = $request->toArray();
 
-        $this->tone            = $content['tone'] ?? null;
-        $this->length          = $content['length'] ?? null;
-        $this->langue          = $content['langue'] ?? null;
+        $this->tone = $content['tone'] ?? null;
+        $this->length = $content['length'] ?? null;
+        $this->langue = $content['langue'] ?? null;
         $this->include_keywords = $content['include_keywords'] ?? null;
         $this->exclude_keywords = $content['exclude_keywords'] ?? null;
-        $this->focus           = $content['focus'] ?? null;
+        $this->focus = $content['focus'] ?? null;
     }
 
     public function getTone(): ?string
