@@ -27,17 +27,17 @@ class BrandingVerbalSubmitService implements BrandingVerbalSubmitServiceInterfac
         return $client;
     }
 
-    public function submitCompanyValues(BrandingVerbalRequest $data): Client
-    {
-        $client = $this->clientService->getConnectedUserClient();
-        $companyValues = $data->getValues();
-        $client->setQualities($companyValues);
+    // public function submitCompanyValues(BrandingVerbalRequest $data): Client
+    // {
+    //     $client = $this->clientService->getConnectedUserClient();
+    //     $companyValues = $data->getValues();
+    //     $client->setQualities($companyValues);
 
-        $this->em->persist($client);
-        $this->em->flush();
+    //     $this->em->persist($client);
+    //     $this->em->flush();
 
-        return $client;
-    }
+    //     return $client;
+    // }
 
     public function submitCompanyToneOfVoice(BrandingVerbalRequest $data): Client
     {

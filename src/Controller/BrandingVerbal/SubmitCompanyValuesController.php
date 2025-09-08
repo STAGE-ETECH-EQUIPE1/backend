@@ -4,6 +4,7 @@ namespace App\Controller\BrandingVerbal;
 
 use App\Request\BrandingVerbal\BrandingVerbalRequest;
 use App\Response\Auth\ClientResponse;
+use App\Services\BrandingVerbal\BrandingVerbalSubmitServiceInterface;
 use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +17,7 @@ class SubmitCompanyValuesController extends AbstractController
 {
     public function __construct(
         private AppValidatorInterface $validator,
-        private BrandingVerbalServiceInterface $brandingVerbalService,
+        private BrandingVerbalSubmitServiceInterface $brandingVerbalService,
     ) {
     }
 
@@ -35,12 +36,12 @@ class SubmitCompanyValuesController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $client = $this->brandingVerbalService->submitCompanyValues($brandingVerbal);
+        // $client = $this->brandingVerbalService->submitCompanyValues($brandingVerbal);
 
         return $this->json([
             'success' => true,
             'message' => 'Company Values Submitted Successfully',
-            'data' => new ClientResponse($client),
+            // 'data' => new ClientResponse($client),
         ]);
     }
 }

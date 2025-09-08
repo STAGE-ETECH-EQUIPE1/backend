@@ -4,6 +4,7 @@ namespace App\Controller\BrandingVerbal;
 
 use App\Request\BrandingVerbal\BrandingVerbalRequest;
 use App\Response\Auth\ClientResponse;
+use App\Services\BrandingVerbal\BrandingVerbalSubmitServiceInterface;
 use App\Utils\Validator\AppValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +17,7 @@ class SubmitCompanyToneOfVoiceController extends AbstractController
 {
     public function __construct(
         private AppValidatorInterface $validator,
-        private BrandingVerbalServiceInterface $brandingVerbalService,
+        private BrandingVerbalSubmitServiceInterface $brandingVerbalService,
     ) {
     }
 

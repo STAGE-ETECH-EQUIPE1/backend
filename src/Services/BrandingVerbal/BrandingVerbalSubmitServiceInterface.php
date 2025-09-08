@@ -9,7 +9,7 @@ interface BrandingVerbalSubmitServiceInterface
 {
     public function submitCompanyName(BrandingVerbalRequest $data): Client;
 
-    public function submitCompanyValues(BrandingVerbalRequest $data): Client;
+    // public function submitCompanyValues(BrandingVerbalRequest $data): Client;
 
     public function submitCompanySlogan(BrandingVerbalRequest $data): Client;
 
