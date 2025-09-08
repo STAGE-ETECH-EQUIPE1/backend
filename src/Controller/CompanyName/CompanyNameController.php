@@ -2,7 +2,9 @@
 
 namespace App\Controller\CompanyName;
 
+use App\Exception\GeminiApiException;
 use App\Request\CompanyName\CompanyNameRequest;
+use App\Services\CompanyName\CompanyNameGeneratorServiceInterface;
 use App\Utils\Validator\AppValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,12 +13,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use function Zenstruck\Foundry\memoize;
+
 class CompanyNameController extends AbstractController
 {
     public function __construct(
         private AppValidator $validator,
-    )
-    {}
+        private CompanyNameGeneratorServiceInterface $companyNameService,
+    ){}
     
     #[IsGranted('ROLE_CLIENT')]
     #[Route('/generate/companyName', name: 'generation_companyName', methods: ['POST'])]
@@ -34,9 +38,21 @@ class CompanyNameController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-         return $this->json([
-            'message' => 'Company Name  submitted successfully.',
-            'status' => Response::HTTP_OK,
-        ], Response::HTTP_OK);
+        try
+        {
+             $generatedNames = $this->companyNameService->generateCompanyNames($Inforequest);
+
+            return $this->json([
+                'success' => true,
+                'Names' => $generatedNames
+            ], Response::HTTP_OK);
+        }
+        catch (GeminiApiException $e)
+        {
+            return $this->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
     }
 }

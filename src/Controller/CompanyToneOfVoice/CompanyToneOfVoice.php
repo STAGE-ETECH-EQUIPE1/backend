@@ -2,7 +2,9 @@
 
 namespace App\Controller\CompanyToneOfVoice;
 
+use App\Exception\GeminiApiException;
 use App\Request\CompanyToneOfVoice\CompanyToneOfVoiceRequest;
+use App\Services\CompanyToneOfVoice\CompanyToneOfVoiceGeneratorServiceInterface;
 use App\Utils\Validator\AppValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,6 +17,7 @@ class CompanyToneOfVoice extends AbstractController
 {
     public function __construct(
         private AppValidator $validator,
+        private CompanyToneOfVoiceGeneratorServiceInterface $companyToneOfVoiceService,    
     )
     {}
     
@@ -34,9 +37,20 @@ class CompanyToneOfVoice extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-         return $this->json([
-            'message' => 'Company Tone of voice  submitted successfully.',
-            'status' => Response::HTTP_OK,
-        ], Response::HTTP_OK);
+        try
+        {
+            $generatedToneOfVoice = $this->companyToneOfVoiceService->generateToneOfVoice($Inforequest);
+            return $this->json([
+                'success' => true,
+                'Tone of Voice' => $generatedToneOfVoice
+            ], Response::HTTP_OK);
+        }
+        catch (GeminiApiException $e)
+        {
+            return $this->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
     }
 }

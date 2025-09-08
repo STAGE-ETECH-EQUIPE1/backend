@@ -2,8 +2,10 @@
 
 namespace App\Controller\CompanyValues;
 
+use App\Exception\GeminiApiException;
 use App\Request\CompanyName\CompanyNameRequest;
 use App\Request\CompanyValues\CompanyValuesRequest;
+use App\Services\CompanyValues\CompanyValuesGeneratorServiceInterface;
 use App\Utils\Validator\AppValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,6 +18,7 @@ class CompanyValuesController extends AbstractController
 {
     public function __construct(
         private AppValidator $validator,
+        private CompanyValuesGeneratorServiceInterface $companyValuesService,
     )
     {}
     
@@ -35,9 +38,20 @@ class CompanyValuesController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-         return $this->json([
-            'message' => 'Company Values  submitted successfully.',
-            'status' => Response::HTTP_OK,
-        ], Response::HTTP_OK);
+        try
+        {
+            $generatedCompanyValues = $this->companyValuesService->generateCompanyValues($Inforequest);
+            return $this->json([
+                'success' => true,
+                'Values' => $generatedCompanyValues
+            ], Response::HTTP_OK);
+        }
+        catch (GeminiApiException $e)
+        {
+            return $this->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], $e->getCode());
+        }
     }
 }
