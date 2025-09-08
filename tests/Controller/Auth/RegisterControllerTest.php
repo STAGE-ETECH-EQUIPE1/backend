@@ -23,8 +23,6 @@ class RegisterControllerTest extends ApiControllerTestCase
                 'confirmPassword' => 'Password1234',
                 'fullName' => 'Test User',
                 'phone' => '0341234567',
-                'companyName' => 'Test Company',
-                'companyArea' => 'IT',
             ],
         ]);
 

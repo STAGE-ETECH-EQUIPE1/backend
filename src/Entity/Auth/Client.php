@@ -54,6 +54,12 @@ class Client
     #[ORM\Column(length: 200)]
     private ?string $publicTarget = null;
 
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $mainService = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $mainLanguage = null;
+
     public function __construct()
     {
         $this->brandingProjects = new ArrayCollection();
@@ -217,6 +223,30 @@ class Client
     public function setPublicTarget(?string $publicTarget): static
     {
         $this->publicTarget = $publicTarget;
+
+        return $this;
+    }
+
+    public function getMainService(): ?string
+    {
+        return $this->mainService;
+    }
+
+    public function setMainService(?string $mainService): static
+    {
+        $this->mainService = $mainService;
+
+        return $this;
+    }
+
+    public function getMainLanguage(): ?string
+    {
+        return $this->mainLanguage;
+    }
+
+    public function setMainLanguage(?string $mainLanguage): static
+    {
+        $this->mainLanguage = $mainLanguage;
 
         return $this;
     }
