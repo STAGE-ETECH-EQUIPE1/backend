@@ -12,6 +12,12 @@ use ApiPlatform\Metadata\Post;
         new Get(
             routeName: 'api_branding_project_logos'
         ),
+        new Get(
+            routeName: 'api_branding_submit_color_palettes'
+        ),
+        new Get(
+            routeName: 'api_branding_submit_typographies'
+        ),
         new GetCollection(
             routeName: 'api_branding_user_projects'
         ),
