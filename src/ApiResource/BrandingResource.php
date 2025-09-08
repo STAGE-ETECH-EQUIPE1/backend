@@ -27,6 +27,9 @@ use ApiPlatform\Metadata\Post;
         new Post(
             routeName: 'api_brandings_typographies'
         ),
+        new Post(
+            routeName: 'api_brandings_file_to_provide'
+        ),
     ]
 )]
 class BrandingResource
