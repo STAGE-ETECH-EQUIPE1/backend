@@ -21,6 +21,12 @@ use ApiPlatform\Metadata\Post;
         new Post(
             routeName: 'api_branding_project_submit'
         ),
+        new Post(
+            routeName: 'api_brandings_color_palettes'
+        ),
+        new Post(
+            routeName: 'api_brandings_typographies'
+        ),
     ]
 )]
 class BrandingResource

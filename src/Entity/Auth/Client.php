@@ -42,6 +42,18 @@ class Client
     #[ORM\Column(nullable: true)]
     private ?int $tokendSent = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $slogan = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $tonVoice = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $qualities = null;
+
+    #[ORM\Column(length: 200)]
+    private ?string $publicTarget = null;
+
     public function __construct()
     {
         $this->brandingProjects = new ArrayCollection();
@@ -157,6 +169,54 @@ class Client
     public function setTokendSent(?int $tokendSent): static
     {
         $this->tokendSent = $tokendSent;
+
+        return $this;
+    }
+
+    public function getSlogan(): ?string
+    {
+        return $this->slogan;
+    }
+
+    public function setSlogan(?string $slogan): static
+    {
+        $this->slogan = $slogan;
+
+        return $this;
+    }
+
+    public function getTonVoice(): ?string
+    {
+        return $this->tonVoice;
+    }
+
+    public function setTonVoice(?string $tonVoice): static
+    {
+        $this->tonVoice = $tonVoice;
+
+        return $this;
+    }
+
+    public function getQualities(): ?array
+    {
+        return $this->qualities;
+    }
+
+    public function setQualities(?array $qualities): static
+    {
+        $this->qualities = $qualities;
+
+        return $this;
+    }
+
+    public function getPublicTarget(): ?string
+    {
+        return $this->publicTarget;
+    }
+
+    public function setPublicTarget(?string $publicTarget): static
+    {
+        $this->publicTarget = $publicTarget;
 
         return $this;
     }

@@ -48,6 +48,10 @@ class ApiControllerTestCase extends ApiTestCase
         $client = (new \App\Entity\Auth\Client())
             ->setCompanyName('Test Client Company')
             ->setCompanyArea('Area Company')
+            ->setPublicTarget('tourist')
+            ->setQualities(['a', 'b', 'c'])
+            ->setSlogan('the best quality')
+            ->setTonVoice('Ton Voice text')
         ;
 
         return (new User())

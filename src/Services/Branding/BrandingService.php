@@ -70,7 +70,6 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
             ->setMoodBoardUrl($designBriefDTO->getMoodBoardUrl())
             ->setLogoStyle($designBriefDTO->getLogoStyle())
             ->setBrandKeywords($designBriefDTO->getBrandKeywords())
-            ->setSlogan($designBriefDTO->getSlogan())
             ->setBranding($project)
         ;
 
@@ -92,7 +91,6 @@ final class BrandingService extends AbstractService implements BrandingServiceIn
             ->setMoodBoardUrl($designBriefDTO->getMoodBoardUrl())
             ->setLogoStyle($designBriefDTO->getLogoStyle())
             ->setBrandKeywords($designBriefDTO->getBrandKeywords())
-            ->setSlogan($designBriefDTO->getSlogan())
             ->setBranding($brandingProject)
         ;
 
