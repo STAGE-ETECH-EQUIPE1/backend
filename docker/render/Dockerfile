@@ -12,7 +12,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install \
 
 FROM php:8.2-fpm-alpine
 # Installer utilitaires + supervisor + nginx
-RUN apk --no-cache add curl wget bash dpkg supervisor vim nginx
+RUN apk --no-cache add curl wget bash dpkg supervisor nginx
 
 # --------------------------------------------------------------------
 # PHP Extensions
@@ -38,8 +38,8 @@ COPY --from=vendor /app/vendor ./vendor
 COPY . .
 
 RUN mkdir -p /var/www/html/public/generated-ai/logo \
-    && chown -R www-data:www-data /var/www/html/public/generated-ai \
-    && chmod -R 775 /var/www/html/public/generated-ai
+    && chown -R root:root /var/www/html/public/generated-ai \
+    && chmod -R 777 /var/www/html/public/generated-ai/logo/
 
 RUN id www-data
 

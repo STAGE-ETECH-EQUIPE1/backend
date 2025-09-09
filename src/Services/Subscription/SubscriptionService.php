@@ -15,6 +15,7 @@ use App\Repository\Subscription\PackRepository;
 use App\Repository\Subscription\ServiceRepository;
 use App\Repository\Subscription\SubscriptionRepository;
 use App\Response\Payment\SecureAcceptanceResponseDTO;
+use App\Services\Client\ClientServiceInterface;
 use App\Services\Payment\MainPayment\MainPaymentServiceInterface;
 use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,6 +31,7 @@ class SubscriptionService implements SubscriptionServiceInterface
         private readonly SubscriptionRepository $subscriptionRepository,
         private readonly UserServiceInterface $userService,
         private readonly MainPaymentServiceInterface $mainPaymentService,
+        private readonly ClientServiceInterface $clientService,
     ) {
     }
 
@@ -73,6 +75,14 @@ class SubscriptionService implements SubscriptionServiceInterface
         $this->em->flush();
 
         return $subscription;
+    }
+
+    public function resetSubscriptionForCurrentUser(): void
+    {
+        $subscription = $this->clientService->getSubscriptionForConnectedClient();
+        if ($subscription) {
+            $subscription->setStatus(SubscriptionStatus::EXPIRED);
+        }
     }
 
     public function initializeSubscriptionFromPack(Pack $pack, CyberSourcePaymentDataDTO $cyberSourcePaymentDataDTO): Subscription
@@ -126,5 +136,31 @@ class SubscriptionService implements SubscriptionServiceInterface
         }
 
         throw new ResourceNotFoundException('SUBSCRIPTION_NOT_FOUND');
+    }
+
+    public function makeFreePackForConnectedUser(): Subscription
+    {
+        $this->resetSubscriptionForCurrentUser();
+
+        /** @var Pack $pack */
+        $pack = $this->packRepository->getFreePack();
+
+        /** @var Client $client */
+        $client = $this->userService->getConnectedUser()->getClient();
+
+        $subscription = (new Subscription())
+            ->setReference(uniqid('ORDER-1-', true))
+            ->setName((string) $pack->getName())
+            ->setStatus(SubscriptionStatus::ACTIVE)
+            ->setStartedAt($pack->getStartedAt() ?? new \DateTimeImmutable())
+            ->setEndedAt($pack->getExpiredAt() ?? new \DateTimeImmutable())
+            ->setClient($client)
+            ->setPack($pack)
+        ;
+
+        $this->em->persist($subscription);
+        $this->em->flush();
+
+        return $subscription;
     }
 }
