@@ -33,6 +33,7 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 | ------------------------------------------- | -------- | ------ | ------------------------------------------ |
 | Liste des services                          | 🔥       | 🚧     | CRUD pour les services                     |
 | Liste des packs pour un ensemble de service | 🔥       | 🕓     | Generation des packs à partir des services |
+| Obtenir l'abonnement du client courant      | 🔥       | ✅     | Obtenir l'abonnement courrant du client    |
 
 ---
 
@@ -66,7 +67,8 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 | Tâche                                                    | Priorité | Statut | Notes                                              |
 | -------------------------------------------------------- | -------- | ------ | -------------------------------------------------- |
-| Utilisation de `Cybersource` pour le système de paiement | 🔥       | 🕓     | Utiliser `cybersource` pour les paiements en ligne |
+| Utilisation de `Cybersource` pour le système de paiement | 🔥       | ✅     | Utiliser `cybersource` pour les paiements en ligne |
+| Application de l'abonnement après paiement               | 🔥       | ✅     | Après que le paiement ait réussi                   |
 | Utilisation de `Api MVola` pour le système de paiement   | 🕓       | 🕓     | Utiliser `Api MVola` pour les paiements            |
 
 ## ⚙️ Épopée 6 : Administration
@@ -82,9 +84,10 @@ Ce fichier suit les fonctionnalités et tâches à faire pour le développement 
 
 ## 🐞 Bugs connus
 
-| Bug                                        | Statut | Notes |
-| ------------------------------------------ | ------ | ----- |
-| choix d'API pour la génération de `n logo` | 🔥     | 🚧    |
+| Bug                                                                | Statut | Notes |
+| ------------------------------------------------------------------ | ------ | ----- |
+| choix d'API pour la génération de `n logo`                         | 🔥     | ✅    |
+| Une erreur connu lors du traitement du paiement vers `Cybersource` | 🔥     | ✅    |
 
 ---
 

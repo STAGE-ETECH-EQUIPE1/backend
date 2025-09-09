@@ -2,7 +2,9 @@
 
 namespace App\Repository\Subscription;
 
+use App\Entity\Auth\Client;
 use App\Entity\Subscription\Subscription;
+use App\Enum\SubscriptionStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -31,13 +33,18 @@ class SubscriptionRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Subscription
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Find the active subscription of the client.
+     */
+    public function findActiveSubscriptionWithClient(Client $client): ?Subscription
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.client = :client')
+            ->andWhere('s.status = :status')
+            ->setParameter('client', $client)
+            ->setParameter('status', SubscriptionStatus::ACTIVE)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

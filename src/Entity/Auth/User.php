@@ -2,6 +2,7 @@
 
 namespace App\Entity\Auth;
 
+use App\Entity\SoftDeleteTrait;
 use App\Repository\Auth\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
     use SocialLoggableTrait;
+    use SoftDeleteTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

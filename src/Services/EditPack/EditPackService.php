@@ -14,8 +14,10 @@ class EditPackService implements EditPackServiceInterface
     private ServiceRepository $serviceRepository;
     private EntityManagerInterface $em;
 
-    public function __construct(PackRepository $packRepository, ServiceRepository $serviceRepository, EntityManagerInterface $em)
-    {
+    public function __construct(PackRepository $packRepository,
+        ServiceRepository $serviceRepository,
+        EntityManagerInterface $em,
+    ) {
         $this->packRepository = $packRepository;
         $this->serviceRepository = $serviceRepository;
         $this->em = $em;

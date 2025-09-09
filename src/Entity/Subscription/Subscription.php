@@ -4,6 +4,7 @@ namespace App\Entity\Subscription;
 
 use App\Entity\Auth\Client;
 use App\Entity\Payment\Payment;
+use App\Entity\SoftDeleteTrait;
 use App\Enum\SubscriptionStatus;
 use App\Repository\Subscription\SubscriptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`subscriptions`')]
 class Subscription
 {
+    use SoftDeleteTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -34,8 +37,8 @@ class Subscription
     #[ORM\Column]
     private ?\DateTimeImmutable $endedAt = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Payment $payment = null;
 
     /**
@@ -47,6 +50,12 @@ class Subscription
     #[ORM\ManyToOne(inversedBy: 'subscriptions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
+    private ?Pack $pack = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -163,6 +172,30 @@ class Subscription
     public function setClient(?Client $client): static
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getPack(): ?Pack
+    {
+        return $this->pack;
+    }
+
+    public function setPack(?Pack $pack): static
+    {
+        $this->pack = $pack;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }

@@ -7,24 +7,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class UserRegistrationRequest
 {
-    #[Assert\Email()]
-    #[Assert\NotBlank()]
+    #[Assert\Email(message: 'NOT_VALID_EMAIL_VALIDATION')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     private string $email;
 
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     private ?string $phone = null;
 
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     private ?string $fullName = null;
 
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     private ?string $username = null;
 
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
     private string $password;
 
-    #[Assert\NotBlank()]
-    #[Assert\EqualTo(propertyPath: 'password')]
+    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
+    #[Assert\EqualTo(propertyPath: 'password', message: 'CONFIRM_NOT_EQUAL_VALIDATION')]
     private ?string $confirmPassword = null;
 
     public function __construct(Request $request)

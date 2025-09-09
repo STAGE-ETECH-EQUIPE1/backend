@@ -17,16 +17,19 @@ class PackFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             [
-                'name' => 'Pack Dubai Starter',
-                'services' => ['VISA-BASIC', 'ECOMMERCE-STARTER', 'LEGAL-REG'],
+                'name' => 'Pack Free',
+                'price' => 0,
+                'services' => ['CREATION-LOGO-FREE', 'CREATION-COMPANY-NAME-FREE', 'CREATION-VALUES-FREE', 'CREATION-TON-VOICE-FREE', 'CREATION-TYPOGRAPHIE-FREE'],
             ],
             [
-                'name' => 'Pack Dubai Pro',
-                'services' => ['VISA-PREMIUM', 'ECOMMERCE-STARTER', 'LEGAL-REG', 'BRANDING-LOGO'],
+                'name' => 'Pack Premium',
+                'price' => 20,
+                'services' => ['CREATION-LOGO', 'CREATION-COMPANY-NAME', 'CREATION-VALUES', 'CREATION-TON-VOICE', 'CREATION-TYPOGRAPHIE'],
             ],
             [
-                'name' => 'Pack Expansion Globale',
-                'services' => ['VISA-PREMIUM', 'STRATEGY-ANALYSIS', 'BRANDING-LOGO', 'LEGAL-REG'],
+                'name' => 'Pack VIP',
+                'price' => 30,
+                'services' => ['CREATION-LOGO', 'CREATION-COMPANY-NAME', 'CREATION-VALUES', 'CREATION-TON-VOICE', 'CREATION-TYPOGRAPHIE'],
             ],
         ];
     }
@@ -39,7 +42,7 @@ class PackFixtures extends Fixture implements DependentFixtureInterface
 
             $pack = (new Pack())
                 ->setName($data['name'])
-                ->setPrice($this->getPrice())
+                ->setPrice($data['price'])
                 ->setStartedAt($startedAt)
                 ->setExpiredAt($startedAt->modify('+30 days'))
                 ->setCreatedAt($this->getDateTimeImmutable());

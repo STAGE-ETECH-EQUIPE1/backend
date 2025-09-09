@@ -5,6 +5,7 @@ namespace App\Services\Client;
 use App\DTO\User\ClientDTO;
 use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
+use App\Entity\Subscription\Subscription;
 
 interface ClientServiceInterface
 {
@@ -17,4 +18,9 @@ interface ClientServiceInterface
      * Convert User Client to ClientDTO.
      */
     public function convertUserClientToClientDTO(User $client): ClientDTO;
+
+    /**
+     * Get active Subscription for current client.
+     */
+    public function getSubscriptionForConnectedClient(): ?Subscription;
 }

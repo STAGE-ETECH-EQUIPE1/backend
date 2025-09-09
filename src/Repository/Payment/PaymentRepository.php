@@ -16,6 +16,21 @@ class PaymentRepository extends ServiceEntityRepository
         parent::__construct($registry, Payment::class);
     }
 
+    /**
+     * Find Payment By Reference number and Transaction ID.
+     */
+    public function findOneByTransactionIdAndReference(string $reference, string $transactionId): ?Payment
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.transactionId = :transactionId')
+            ->andWhere('p.referenceNumber = :referenceNumber')
+            ->setParameter('transactionId', $transactionId)
+            ->setParameter('referenceNumber', $reference)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     //    /**
     //     * @return Payment[] Returns an array of Payment objects
     //     */
@@ -28,16 +43,6 @@ class PaymentRepository extends ServiceEntityRepository
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Payment
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
     //        ;
     //    }
 }

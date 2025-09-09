@@ -4,12 +4,19 @@ namespace App\Services\Branding;
 
 use App\DTO\Branding\BrandingProjectDTO;
 use App\DTO\PaginationDTO;
+use App\Entity\Auth\Client;
 use App\Entity\Branding\BrandingProject;
 use App\Entity\Branding\DesignBrief;
 use App\Request\Branding\DesignBriefRequest;
+use App\Request\Branding\FileToProvideRequest;
 
 interface BrandingServiceInterface
 {
+    /**
+     * Submit file to provide after generating informations from AI.
+     */
+    public function submitFileToProvide(FileToProvideRequest $request): Client;
+
     /**
      * Get All Branding Project.
      *

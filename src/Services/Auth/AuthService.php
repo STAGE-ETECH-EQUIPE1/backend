@@ -2,9 +2,11 @@
 
 namespace App\Services\Auth;
 
+use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
 use App\Exception\UserNotFoundException;
 use App\Request\Auth\UpdatePasswordRequest;
+use App\Request\Auth\UserRegistrationRequest;
 use App\Security\EmailVerifier;
 use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,13 +34,32 @@ final readonly class AuthService implements AuthServiceInterface
     ) {
     }
 
-    public function sendVerificationEmail(string $email): void
+    public function registerUser(UserRegistrationRequest $request): User
+    {
+        $user = $this->userService->convertUserRegistrationDtoToUser($request);
+        $user
+            ->setIsVerified(false)
+            ->setRoles(['ROLE_USER', 'ROLE_CLIENT'])
+        ;
+
+        $client = new Client();
+        $user->setClient($client);
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $this->sendVerificationEmail((string) $user->getEmail());
+
+        return $user;
+    }
+
+    private function sendVerificationEmail(string $email): void
     {
         $this->emailVerifier->sendEmailConfirmation(
-            'app_verify_email',
+            'api_verify_email',
             $this->userService->getByEmail($email),
             (new TemplatedEmail())
-                ->from(new Address('noreply@gmail.com', 'ORBIXUP Mail Bot'))
+                ->from(new Address('noreply@domain.com', 'ORBIXUP Mail Bot'))
                 ->to($email)
                 ->subject('Please Confirm your Email')
                 ->htmlTemplate('email/verification_email.html.twig')
