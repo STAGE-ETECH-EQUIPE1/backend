@@ -21,6 +21,9 @@ until php bin/console doctrine:query:sql "SELECT 1" >/dev/null 2>&1; do
 done
 echo "Database is ready!"
 
+echo "▶ Generating KeyPair..."
+php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
+
 echo "▶ Ensuring database & migrations..."
 php bin/console doctrine:database:create --if-not-exists || true
 php bin/console doctrine:migrations:migrate --no-interaction || true

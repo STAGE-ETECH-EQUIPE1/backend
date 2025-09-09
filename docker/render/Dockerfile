@@ -39,7 +39,7 @@ COPY . .
 
 RUN mkdir -p /var/www/html/public/generated-ai/logo \
     && chown -R www-data:www-data /var/www/html/public/generated-ai \
-    && chmod -R 775 /var/www/html/public/generated-ai
+    && chmod -R 777 /var/www/html/public/generated-ai/logo/
 
 RUN id www-data
 
