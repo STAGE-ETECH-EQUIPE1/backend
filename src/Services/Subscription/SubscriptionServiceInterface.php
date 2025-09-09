@@ -13,6 +13,11 @@ interface SubscriptionServiceInterface
     public function createSubscription(SubscriptionDTO $subscriptionDTO): Subscription;
 
     /**
+     * Reset Subscription for Connected User.
+     */
+    public function resetSubscriptionForCurrentUser(): void;
+
+    /**
      * Initialize Subscription after choosing pack and initialize Payment Data.
      */
     public function initializeSubscriptionFromPack(Pack $pack, CyberSourcePaymentDataDTO $cyberSourcePaymentDataDTO): Subscription;
@@ -21,4 +26,9 @@ interface SubscriptionServiceInterface
      * Update Payment Status after payment from Cybersource.
      */
     public function updateSubscriptionAfterPayment(SecureAcceptanceResponseDTO $response): Subscription;
+
+    /**
+     * Update the Subscription of the user to free.
+     */
+    public function makeFreePackForConnectedUser(): Subscription;
 }

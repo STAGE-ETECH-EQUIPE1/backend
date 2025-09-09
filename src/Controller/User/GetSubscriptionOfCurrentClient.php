@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Response\Subscription\SubscriptionResponse;
 use App\Services\Client\ClientServiceInterface;
+use App\Services\Subscription\SubscriptionServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ class GetSubscriptionOfCurrentClient extends AbstractController
 {
     public function __construct(
         private readonly ClientServiceInterface $clientService,
+        private readonly SubscriptionServiceInterface $subscriptionService,
     ) {
     }
 
@@ -26,7 +28,7 @@ class GetSubscriptionOfCurrentClient extends AbstractController
     public function __invoke(): JsonResponse
     {
         $subscription = $this->clientService->getSubscriptionForConnectedClient();
-        // dd($subscription);
+
         if ($subscription) {
             return $this->json([
                 'success' => true,
@@ -35,10 +37,12 @@ class GetSubscriptionOfCurrentClient extends AbstractController
             ], Response::HTTP_OK);
         }
 
+        $subscription = $this->subscriptionService->makeFreePackForConnectedUser();
+
         return $this->json([
             'success' => true,
             'message' => 'The Client has no subscription',
-            'data' => null,
+            'data' => new SubscriptionResponse($subscription),
         ], Response::HTTP_OK);
     }
 }

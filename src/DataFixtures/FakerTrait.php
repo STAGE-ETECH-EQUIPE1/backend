@@ -19,7 +19,7 @@ trait FakerTrait
 
     public function getPrice(): string
     {
-        return $this->getFaker()->randomFloat(2, 10, 5000).'';
+        return $this->getFaker()->randomFloat(2, 10, 50).'';
     }
 
     public function getDateTimeImmutable(): \DateTimeImmutable
