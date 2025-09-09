@@ -44,7 +44,7 @@ final readonly class AuthService implements AuthServiceInterface
 
         $client = new Client();
         $user->setClient($client);
-        
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

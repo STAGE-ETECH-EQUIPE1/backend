@@ -4,11 +4,8 @@ namespace App\Services\CompanyName;
 
 use App\Exception\GeminiApiException;
 use App\Request\BrandingVerbal\CompanyNameRequest;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -16,15 +13,10 @@ class CompanyNameGeneratorService implements CompanyNameGeneratorServiceInterfac
 {
     public function __construct(
         private readonly HttpClientInterface $httpClient,
-        private readonly EntityManagerInterface $entityManager,
         #[Autowire('%app.gemini_api_key%')]
         private readonly string $googleAiToken,
         #[Autowire('%app.gemini_api_url%')]
         private readonly string $googleAiUrl,
-        #[Autowire('%app.ai_logo_generated_path%')]
-        private readonly ?string $aiGeneratedLogoPath,
-        private readonly SerializerInterface $serializer,
-        private readonly EventDispatcherInterface $eventDispatcher,
         private readonly LoggerInterface $logger,
     ) {
     }
@@ -74,7 +66,7 @@ class CompanyNameGeneratorService implements CompanyNameGeneratorServiceInterfac
             return $this->parseGeminiResponse($rawResponse);
         } catch (ExceptionInterface $e) {
             $this->logger->error('Failed to connect to Gemini API.', ['exception' => $e]);
-            throw new GeminiApiException('Communication with Gemini API failed: '.$e->getMessage(), 0, $e);
+            throw new GeminiApiException('Communication with Gemini API failed: '.$e->getMessage());
         }
     }
 

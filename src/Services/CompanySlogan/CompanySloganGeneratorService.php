@@ -66,7 +66,7 @@ class CompanySloganGeneratorService implements CompanySloganGeneratorServiceInte
             return $this->parseGeminiResponse($rawResponse);
         } catch (ExceptionInterface $e) {
             $this->logger->error('Failed to connect to Gemini API.', ['exception' => $e]);
-            throw new GeminiApiException('Communication with Gemini API failed: '.$e->getMessage(), 0, $e);
+            throw new GeminiApiException('Communication with Gemini API failed: '.$e->getMessage());
         }
     }
 
