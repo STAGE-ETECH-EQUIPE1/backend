@@ -16,7 +16,7 @@ class BrandingVerbalRequest
     ) {
         $content = $request->toArray();
 
-        $this->value = $content['values'];
+        $this->value = $content['value'];
     }
 
     public function getValues(): string

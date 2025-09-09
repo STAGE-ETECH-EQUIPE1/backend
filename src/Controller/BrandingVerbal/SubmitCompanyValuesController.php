@@ -22,7 +22,7 @@ class SubmitCompanyValuesController extends AbstractController
     }
 
     #[IsGranted('ROLE_CLIENT')]
-    #[Route(path: '/brandingVerbal/companyValeus', name: 'submit__companyValue', methods: ['POST'])]
+    #[Route(path: '/brandingVerbal/companyValues', name: 'submit__companyValue', methods: ['POST'])]
     public function __invoke(
         Request $request,
     ): JsonResponse {
@@ -36,12 +36,12 @@ class SubmitCompanyValuesController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // $client = $this->brandingVerbalService->submitCompanyValues($brandingVerbal);
+        $client = $this->brandingVerbalService->submitCompanyValues($brandingVerbal);
 
         return $this->json([
             'success' => true,
             'message' => 'Company Values Submitted Successfully',
-            // 'data' => new ClientResponse($client),
+            'data' => new ClientResponse($client),
         ]);
     }
 }

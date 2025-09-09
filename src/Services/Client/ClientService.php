@@ -27,7 +27,7 @@ final class ClientService extends AbstractService implements ClientServiceInterf
             return $this->getConnectedUser()->getClient();
         }
 
-        throw new \RuntimeException('No connected user found.');
+        throw new \RuntimeException('Connected user has no client associated..');
     }
 
     private function getConnectedUser(): User
