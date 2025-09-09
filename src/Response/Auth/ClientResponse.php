@@ -16,8 +16,7 @@ class ClientResponse
 
     private string $tonVoice;
 
-    /** @var string[] */
-    private array $qualities;
+    private string $qualities;
 
     private string $publicTarget;
 
@@ -37,7 +36,7 @@ class ClientResponse
         $this->companyArea = (string) $client->getCompanyArea();
         $this->slogan = (string) $client->getSlogan();
         $this->tonVoice = (string) $client->getTonVoice();
-        $this->qualities = $client->getQualities() ?? [];
+        $this->qualities = (string) $client->getQualities();
         $this->publicTarget = (string) $client->getPublicTarget();
         $this->mainLanguage = (string) $client->getMainLanguage();
         $this->mainService = (string) $client->getMainService();
@@ -71,10 +70,8 @@ class ClientResponse
 
     /**
      * Get the value of qualities.
-     *
-     * @return string[]
      */
-    public function getQualities(): array
+    public function getQualities(): ?string
     {
         return $this->qualities;
     }
