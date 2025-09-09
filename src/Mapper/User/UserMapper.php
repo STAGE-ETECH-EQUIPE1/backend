@@ -9,7 +9,7 @@ class UserMapper
 {
     public static function fromRequest(UserRequest $request): UserDTO
     {
-        return new UserDTO()
+        return (new UserDTO())
             ->setEmail($request->getEmail())
             ->setPhone((string) $request->getPhone())
             ->setFullName($request->getFullName());
