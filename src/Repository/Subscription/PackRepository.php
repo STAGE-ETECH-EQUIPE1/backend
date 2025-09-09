@@ -26,6 +26,13 @@ class PackRepository extends ServiceEntityRepository
         ;
     }
 
+    public function getFreePack(): ?Pack
+    {
+        return $this->findOneBy([
+            'price' => 0,
+        ]);
+    }
+
     //    /**
     //     * @return Pack[] Returns an array of Pack objects
     //     */
