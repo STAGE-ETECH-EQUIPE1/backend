@@ -49,7 +49,7 @@ class ApiControllerTestCase extends ApiTestCase
             ->setCompanyName('Test Client Company')
             ->setCompanyArea('Area Company')
             ->setPublicTarget('tourist')
-            ->setQualities(['a', 'b', 'c'])
+            ->setQualities('a')
             ->setSlogan('the best quality')
             ->setTonVoice('Ton Voice text')
         ;

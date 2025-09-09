@@ -17,7 +17,7 @@ class Client
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 200)]
+    #[ORM\Column(length: 200, nullable: true)]
     private ?string $companyName = null;
 
     #[ORM\OneToOne(inversedBy: 'client', cascade: ['persist', 'remove'])]
@@ -48,10 +48,10 @@ class Client
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $tonVoice = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?array $qualities = null;
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $qualities = null;
 
-    #[ORM\Column(length: 200)]
+    #[ORM\Column(length: 200, nullable: true)]
     private ?string $publicTarget = null;
 
     #[ORM\Column(length: 200, nullable: true)]
@@ -209,12 +209,12 @@ class Client
         return $this;
     }
 
-    public function getQualities(): ?array
+    public function getQualities(): ?string
     {
         return $this->qualities;
     }
 
-    public function setQualities(?array $qualities): static
+    public function setQualities(?string $qualities): static
     {
         $this->qualities = $qualities;
 

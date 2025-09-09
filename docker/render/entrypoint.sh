@@ -7,8 +7,8 @@ echo "▶ Project contents:"
 ls -la
 
 echo "▶ Permission Folders..."
-sudo chown -R www-data:www-data public/generated-ai
-sudo chmod -R 775 public/generated-ai
+chown -R www-data:www-data public/generated-ai
+chmod -R 775 public/generated-ai
 
 echo "▶ Logo Generation Folder Permission :"
 ls -la /var/www/html/public/generated-ai/logo
@@ -27,9 +27,6 @@ until php bin/console doctrine:query:sql "SELECT 1" >/dev/null 2>&1; do
     sleep 1
 done
 echo "Database is ready!"
-
-echo "▶ Generating KeyPair..."
-php bin/console lexik:jwt:generate-keypair --overwrite --no-interaction
 
 echo "▶ Ensuring database & migrations..."
 php bin/console doctrine:database:create --if-not-exists || true

@@ -39,7 +39,7 @@ final class ClientFactory extends PersistentProxyObjectFactory
             'companyArea' => $companyAreas[array_rand($companyAreas)] ?? 'health',
             'slogan' => self::faker()->sentence(2),
             'tonVoice' => self::faker()->sentence(2),
-            'qualities' => [self::faker()->word(), self::faker()->word(), self::faker()->word()],
+            'qualities' => self::faker()->word(),
             'publicTarget' => $publicTargets[array_rand($publicTargets)] ?? 'tourist',
             'userInfo' => UserFactory::new(),
         ];
