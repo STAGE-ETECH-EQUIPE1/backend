@@ -29,6 +29,9 @@ class Service
     #[ORM\Column(nullable: true)]
     private ?int $token = null;
 
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $service_code = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,6 +86,18 @@ class Service
     public function setToken(?int $token): static
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getServiceCode(): ?string
+    {
+        return $this->service_code;
+    }
+
+    public function setServiceCode(?string $service_code): static
+    {
+        $this->service_code = $service_code;
 
         return $this;
     }

@@ -20,7 +20,7 @@ class ResetPasswordController extends AbstractController
     }
 
     #[Route(
-        path: '/auth/reset-password/reset/{token}',
+        path: '/reset-password/reset/{token}',
         name: 'reset_password',
         methods: ['POST']
     )]

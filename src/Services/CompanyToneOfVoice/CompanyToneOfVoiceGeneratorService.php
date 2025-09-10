@@ -45,7 +45,7 @@ class CompanyToneOfVoiceGeneratorService implements CompanyToneOfVoiceGeneratorS
         try {
             $response = $this->httpClient->request(
                 'POST',
-                $this->googleAiUrl,
+                "{$this->googleAiUrl}/gemini-2.5-flash:generateContent",
                 [
                     'query' => ['key' => $this->googleAiToken],
                     'json' => $payload,

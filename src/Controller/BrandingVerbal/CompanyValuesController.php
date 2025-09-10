@@ -2,23 +2,27 @@
 
 namespace App\Controller\BrandingVerbal;
 
+use App\Controller\AbstractApiController;
 use App\Exception\GeminiApiException;
 use App\Request\BrandingVerbal\CompanyValuesRequest;
 use App\Services\CompanyValues\CompanyValuesGeneratorServiceInterface;
+use App\Services\TokenManager\TokenManagerServiceInterface;
 use App\Utils\Validator\AppValidator;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class CompanyValuesController extends AbstractController
+class CompanyValuesController extends AbstractApiController
 {
     public function __construct(
         private AppValidator $validator,
         private CompanyValuesGeneratorServiceInterface $companyValuesService,
+        // @phpstan-ignore property.onlyWritten
+        private readonly TokenManagerServiceInterface $tokenManagerService,
     ) {
+        parent::__construct($tokenManagerService);
     }
 
     #[IsGranted('ROLE_CLIENT')]
@@ -26,6 +30,13 @@ class CompanyValuesController extends AbstractController
     public function __invoke(
         Request $request,
     ): JsonResponse {
+        if (!$this->handleServiceRequest('values_tokens')) {
+            return $this->json([
+                'message' => 'Quota reached message',
+                'code' => 'QUOTA_REACHED_EXCEPTION',
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
         $Inforequest = new CompanyValuesRequest($request);
 
         $errorMessages = $this->validator->validateRequest($Inforequest);

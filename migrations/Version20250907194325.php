@@ -19,9 +19,6 @@ final class Version20250907194325 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP SEQUENCE messenger_messages_id_seq CASCADE');
-        $this->addSql('DROP TABLE messenger_messages');
         $this->addSql('ALTER TABLE client ALTER public_target SET NOT NULL');
     }
 
