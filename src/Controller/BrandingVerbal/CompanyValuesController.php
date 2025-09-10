@@ -26,7 +26,7 @@ class CompanyValuesController extends AbstractApiController
     }
 
     #[IsGranted('ROLE_CLIENT')]
-    #[Route('/generate/companyValues', name: 'generation_companyValues', methods: ['POST'])]
+    #[Route('/brandings/companyValues', name: 'generation_companyValues', methods: ['POST'])]
     public function __invoke(
         Request $request,
     ): JsonResponse {

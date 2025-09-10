@@ -26,7 +26,7 @@ class CompanyNameController extends AbstractApiController
     }
 
     #[IsGranted('ROLE_CLIENT')]
-    #[Route('/generate/companyName', name: 'generation_companyName', methods: ['POST'])]
+    #[Route('/brandings/companyNames', name: 'generation_companyName', methods: ['POST'])]
     public function __invoke(
         Request $request,
     ): JsonResponse {
