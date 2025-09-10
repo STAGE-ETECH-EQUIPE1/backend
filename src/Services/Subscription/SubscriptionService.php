@@ -5,7 +5,7 @@ namespace App\Services\Subscription;
 use App\DTO\Payment\CyberSourcePaymentDataDTO;
 use App\DTO\Subscription\SubscriptionDTO;
 use App\Entity\Auth\Client;
-use App\Entity\Auth\User;
+use App\Entity\Auth\UserTokens;
 use App\Entity\Subscription\Pack;
 use App\Entity\Subscription\Subscription;
 use App\Enum\SubscriptionStatus;
@@ -115,12 +115,9 @@ class SubscriptionService implements SubscriptionServiceInterface
             'reference' => $response->getReqReferenceNumber(),
         ]);
 
-        /** @var Client $client */
-        $client = $subscription->getClient();
-        /** @var User $user */
-        $user = $client->getUserInfo();
-
         if ($subscription) {
+            /** @var Client $client */
+            $client = $subscription->getClient();
             $subscription->setPayment($payment);
 
             switch ($response->getDecision()) {
@@ -130,7 +127,10 @@ class SubscriptionService implements SubscriptionServiceInterface
                 case 'ACCEPT':
                     $subscription->setStatus(SubscriptionStatus::ACTIVE);
 
-                    $client->getUserTokens()
+                    /** @var UserTokens $userTokens */
+                    $userTokens = $client->getUserTokens();
+
+                    $userTokens
                         ->setCompanyNameTokens(20)
                         ->setColorPaletteTokens(20)
                         ->setLogoGenerationTokens(20)

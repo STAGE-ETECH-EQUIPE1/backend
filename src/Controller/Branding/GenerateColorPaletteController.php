@@ -18,6 +18,7 @@ class GenerateColorPaletteController extends AbstractApiController
     public function __construct(
         private readonly VisualIdentityServiceInterface $visualIdentityService,
         private readonly AppValidatorInterface $validator,
+        // @phpstan-ignore property.onlyWritten
         private readonly TokenManagerServiceInterface $tokenManagerService,
     ) {
         parent::__construct($tokenManagerService);

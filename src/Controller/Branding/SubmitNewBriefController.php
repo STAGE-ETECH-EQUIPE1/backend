@@ -23,6 +23,7 @@ class SubmitNewBriefController extends AbstractApiController
         private readonly MessageBusInterface $messageBus,
         private readonly BrandingServiceInterface $brandingService,
         private readonly AppValidatorInterface $validator,
+        // @phpstan-ignore property.onlyWritten
         private readonly TokenManagerServiceInterface $tokenManagerService,
     ) {
         parent::__construct($tokenManagerService);

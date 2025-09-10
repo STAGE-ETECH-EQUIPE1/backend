@@ -19,6 +19,7 @@ class CompanyToneOfVoiceController extends AbstractApiController
     public function __construct(
         private AppValidator $validator,
         private CompanyToneOfVoiceGeneratorServiceInterface $companyToneOfVoiceService,
+        // @phpstan-ignore property.onlyWritten
         private readonly TokenManagerServiceInterface $tokenManagerService,
     ) {
         parent::__construct($tokenManagerService);

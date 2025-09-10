@@ -19,6 +19,7 @@ class CompanySloganController extends AbstractApiController
     public function __construct(
         private AppValidator $validator,
         private CompanySloganGeneratorServiceInterface $companySloganService,
+        // @phpstan-ignore property.onlyWritten
         private readonly TokenManagerServiceInterface $tokenManagerService,
     ) {
         parent::__construct($tokenManagerService);

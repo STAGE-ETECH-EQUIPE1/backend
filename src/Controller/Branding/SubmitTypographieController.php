@@ -19,6 +19,7 @@ class SubmitTypographieController extends AbstractApiController
     public function __construct(
         private readonly AppValidatorInterface $validator,
         private readonly VisualIdentityServiceInterface $visualIdentityService,
+        // @phpstan-ignore property.onlyWritten
         private readonly TokenManagerServiceInterface $tokenManagerService,
     ) {
         parent::__construct($tokenManagerService);
