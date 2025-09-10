@@ -40,7 +40,9 @@ class GenerateColorPaletteController extends AbstractController
         }
 
         return $this->json([
-            ...$this->visualIdentityService->generateColorPalettes($colorPaletteRequest),
+            'message' => 'Color Palette generated successfully !',
+            'success' => true,
+            'data' => $this->visualIdentityService->generateColorPalettes($colorPaletteRequest),
         ]);
     }
 }

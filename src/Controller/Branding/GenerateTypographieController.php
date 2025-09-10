@@ -40,7 +40,9 @@ class GenerateTypographieController extends AbstractController
         }
 
         return $this->json([
-            ...$this->visualIdentityService->generateTypographies($typographiesRequest),
+            'message' => 'typographie generated successfully !',
+            'success' => true,
+            'data' => $this->visualIdentityService->generateTypographies($typographiesRequest),
         ]);
     }
 }

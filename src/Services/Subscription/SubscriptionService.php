@@ -122,6 +122,7 @@ class SubscriptionService implements SubscriptionServiceInterface
                     $subscription->setStatus(SubscriptionStatus::INACTIVE);
                     break;
                 case 'ACCEPT':
+                    $this->resetSubscriptionForCurrentUser();
                     $subscription->setStatus(SubscriptionStatus::ACTIVE);
                     break;
                 default:
@@ -157,6 +158,10 @@ class SubscriptionService implements SubscriptionServiceInterface
             ->setClient($client)
             ->setPack($pack)
         ;
+
+        foreach ($pack->getServices()->getValues() as $service) {
+            $subscription->addService($service);
+        }
 
         $this->em->persist($subscription);
         $this->em->flush();
