@@ -22,7 +22,7 @@ class CompanySloganController extends AbstractController
     }
 
     #[IsGranted('ROLE_CLIENT')]
-    #[Route('/generate/companySlogan', name: 'generation_companySlogan', methods: ['POST'])]
+    #[Route('/brandings/companySlogan', name: 'generation_companySlogan', methods: ['POST'])]
     public function __invoke(
         Request $request,
     ): JsonResponse {
