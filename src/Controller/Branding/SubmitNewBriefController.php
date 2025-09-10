@@ -2,14 +2,13 @@
 
 namespace App\Controller\Branding;
 
+use App\Controller\AbstractApiController;
 use App\Entity\Branding\BrandingProject;
-use App\Exception\QuotaReachedException;
 use App\Message\Branding\GenerateLogoMessage;
 use App\Request\Branding\DesignBriefRequest;
 use App\Services\Branding\BrandingServiceInterface;
-use App\Services\RateLimiter\RateLimiterServiceInterface;
+use App\Services\TokenManager\TokenManagerServiceInterface;
 use App\Utils\Validator\AppValidatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,14 +17,15 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class SubmitNewBriefController extends AbstractController
+class SubmitNewBriefController extends AbstractApiController
 {
     public function __construct(
         private readonly MessageBusInterface $messageBus,
         private readonly BrandingServiceInterface $brandingService,
         private readonly AppValidatorInterface $validator,
-        private readonly RateLimiterServiceInterface $tokenCount,
+        private readonly TokenManagerServiceInterface $tokenManagerService,
     ) {
+        parent::__construct($tokenManagerService);
     }
 
     #[Route(
@@ -37,6 +37,13 @@ class SubmitNewBriefController extends AbstractController
     public function __invoke(
         Request $request,
     ): JsonResponse {
+        if (!$this->handleServiceRequest('logo_generation_tokens')) {
+            return $this->json([
+                'message' => 'Quota reached message',
+                'code' => 'QUOTA_REACHED_EXCEPTION',
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
         $designBriefRequest = new DesignBriefRequest($request);
 
         $errorMessages = $this->validator->validateRequest($designBriefRequest);
@@ -45,14 +52,6 @@ class SubmitNewBriefController extends AbstractController
             return $this->json([
                 'error' => $errorMessages,
             ], Response::HTTP_BAD_REQUEST);
-        }
-
-        try {
-            $this->tokenCount->tokenCount();
-        } catch (QuotaReachedException $e) {
-            return $this->json([
-                'message' => $e->getMessage(),
-            ], $e->getStatusCode());
         }
 
         $brief = $this->brandingService->createNewBrandingProject($designBriefRequest);

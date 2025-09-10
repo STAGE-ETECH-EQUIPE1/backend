@@ -5,6 +5,7 @@ namespace App\Services\Subscription;
 use App\DTO\Payment\CyberSourcePaymentDataDTO;
 use App\DTO\Subscription\SubscriptionDTO;
 use App\Entity\Auth\Client;
+use App\Entity\Auth\User;
 use App\Entity\Subscription\Pack;
 use App\Entity\Subscription\Subscription;
 use App\Enum\SubscriptionStatus;
@@ -114,6 +115,11 @@ class SubscriptionService implements SubscriptionServiceInterface
             'reference' => $response->getReqReferenceNumber(),
         ]);
 
+        /** @var Client $client */
+        $client = $subscription->getClient();
+        /** @var User $user */
+        $user = $client->getUserInfo();
+
         if ($subscription) {
             $subscription->setPayment($payment);
 
@@ -122,8 +128,21 @@ class SubscriptionService implements SubscriptionServiceInterface
                     $subscription->setStatus(SubscriptionStatus::INACTIVE);
                     break;
                 case 'ACCEPT':
-                    $this->resetSubscriptionForCurrentUser();
                     $subscription->setStatus(SubscriptionStatus::ACTIVE);
+
+                    $client->getUserTokens()
+                        ->setCompanyNameTokens(20)
+                        ->setColorPaletteTokens(20)
+                        ->setLogoGenerationTokens(20)
+                        ->setTonVoiceTokens(20)
+                        ->setValuesTokens(20)
+                        ->setTypographyTokens(20)
+                        ->setSloganTokens(20)
+                    ;
+
+                    $this->em->persist($client);
+                    $this->em->flush();
+
                     break;
                 default:
                     $subscription->setStatus(SubscriptionStatus::EXPIRED);

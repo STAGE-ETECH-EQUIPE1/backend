@@ -66,6 +66,9 @@ class Client
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $typographie = null;
 
+    #[ORM\OneToOne(mappedBy: 'userInfo', cascade: ['persist', 'remove'])]
+    private ?UserTokens $userTokens = null;
+
     public function __construct()
     {
         $this->brandingProjects = new ArrayCollection();
@@ -277,6 +280,23 @@ class Client
     public function setTypographie(?string $typographie): static
     {
         $this->typographie = $typographie;
+
+        return $this;
+    }
+
+    public function getUserTokens(): ?UserTokens
+    {
+        return $this->userTokens;
+    }
+
+    public function setUserTokens(UserTokens $userTokens): static
+    {
+        // set the owning side of the relation if necessary
+        if ($userTokens->getUserInfo() !== $this) {
+            $userTokens->setUserInfo($this);
+        }
+
+        $this->userTokens = $userTokens;
 
         return $this;
     }
