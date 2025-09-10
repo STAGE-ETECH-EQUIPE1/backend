@@ -22,7 +22,7 @@ class CompanyToneOfVoiceController extends AbstractController
     }
 
     #[IsGranted('ROLE_CLIENT')]
-    #[Route('/generate/companyToneOfVoice', name: 'generation_companyToneOfVoice', methods: ['POST'])]
+    #[Route('/brandings/companyToneOfVoice', name: 'generation_companyToneOfVoice', methods: ['POST'])]
     public function __invoke(
         Request $request,
     ): JsonResponse {

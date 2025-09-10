@@ -19,7 +19,7 @@ class CompanyNameRequest
     ])]
     private ?array $exclude_keywords = null;
 
-    #[Assert\Choice(['court', 'moyen', 'flexible'])]
+    #[Assert\Type('string')]
     private ?string $length = null;
 
     #[Assert\Type('string')]
