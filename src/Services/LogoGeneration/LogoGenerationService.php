@@ -152,18 +152,20 @@ final class LogoGenerationService implements LogoGenerationServiceInterface
         $client = $branding->getClient();
         /** @var string $logoStyle */
         $logoStyle = $designBrief->getLogoStyle();
-        $colorString = implode(',', $designBrief->getColorPreferences() ?? []);
-        $keywords = implode(',', $designBrief->getBrandKeywords());
+        $colorString = implode(',', $designBrief->getColorPreferences() ?? ($client->getColorPreferences() ?? []));
 
-        $slogan = $client->getSlogan() ? "and with this slogan {$client->getSlogan()}" : '';
+        $slogan = $client->getSlogan() ?? 'Powering Tomorrow, Today';
 
         $prompt = <<<PROMPT
-        A {$logoStyle} logo for a {$client->getCompanyArea()} company.
-        Include this text {$client->getCompanyName()} {$slogan}.
-        They are the keywords : {$keywords}
+        A {$logoStyle} logo for {$client->getCompanyName()} company with the slogan "{$slogan}" in the design, on a solid color background.
+        The color palette should include a blend of {$colorString}.
+
+        The company name {$client->getCompanyName()} should be integrated clearly. Use a clean, sans-serif, {$client->getTypographie()}.
+
+        --no 3d, photorealistic, complex gradients, shadows, cluttered details, blurry, rasterized, stock image
         PROMPT;
 
-        $designBrief->getMoodBoardUrl() and $prompt .= ' you can use this picture from inspiration';
+        $designBrief->getMoodBoardUrl() and $prompt .= "\n\nVisually inspired by the style and elements found in this mood board uploaded image";
 
         return $prompt;
     }
