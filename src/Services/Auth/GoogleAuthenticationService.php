@@ -2,8 +2,10 @@
 
 namespace App\Services\Auth;
 
+use App\Entity\Auth\Client;
 use App\Entity\Auth\User;
 use App\Request\Auth\GoogleAuthenticationRequest;
+use App\Services\TokenManager\TokenManagerServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use League\OAuth2\Client\Provider\GoogleUser;
@@ -16,6 +18,7 @@ class GoogleAuthenticationService
         private ClientRegistry $clientRegistry,
         private EntityManagerInterface $em,
         private JWTTokenManagerInterface $jwtManager,
+        private TokenManagerServiceInterface $tokenManagerService,
     ) {
     }
 
@@ -42,8 +45,12 @@ class GoogleAuthenticationService
             $user->setPhone('');
             $user->setRoles(['ROLE_USER']);
 
+            $client = new Client();
+            $user->setClient($client);
+
             $this->em->persist($user);
             $this->em->flush();
+            $this->tokenManagerService->initializeTokenForClient($client);
         }
 
         return $this->jwtManager->create($user);

@@ -40,7 +40,7 @@ class DesignBriefRequestTest extends RequestTestCase
                 'colorPreferences' => [],
                 'brandKeywords' => [],
                 'moodBoardUrl' => '',
-            ]), 5
+            ]), 3
         );
     }
 }

@@ -14,15 +14,6 @@ class DesignBriefRequest
         minMessage: 'MIN_LENGTH_VALIDATION',
         maxMessage: 'MAX_LENGTH_VALIDATION'
     )]
-    private string $slogan = '';
-
-    #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
-    #[Assert\Length(
-        min: 2,
-        max: 200,
-        minMessage: 'MIN_LENGTH_VALIDATION',
-        maxMessage: 'MAX_LENGTH_VALIDATION'
-    )]
     private string $logoStyle = '';
 
     #[Assert\NotBlank(message: 'NOT_BLANK_VALIDATION')]
@@ -38,29 +29,16 @@ class DesignBriefRequest
     #[Assert\Count(min: 1, minMessage: 'MIN_COUNT_VALIDATION')]
     private array $colorPreferences = [];
 
-    #[Assert\Count(min: 1, minMessage: 'MIN_COUNT_VALIDATION')]
-    private array $brandKeywords = [];
-
     #[Assert\Url(requireTld: false, message: 'NOT_VALID_URL_VALIDATION')]
     private string $moodBoardUrl = '';
 
     public function __construct(Request $request)
     {
         $content = $request->toArray();
-        $this->slogan = $content['slogan'] ?? '';
         $this->logoStyle = $content['logoStyle'] ?? '';
         $this->description = $content['description'] ?? '';
         $this->colorPreferences = $content['colorPreferences'] ?? [];
-        $this->brandKeywords = $content['brandKeywords'] ?? [];
         $this->moodBoardUrl = $content['moodBoardUrl'] ?? '';
-    }
-
-    /**
-     * Get the value of brandKeywords.
-     */
-    public function getBrandKeywords(): array
-    {
-        return $this->brandKeywords;
     }
 
     /**
@@ -90,10 +68,5 @@ class DesignBriefRequest
     public function getLogoStyle(): string
     {
         return $this->logoStyle;
-    }
-
-    public function getSlogan(): string
-    {
-        return $this->slogan;
     }
 }

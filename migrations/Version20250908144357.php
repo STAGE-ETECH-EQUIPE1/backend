@@ -16,10 +16,6 @@ final class Version20250908144357 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // Supprime la séquence et la table si elles existent
-        $this->addSql('DROP SEQUENCE IF EXISTS messenger_messages_id_seq CASCADE');
-        $this->addSql('DROP TABLE IF EXISTS messenger_messages');
-
         // Colonnes du client : n'ajoute que si elles n'existent pas
         $this->addSql('ALTER TABLE client ADD COLUMN IF NOT EXISTS slogan VARCHAR(255) DEFAULT NULL');
         $this->addSql('ALTER TABLE client ADD COLUMN IF NOT EXISTS ton_voice VARCHAR(200) DEFAULT NULL');

@@ -5,6 +5,7 @@ namespace App\Services\Subscription;
 use App\DTO\Payment\CyberSourcePaymentDataDTO;
 use App\DTO\Subscription\SubscriptionDTO;
 use App\Entity\Auth\Client;
+use App\Entity\Auth\UserTokens;
 use App\Entity\Subscription\Pack;
 use App\Entity\Subscription\Subscription;
 use App\Enum\SubscriptionStatus;
@@ -115,6 +116,8 @@ class SubscriptionService implements SubscriptionServiceInterface
         ]);
 
         if ($subscription) {
+            /** @var Client $client */
+            $client = $subscription->getClient();
             $subscription->setPayment($payment);
 
             switch ($response->getDecision()) {
@@ -123,6 +126,23 @@ class SubscriptionService implements SubscriptionServiceInterface
                     break;
                 case 'ACCEPT':
                     $subscription->setStatus(SubscriptionStatus::ACTIVE);
+
+                    /** @var UserTokens $userTokens */
+                    $userTokens = $client->getUserTokens();
+
+                    $userTokens
+                        ->setCompanyNameTokens(20)
+                        ->setColorPaletteTokens(20)
+                        ->setLogoGenerationTokens(20)
+                        ->setTonVoiceTokens(20)
+                        ->setValuesTokens(20)
+                        ->setTypographyTokens(20)
+                        ->setSloganTokens(20)
+                    ;
+
+                    $this->em->persist($client);
+                    $this->em->flush();
+
                     break;
                 default:
                     $subscription->setStatus(SubscriptionStatus::EXPIRED);
@@ -157,6 +177,10 @@ class SubscriptionService implements SubscriptionServiceInterface
             ->setClient($client)
             ->setPack($pack)
         ;
+
+        foreach ($pack->getServices()->getValues() as $service) {
+            $subscription->addService($service);
+        }
 
         $this->em->persist($subscription);
         $this->em->flush();

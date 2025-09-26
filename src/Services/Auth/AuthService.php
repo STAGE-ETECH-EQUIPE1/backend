@@ -8,6 +8,7 @@ use App\Exception\UserNotFoundException;
 use App\Request\Auth\UpdatePasswordRequest;
 use App\Request\Auth\UserRegistrationRequest;
 use App\Security\EmailVerifier;
+use App\Services\TokenManager\TokenManagerServiceInterface;
 use App\Services\User\UserServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -31,6 +32,7 @@ final readonly class AuthService implements AuthServiceInterface
         #[Autowire('%app.frontend_url%')]
         private string $frontendUrl,
         private UrlGeneratorInterface $urlGenerator,
+        private TokenManagerServiceInterface $tokenManagerService,
     ) {
     }
 
@@ -47,6 +49,7 @@ final readonly class AuthService implements AuthServiceInterface
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+        $this->tokenManagerService->initializeTokenForClient($client);
 
         $this->sendVerificationEmail((string) $user->getEmail());
 

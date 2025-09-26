@@ -10,6 +10,7 @@ use App\Request\Branding\VisualIdentityRequest;
 use App\Services\Client\ClientServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -56,10 +57,11 @@ class VisualIdentityService implements VisualIdentityServiceInterface
         }
     }
 
-    public function submitColorPalette(VisualIdentityRequest $request): Client
+    public function submitColorPalette(Request $request): Client
     {
         $client = $this->clientService->getConnectedUserClient();
-        $data = json_decode($request->getData());
+        $data = $request->toArray()['colors'];
+
         $client->setColorPreferences($data);
 
         $this->entityManager->persist($client);
